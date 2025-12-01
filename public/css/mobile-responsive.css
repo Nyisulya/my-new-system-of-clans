@@ -1,0 +1,739 @@
+/* ============================================
+   Mobile Responsive Styles for Clan Management System
+   Mobile-First Approach with Touch-Friendly Design
+   ============================================ */
+
+/* ============================================
+   1. BASE MOBILE STYLES (320px+)
+   ============================================ */
+
+/* Ensure proper viewport rendering */
+* {
+    box-sizing: border-box;
+}
+
+/* Touch-friendly minimum sizes */
+.btn,
+button,
+input[type="submit"],
+input[type="button"],
+.nav-link,
+a.btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 15px;
+    font-size: 16px;
+    /* Prevents zoom on iOS */
+}
+
+/* Make all inputs readable without zoom */
+input,
+select,
+textarea {
+    font-size: 16px !important;
+}
+
+/* Responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ============================================
+   2. MOBILE TABLES (< 768px)
+   ============================================ */
+
+/* Horizontal scroll for tables on mobile */
+@media (max-width: 767px) {
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    .table-responsive>.table {
+        margin-bottom: 0;
+        min-width: 600px;
+        /* Prevent table from becoming too narrow */
+    }
+
+    /* Alternative: Stack table rows as cards */
+    .table-mobile-cards {
+        border: 0;
+    }
+
+    .table-mobile-cards thead {
+        display: none;
+    }
+
+    .table-mobile-cards tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+        background: #fff;
+    }
+
+    .table-mobile-cards tbody td {
+        display: block;
+        text-align: right;
+        padding: 8px;
+        border: 0;
+        border-bottom: 1px solid #f4f4f4;
+    }
+
+    .table-mobile-cards tbody td:last-child {
+        border-bottom: 0;
+    }
+
+    .table-mobile-cards tbody td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        color: #666;
+    }
+}
+
+/* ============================================
+   3. MOBILE FORMS
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Stack form columns */
+    .row>[class*="col-"] {
+        margin-bottom: 15px;
+    }
+
+    /* Full width form groups on mobile */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    /* Full width buttons on mobile */
+    .btn-block-mobile {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Stack button groups */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-group .btn {
+        border-radius: 4px !important;
+        margin-bottom: 5px;
+    }
+
+    /* Make Select2 mobile friendly */
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 44px !important;
+        padding: 8px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 28px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 42px;
+    }
+}
+
+/* ============================================
+   4. MOBILE CARDS & LAYOUT
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Stack cards vertically */
+    .card {
+        margin-bottom: 15px;
+    }
+
+    /* Reduce card padding on mobile */
+    .card-body {
+        padding: 15px;
+    }
+
+    /* Make small-box statistics stack better */
+    .small-box {
+        margin-bottom: 15px;
+    }
+
+    .small-box h3 {
+        font-size: 2rem;
+    }
+
+    .small-box p {
+        font-size: 14px;
+    }
+
+    /* Profile images responsive */
+    .profile-user-img {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}
+
+/* ============================================
+   5. MOBILE NAVIGATION
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Sidebar adjustments */
+    .main-sidebar {
+        width: 250px;
+        transition: margin-left 0.3s ease-in-out;
+    }
+
+    /* Brand logo sizing */
+    .brand-link {
+        padding: 12px;
+    }
+
+    /* Navigation items */
+    .nav-sidebar>.nav-item {
+        margin-bottom: 2px;
+    }
+
+    .nav-sidebar .nav-link {
+        padding: 12px 15px;
+        min-height: 44px;
+    }
+
+    /* Navbar on mobile */
+    .navbar-nav>.nav-item>.nav-link {
+        padding: 12px 15px;
+    }
+}
+
+/* ============================================
+   6. MOBILE MODALS
+   ============================================ */
+
+@media (max-width: 767px) {
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    .modal-body {
+        padding: 15px;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        flex-direction: column;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* ============================================
+   7. MOBILE TABS
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Scrollable horizontal tabs */
+    .nav-pills,
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .nav-pills .nav-link,
+    .nav-tabs .nav-link {
+        white-space: nowrap;
+        min-width: auto;
+        padding: 10px 15px;
+    }
+
+    /* Tab content spacing */
+    .tab-content {
+        padding-top: 15px;
+    }
+}
+
+/* ============================================
+   8. MAPS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    #memberLocationMap,
+    .leaflet-container {
+        height: 300px !important;
+        margin-bottom: 15px;
+    }
+
+    .leaflet-control-layers {
+        max-width: 200px;
+    }
+
+    .leaflet-popup-content-wrapper {
+        max-width: 250px;
+    }
+}
+
+/* ============================================
+   9. CHARTS RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    canvas {
+        max-width: 100%;
+        height: auto !important;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 250px;
+    }
+}
+
+/* ============================================
+   10. MOBILE BREADCRUMBS & HEADERS
+   ============================================ */
+
+@media (max-width: 767px) {
+    .breadcrumb {
+        flex-wrap: wrap;
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .breadcrumb-item {
+        margin-bottom: 5px;
+    }
+
+    .content-header h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .content-header h1 small {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   11. MOBILE UTILITIES
+   ============================================ */
+
+/* Hide on mobile */
+@media (max-width: 767px) {
+    .d-mobile-none {
+        display: none !important;
+    }
+}
+
+/* Show only on mobile */
+.d-mobile-block {
+    display: none !important;
+}
+
+@media (max-width: 767px) {
+    .d-mobile-block {
+        display: block !important;
+    }
+
+    .d-mobile-flex {
+        display: flex !important;
+    }
+}
+
+/* Full width on mobile */
+@media (max-width: 767px) {
+    .w-mobile-100 {
+        width: 100% !important;
+    }
+}
+
+/* Text alignment on mobile */
+@media (max-width: 767px) {
+    .text-mobile-center {
+        text-align: center !important;
+    }
+
+    .text-mobile-left {
+        text-align: left !important;
+    }
+}
+
+/* Margin/Padding adjustments */
+@media (max-width: 767px) {
+    .p-mobile-2 {
+        padding: 0.5rem !important;
+    }
+
+    .m-mobile-2 {
+        margin: 0.5rem !important;
+    }
+
+    .mb-mobile-3 {
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* ============================================
+   12. FAMILY TREE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .tree-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 15px;
+    }
+
+    .tree-node {
+        min-width: 150px;
+        font-size: 12px;
+    }
+
+    .tree-node img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ============================================
+   13. GALLERY RESPONSIVE
+   ============================================ */
+
+@media (max-width: 767px) {
+    .gallery-item {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+/* ============================================
+   14. TABLET OPTIMIZATIONS (768px - 1023px)
+   ============================================ */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    /* Adjust button groups for tablet */
+    .btn-group-justified {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    /* Table fonts slightly smaller on tablet */
+    .table {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   15. LANDSCAPE PHONE OPTIMIZATIONS
+   ============================================ */
+
+@media (max-width: 767px) and (orientation: landscape) {
+
+    /* Reduce header size in landscape */
+    .content-header h1 {
+        font-size: 20px;
+    }
+
+    /* Adjust modal height for landscape */
+    .modal-body {
+        max-height: calc(100vh - 150px);
+    }
+
+    /* Maps smaller in landscape */
+    #memberLocationMap,
+    .leaflet-container {
+        height: 250px !important;
+    }
+}
+
+/* ============================================
+   16. ACCESSIBILITY & TOUCH IMPROVEMENTS
+   ============================================ */
+
+/* Larger tap targets for links */
+a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Focus states for keyboard navigation */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevent horizontal scroll */
+body {
+    overflow-x: hidden;
+}
+
+/* ============================================
+   17. PRINT STYLES
+   ============================================ */
+
+@media print {
+
+    .sidebar,
+    .main-header,
+    .main-footer,
+    .btn,
+    .breadcrumb {
+        display: none !important;
+    }
+
+    .content-wrapper {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .card {
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+}
+
+/* ============================================
+   18. LOADING STATES
+   ============================================ */
+
+@media (max-width: 767px) {
+    .overlay {
+        z-index: 9999;
+    }
+
+    .overlay .spinner-border {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* ============================================
+   19. RESPONSIVE SPACING
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Reduce content wrapper padding */
+    .content-wrapper {
+        padding: 15px 10px;
+    }
+
+    /* Compact card headers */
+    .card-header {
+        padding: 10px 15px;
+    }
+
+    /* Smaller spacing between sections */
+    .content-header {
+        padding: 15px;
+    }
+}
+
+/* ============================================
+   20. CUSTOM COMPONENT FIXES
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Timeline adjustments */
+    .timeline {
+        padding-left: 30px;
+    }
+
+    .timeline::before {
+        left: 8px;
+    }
+
+    .timeline>div>i {
+        left: -22px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+    }
+
+    .timeline-item {
+        font-size: 14px;
+    }
+
+    /* Description lists */
+    .row.dl-row dt,
+    .row.dl-row dd {
+        padding: 8px 0;
+    }
+
+    dl.row dt {
+        margin-bottom: 5px;
+    }
+
+    dl.row dd {
+        margin-bottom: 15px;
+    }
+}
+
+/* ============================================
+   21. ADMINLTE SPECIFIC OVERRIDES
+   ============================================ */
+
+@media (max-width: 767px) {
+
+    /* Fix AdminLTE sidebar on mobile */
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .content-wrapper,
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-footer,
+    body:not(.sidebar-mini-md):not(.sidebar-mini-xs):not(.layout-top-nav) .main-header {
+        margin-left: 0 !important;
+    }
+
+    /* Navbar toggler */
+    .navbar-nav .nav-item {
+        position: relative;
+    }
+
+    /* Dropdown menus */
+    .dropdown-menu {
+        position: absolute !important;
+        transform: none !important;
+    }
+
+    /* Info box */
+    .info-box {
+        margin-bottom: 15px;
+    }
+
+    .info-box-icon {
+        width: 70px;
+    }
+
+    .info-box-content {
+        padding: 10px;
+    }
+}
+
+/* ============================================
+   22. FINAL TOUCH-UPS
+   ============================================ */
+
+/* Ensure buttons don't wrap text awkwardly */
+.btn {
+    white-space: nowrap;
+}
+
+/* Make sure pagination is responsive */
+@media (max-width: 767px) {
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pagination .page-item {
+        margin: 2px;
+    }
+
+    .pagination .page-link {
+        padding: 8px 12px;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Ensure alerts are readable on mobile */
+@media (max-width: 767px) {
+    .alert {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .alert-dismissible .close {
+        padding: 12px;
+    }
+}
+
+/* ============================================
+   23. LAYOUT & SCROLL FIXES
+   ============================================ */
+
+/* Ensure content wrapper fills available height to push footer down */
+.content-wrapper {
+    min-height: calc(100vh - 57px - 57px) !important;
+    /* Viewport - Navbar - Footer */
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
+/* Prevent sidebar from creating unnecessary scroll */
+.main-sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    position: fixed;
+}
+
+/* Ensure footer sticks to bottom */
+.main-footer {
+    position: relative;
+    z-index: 1030;
+}
+
+/* Fix for short content pages */
+body.layout-fixed .content-wrapper {
+    margin-bottom: 0;
+}
