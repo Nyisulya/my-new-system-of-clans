@@ -3,9 +3,7 @@ services:
     name: ukoo
     env: docker
     plan: free
-    # buildCommand is not needed for Docker (handled in Dockerfile)
-    # startCommand can be used to run migrations before starting Apache
-    startCommand: php artisan migrate --force && apache2-foreground
+    # startCommand is handled in Dockerfile for Docker runtime
     envVars:
       - key: APP_KEY
         generateValue: true

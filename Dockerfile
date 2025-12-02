@@ -51,3 +51,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 # Expose port 80
 EXPOSE 80
+
+# Run migrations and start Apache
+CMD ["/bin/bash", "-c", "php artisan migrate --force && apache2-foreground"]
