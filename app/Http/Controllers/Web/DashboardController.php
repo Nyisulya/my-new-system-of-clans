@@ -134,6 +134,15 @@ class DashboardController extends Controller
                 'stats' => $this->getEmptyStats(),
                 'recentMembers' => collect(),
                 'clans' => collect(),
+                'families' => collect(),
+                'clan' => null,
+                'user' => $user,
+                'totalParents' => 0,
+                'totalChildren' => 0,
+                'totalGrandchildren' => 0,
+                'totalGreatGrandchildren' => 0,
+                'totalGreatGreatGrandchildren' => 0,
+                'totalGreatGreatGreatGrandchildren' => 0,
             ]);
         }
 
