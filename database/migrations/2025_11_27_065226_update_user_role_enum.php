@@ -12,10 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Modify the ENUM column to include 'member'
-        // Note: DB::statement is needed for modifying ENUMs in some MySQL versions/drivers
-        // properly without doctrine/dbal issues
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'editor', 'viewer', 'member') NOT NULL DEFAULT 'viewer'");
+        $driver = DB::getDriverName();
+
+        if ($driver === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'editor', 'viewer', 'member') NOT NULL DEFAULT 'viewer'");
+        } elseif ($driver === 'pgsql') {
+            // Drop the old check constraint
+            DB::statement("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
+            // Add the new check constraint with the new value
+            DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['admin'::text, 'editor'::text, 'viewer'::text, 'member'::text]))");
+        }
     }
 
     /**
@@ -23,7 +29,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original ENUM (warning: this will fail if 'member' roles exist)
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'editor', 'viewer') NOT NULL DEFAULT 'viewer'");
+        $driver = DB::getDriverName();
+
+        if ($driver === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'editor', 'viewer') NOT NULL DEFAULT 'viewer'");
+        } elseif ($driver === 'pgsql') {
+            DB::statement("ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check");
+            DB::statement("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['admin'::text, 'editor'::text, 'viewer'::text]))");
+        }
     }
 };
