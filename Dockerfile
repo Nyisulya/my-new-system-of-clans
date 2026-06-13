@@ -63,4 +63,4 @@ EXPOSE 80
 
 # Generate APP_KEY and start Apache.
 # Migrations run in Render's releaseCommand after the database is available.
-CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan view:clear && apache2-foreground"]
+CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan view:clear && apache2-foreground"]
