@@ -4,6 +4,7 @@ services:
     env: docker
     plan: free
     # startCommand is handled in Dockerfile for Docker runtime
+    releaseCommand: php artisan migrate --force
     envVars:
       - key: APP_KEY
         generateValue: true

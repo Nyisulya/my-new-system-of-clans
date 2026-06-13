@@ -61,6 +61,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Expose port 80
 EXPOSE 80
 
-# Generate APP_KEY, run migrations, then start Apache.
-# Avoid cache:clear during boot because the default cache store uses the database.
-CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan migrate --force && php artisan view:clear && apache2-foreground"]
+# Generate APP_KEY and start Apache.
+# Migrations run in Render's releaseCommand after the database is available.
+CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan view:clear && apache2-foreground"]
