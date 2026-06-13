@@ -1,0 +1,417 @@
+@extends('adminlte::page')
+
+@section('title', 'Add Member')
+
+@section('content_header')
+    <div class="d-flex justify-content-between align-items-center">
+                
+                @if(session('partial_matches'))
+                    <hr>
+                    <p class="mb-1"><strong>Similar records:</strong></p>
+                    <ul class="mb-0 pl-3">
+                        @foreach(session('partial_matches') as $match)
+                            <li>
+                                <a href="{{ route('members.show', $match->id) }}" target="_blank" class="text-dark font-weight-bold">
+                                    {{ $match->full_name }} 
+                                </a>
+                                <span class="text-muted">(Born: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Unknown' }})</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong><i class="fas fa-times-circle"></i> Error!</strong> {{ session('error') }}
+            </div>
+        @endif
+
+        <div class="row">
+            {{-- Left Column: Main Information --}}
+            <div class="col-lg-8">
+                {{-- Personal Details Card --}}
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-user mr-1"></i> Personal Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>First Name <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                                        </div>
+                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" 
+                                               value="{{ old('first_name') }}" placeholder="First Name" required>
+                                    </div>
+                                    @error('first_name') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Middle Name</label>
+                                    <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
+                                           value="{{ old('middle_name') }}" placeholder="Middle Name">
+                                    @error('middle_name') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
+                                           value="{{ old('last_name') }}" placeholder="Last Name" required>
+                                    @error('last_name') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Gender <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                                        </div>
+                                        <select name="gender" class="form-control @error('gender') is-invalid @enderror" required>
+                                            <option value="">Select...</option>
+                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                                        </select>
+                                    </div>
+                                    @error('gender') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Date of Birth <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" 
+                                               value="{{ old('date_of_birth') }}" required>
+                                    </div>
+                                    @error('date_of_birth') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status <span class="text-danger">*</span></label>
+                                    <select name="status" id="statusSelect" class="form-control @error('status') is-invalid @enderror" required>
+                                        <option value="alive" {{ old('status', 'alive') == 'alive' ? 'selected' : '' }}>Alive</option>
+                                        <option value="deceased" {{ old('status') == 'deceased' ? 'selected' : '' }}>Deceased</option>
+                                    </select>
+                                    @error('status') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Place of Birth</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        </div>
+                                        <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
+                                               value="{{ old('place_of_birth') }}" placeholder="City, Country">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Maiden Name <small class="text-muted">(Optional)</small></label>
+                                    <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
+                                           value="{{ old('maiden_name') }}" placeholder="Maiden Name">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Deceased Fields (Hidden by default) --}}
+                        <div id="deceasedFields" style="display: none;">
+                            <hr>
+                            <h6 class="text-secondary mb-3">Death Details</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date of Death</label>
+                                        <input type="date" name="date_of_death" class="form-control @error('date_of_death') is-invalid @enderror" 
+                                               value="{{ old('date_of_death') }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Place of Death</label>
+                                        <input type="text" name="place_of_death" class="form-control @error('place_of_death') is-invalid @enderror" 
+                                               value="{{ old('place_of_death') }}" placeholder="City, Country">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Family Organization Card --}}
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-sitemap mr-1"></i> Family Structure</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Clan <span class="text-danger">*</span></label>
+                                    @if(isset($selectedSpouse))
+                                        <input type="text" name="clan_name" class="form-control" value="{{ old('clan_name') }}" placeholder="Spouse's Clan" required>
+                                        <small class="text-muted">Enter spouse's clan name</small>
+                                    @else
+                                        <select name="clan_id" class="form-control select2" required>
+                                            <option value="">Select Clan...</option>
+                                            @foreach($clans as $clan)
+                                                <option value="{{ $clan->id }}" {{ old('clan_id', $selectedClanId ?? '') == $clan->id ? 'selected' : '' }}>
+                                                    {{ $clan->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Family <span class="text-danger">*</span></label>
+                                    @if(isset($selectedSpouse))
+                                        <input type="text" name="family_name" class="form-control" value="{{ old('family_name') }}" placeholder="Spouse's Family" required>
+                                    @else
+                                        <select name="family_id" class="form-control select2" required>
+                                            <option value="">Select Family...</option>
+                                            @foreach($clans as $clan)
+                                                @foreach($clan->families as $family)
+                                                    <option value="{{ $family->id }}" {{ old('family_id', $selectedFamilyId ?? '') == $family->id ? 'selected' : '' }}>
+                                                        {{ $family->name }} ({{ $clan->name }})
+                                                    </option>
+                                                @endforeach
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Branch</label>
+                                    @if(isset($selectedSpouse))
+                                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name') }}" placeholder="Branch (Optional)">
+                                    @else
+                                        <select name="branch_id" class="form-control select2">
+                                            <option value="">None</option>
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h6 class="text-secondary mb-3">Relationships</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Father</label>
+                                    @if(isset($selectedSpouse))
+                                        <input type="text" name="father_name" class="form-control" placeholder="Father's Name">
+                                    @else
+                                        <select name="father_id" class="form-control select2">
+                                            <option value="">Unknown / None</option>
+                                            @foreach($potentialFathers as $father)
+                                                <option value="{{ $father->id }}" {{ old('father_id', $selectedFatherId ?? '') == $father->id ? 'selected' : '' }}>
+                                                    {{ $father->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mother</label>
+                                    @if(isset($selectedSpouse))
+                                        <input type="text" name="mother_name" class="form-control" placeholder="Mother's Name">
+                                    @else
+                                        <select name="mother_id" class="form-control select2">
+                                            <option value="">Unknown / None</option>
+                                            @foreach($potentialMothers as $mother)
+                                                <option value="{{ $mother->id }}" {{ old('mother_id', $selectedMotherId ?? '') == $mother->id ? 'selected' : '' }}>
+                                                    {{ $mother->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Spouse <small class="text-muted">(Optional)</small></label>
+                                    @if(isset($selectedSpouse))
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text bg-success text-white"><i class="fas fa-check"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="{{ $selectedSpouse->full_name }}" readonly>
+                                            <input type="hidden" name="spouse_id" value="{{ $selectedSpouse->id }}">
+                                        </div>
+                                        <small class="text-success">Adding spouse for {{ $selectedSpouse->full_name }}</small>
+                                    @else
+                                        <input type="text" name="spouse_name" class="form-control" value="{{ old('spouse_name') }}" placeholder="Enter name to create spouse profile automatically">
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Right Column: Photo & Contact --}}
+            <div class="col-lg-4">
+                {{-- Profile Photo Card --}}
+                <div class="card card-warning card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center mb-3">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="{{ asset('vendor/adminlte/dist/img/user4-128x128.jpg') }}"
+                                 alt="User profile picture"
+                                 id="profilePreview"
+                                 style="width: 120px; height: 120px; object-fit: cover;">
+                        </div>
+                        <h3 class="profile-username text-center text-muted">Upload Photo</h3>
+                        
+                        <div class="form-group mt-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="profilePhoto" name="profile_photo" accept="image/*">
+                                <label class="custom-file-label" for="profilePhoto">Choose file</label>
+                            </div>
+                            <small class="text-muted d-block text-center mt-1">Max 2MB (JPG, PNG)</small>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Contact Info Card --}}
+                <div class="card card-success card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-address-book mr-1"></i> Contact Info</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope mr-1 text-muted"></i> Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email Address">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone mr-1 text-muted"></i> Phone</label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Phone Number">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-map-marker-alt mr-1 text-muted"></i> Location</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" name="city" class="form-control mb-2" value="{{ old('city') }}" placeholder="City">
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" name="country" class="form-control mb-2" value="{{ old('country') }}" placeholder="Country">
+                                </div>
+                            </div>
+                            <input type="text" name="address" class="form-control" value="{{ old('address') }}" placeholder="Full Address">
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Additional Info Card --}}
+                <div class="card card-secondary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> Extras</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Occupation</label>
+                            <input type="text" name="occupation" class="form-control" value="{{ old('occupation') }}" placeholder="Job Title">
+                        </div>
+                        <div class="form-group">
+                            <label>Biography</label>
+                            <textarea name="biography" class="form-control" rows="3" placeholder="Short bio...">{{ old('biography') }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Private Notes</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="Internal notes...">{{ old('notes') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Action Buttons --}}
+        <div class="row mb-5">
+            <div class="col-12">
+                <button type="submit" class="btn btn-success btn-lg float-right">
+                    <i class="fas fa-save mr-1"></i> {{ session('warning') ? 'Confirm & Create' : 'Create Member' }}
+                </button>
+                <a href="{{ route('members.index') }}" class="btn btn-secondary btn-lg float-right mr-2">
+                    <i class="fas fa-times mr-1"></i> Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+@stop
+
+@section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css">
+    <style>
+        .card-title { font-weight: 600; }
+        .custom-file-label::after { content: "Browse"; }
+        .select2-container .select2-selection--single { height: 38px; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px; }
+    </style>
+@stop
+
+@section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2
+            $('.select2').select2({
+                theme: 'bootstrap'
+            });
+
+            // Image Preview
+            $('#profilePhoto').change(function(){
+                let reader = new FileReader();
+                reader.onload = (e) => { 
+                    $('#profilePreview').attr('src', e.target.result); 
+                }
+                reader.readAsDataURL(this.files[0]);
+                
+                // Update label
+                var fileName = $(this).val().split('\\').pop();
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            });
+
+            // Toggle Deceased Fields
+            function toggleDeceased() {
+                if($('#statusSelect').val() === 'deceased') {
+                    $('#deceasedFields').slideDown();
+                } else {
+                    $('#deceasedFields').slideUp();
+                }
+            }
+            $('#statusSelect').change(toggleDeceased);
+            toggleDeceased(); // Run on load
+        });
+    </script>
+@stop

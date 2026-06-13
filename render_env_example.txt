@@ -1,0 +1,21 @@
+# DO NOT UPLOAD render.yaml TO ENVIRONMENT VARIABLES.
+# USE THIS FORMAT INSTEAD IF YOU ARE SETTING UP MANUALLY.
+
+APP_NAME=Ukoo
+APP_ENV=production
+APP_DEBUG=true
+APP_URL=https://your-app-name.onrender.com
+
+# APP_KEY: You can generate one or copy from your local .env
+# If using Render Blueprint (render.yaml), this is generated automatically.
+APP_KEY=base64:ReplaceWithYourKeyOrGenerateNewOne
+
+# DATABASE SETTINGS
+# If you use render.yaml (Blueprint), these are set automatically.
+# If you do this manually, you must create a Postgres DB on Render and paste the details here.
+DB_CONNECTION=pgsql
+DB_HOST=dpg-xxxx-a.oregon-postgres.render.com
+DB_PORT=5432
+DB_DATABASE=ukoo_db
+DB_USERNAME=ukoo_user
+DB_PASSWORD=ReplaceWithDatabasePassword
