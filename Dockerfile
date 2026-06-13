@@ -61,5 +61,6 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 # Expose port 80
 EXPOSE 80
 
-# Generate APP_KEY (needed for Laravel boot) and start the app
-CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan migrate --force && apache2-foreground"]
+# Generate APP_KEY, run migrations, then start Apache.
+# Avoid cache:clear during boot because the default cache store uses the database.
+CMD ["/bin/bash", "-c", "php artisan key:generate --force && php artisan config:clear && php artisan migrate --force && php artisan view:clear && apache2-foreground"]
