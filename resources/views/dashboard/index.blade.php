@@ -5,7 +5,7 @@
 @section('content_header')
     <h1>
         <i class="fas fa-tachometer-alt"></i> Dashboard
-        <small>Family Tree </small>
+        <small>Family  </small>
     </h1>
 @stop
 
