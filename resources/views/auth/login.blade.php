@@ -131,10 +131,32 @@
             height: 20px;
         }
 
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            color: #a0aec0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 14px 16px 14px 48px;
+            padding: 14px 48px 14px 48px;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             font-size: 15px;
@@ -347,6 +369,12 @@
                             required
                             placeholder="Enter your password"
                         >
+                        <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zm0 12c-2.48 0-4.5-2.02-4.5-4.5S9.52 7.5 12 7.5s4.5 2.02 4.5 4.5S14.48 16.5 12 16.5z"/>
+                                <path d="M12 9.75A2.25 2.25 0 109 12a2.25 2.25 0 003-2.25z"/>
+                            </svg>
+                        </button>
                     </div>
                     @error('password')
                         <span class="invalid-feedback">{{ $message }}</span>
@@ -376,5 +404,18 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.password-toggle').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var targetId = button.getAttribute('data-target');
+                    var input = document.getElementById(targetId);
+                    if (!input) return;
+                    input.type = input.type === 'password' ? 'text' : 'password';
+                    button.setAttribute('aria-label', input.type === 'password' ? 'Show password' : 'Hide password');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
