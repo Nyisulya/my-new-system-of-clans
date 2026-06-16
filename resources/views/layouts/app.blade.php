@@ -3,94 +3,357 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', config('app.name', 'Clan System'))</title>
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Bootstrap 4 (kept for AdminLTE component compat) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- AdminLTE 3 CSS (components only compat: small-box, card, badges) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+    <!-- Leaflet CSS (for map pages) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Our Modern Layout CSS (loaded last to override) -->
+    <link rel="stylesheet" href="{{ asset('css/layout.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
+
+    <!-- Page-specific styles -->
+    @yield('css')
+    @stack('styles')
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+<body class="@auth logged-in @endauth">
 
-                    </ul>
+{{-- ======================================
+     SIDEBAR
+     ====================================== --}}
+@auth
+<aside class="app-sidebar" id="appSidebar">
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+    {{-- Brand --}}
+    <a href="{{ route('dashboard') }}" class="sidebar-brand">
+        <div class="sidebar-brand-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="sidebar-brand-text">
+            {{ config('app.name', 'Clan System') }}
+            <small>Family Tree Management</small>
+        </div>
+    </a>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+    {{-- Navigation --}}
+    <nav class="sidebar-nav">
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+        {{-- Main --}}
+        <div class="sidebar-section-title">Main</div>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+        <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <i class="fas fa-tachometer-alt"></i>
+            Dashboard
+        </a>
+
+        {{-- Members --}}
+        <div class="sidebar-section-title">People</div>
+
+        <a href="{{ route('members.index') }}" class="sidebar-item {{ request()->routeIs('members.*') && !request()->routeIs('members.create') ? 'active' : '' }}">
+            <i class="fas fa-users"></i>
+            All Members
+        </a>
+
+        <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
+            <i class="fas fa-user-plus"></i>
+            Add Member
+        </a>
+
+        <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
+            <i class="fas fa-user-friends"></i>
+            Parents
+        </a>
+
+        {{-- Clans & Families --}}
+        <div class="sidebar-section-title">Structure</div>
+
+        <a href="{{ route('clans.index') }}" class="sidebar-item {{ request()->routeIs('clans.*') ? 'active' : '' }}">
+            <i class="fas fa-shield-alt"></i>
+            Clans
+        </a>
+
+        <a href="{{ route('families.index') }}" class="sidebar-item {{ request()->routeIs('families.*') ? 'active' : '' }}">
+            <i class="fas fa-home"></i>
+            Families
+        </a>
+
+        <a href="{{ route('branches.index') }}" class="sidebar-item {{ request()->routeIs('branches.*') ? 'active' : '' }}">
+            <i class="fas fa-code-branch"></i>
+            Branches
+        </a>
+
+        {{-- Community --}}
+        <div class="sidebar-section-title">Community</div>
+
+        <a href="{{ route('announcements.index') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+            <i class="fas fa-bullhorn"></i>
+            Announcements
+        </a>
+
+        <a href="{{ route('campaigns.index') }}" class="sidebar-item {{ request()->routeIs('campaigns.*') ? 'active' : '' }}">
+            <i class="fas fa-hand-holding-heart"></i>
+            Campaigns
+        </a>
+
+        <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
+            <i class="fas fa-calendar-alt"></i>
+            Calendar
+        </a>
+
+        {{-- Media & Records --}}
+        <div class="sidebar-section-title">Records</div>
+
+        <a href="{{ route('galleries.index') }}" class="sidebar-item {{ request()->routeIs('galleries.*') ? 'active' : '' }}">
+            <i class="fas fa-images"></i>
+            Galleries
+        </a>
+
+        <a href="{{ route('timeline.index') }}" class="sidebar-item {{ request()->routeIs('timeline.*') ? 'active' : '' }}">
+            <i class="fas fa-stream"></i>
+            Timeline
+        </a>
+
+        <a href="{{ route('gedcom.index') }}" class="sidebar-item {{ request()->routeIs('gedcom.*') ? 'active' : '' }}">
+            <i class="fas fa-file-export"></i>
+            GEDCOM
+        </a>
+
+        <div class="sidebar-divider"></div>
+
+        <a href="{{ route('notifications.index') }}" class="sidebar-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
+            <i class="fas fa-bell"></i>
+            Notifications
+        </a>
+
+    </nav>
+
+    {{-- User Footer --}}
+    <div class="sidebar-footer">
+        <div class="sidebar-user-card">
+            <div class="sidebar-user-avatar">
+                {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 2)) }}
             </div>
-        </nav>
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-
-        <!-- Footer -->
-        <footer class="bg-light text-center text-lg-start mt-5">
-            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-                <div class="row">
-                    <div class="col-md-6 text-md-start">
-                        <strong>Copyright © 2025 <a href="#">Felician Joseph Nyisulya</a>.</strong> All rights reserved.
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <strong>Developed by:</strong> Felician Joseph Nyisulya | 
-                        <i class="fas fa-phone"></i> +255 756 670 798 | 
-                        <i class="fas fa-envelope"></i> felicianjoseph575@gmail.com
-                    </div>
-                </div>
+            <div class="sidebar-user-info">
+                <div class="sidebar-user-name">{{ Auth::user()->name ?? 'User' }}</div>
+                <div class="sidebar-user-role">{{ Auth::user()->email ?? '' }}</div>
             </div>
-        </footer>
+            <a href="{{ route('logout') }}"
+               class="sidebar-logout-btn"
+               title="Logout"
+               onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+        <form id="sidebar-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
     </div>
+
+</aside>
+
+{{-- Sidebar Overlay (mobile) --}}
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+@endauth
+
+{{-- ======================================
+     TOPBAR
+     ====================================== --}}
+@auth
+<header class="app-topbar" id="appTopbar">
+    <div class="topbar-left">
+        <button class="topbar-toggle" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="topbar-page-title">@yield('page_title', config('app.name', 'Clan System'))</h1>
+    </div>
+
+    <div class="topbar-right">
+        {{-- Notifications bell --}}
+        <a href="{{ route('notifications.index') }}" class="topbar-icon-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            @if(auth()->user() && auth()->user()->unreadNotifications && auth()->user()->unreadNotifications->count() > 0)
+                <span class="topbar-notif-dot"></span>
+            @endif
+        </a>
+
+        {{-- User dropdown --}}
+        <div class="dropdown">
+            <a href="#" class="topbar-user-btn" data-toggle="dropdown" role="button">
+                <div class="topbar-avatar">
+                    {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 2)) }}
+                </div>
+                <span class="topbar-name">{{ Str::limit(Auth::user()->name ?? 'User', 14) }}</span>
+                <i class="fas fa-chevron-down" style="font-size:10px; color:#94a3b8;"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="dropdown-item-text">
+                    <small class="text-muted">Signed in as</small><br>
+                    <strong>{{ Auth::user()->name }}</strong>
+                </div>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+@endauth
+
+{{-- ======================================
+     MAIN CONTENT
+     ====================================== --}}
+<div class="app-content" id="appContent">
+    <div class="app-content-inner">
+
+        {{-- Flash Messages --}}
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-check-circle mr-2"></i>
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        @if(session('warning'))
+            <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                {{ session('warning') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
+        {{-- Content Header (AdminLTE compat) --}}
+        @hasSection('content_header')
+            <div class="content-page-header">
+                @yield('content_header')
+            </div>
+        @endif
+
+        {{-- Main Content --}}
+        @yield('content')
+
+    </div>
+
+    {{-- Footer --}}
+    <footer class="app-footer">
+        <span>&copy; {{ date('Y') }} <strong>Felician Joseph Nyisulya</strong>. All rights reserved.</span>
+        <span><i class="fas fa-phone-alt mr-1"></i> +255 756 670 798</span>
+    </footer>
+</div>
+
+{{-- ======================================
+     SCRIPTS
+     ====================================== --}}
+
+<!-- jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+<!-- Bootstrap 4 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- AdminLTE 3 JS (for component behaviours) -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+<!-- Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+<!-- Leaflet JS (for map pages) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Sidebar Toggle Script -->
+<script>
+(function () {
+    var sidebar   = document.getElementById('appSidebar');
+    var overlay   = document.getElementById('sidebarOverlay');
+    var toggleBtn = document.getElementById('sidebarToggle');
+
+    function openSidebar() {
+        if (sidebar)  sidebar.classList.add('sidebar-open');
+        if (overlay)  overlay.classList.add('active');
+    }
+
+    function closeSidebar() {
+        if (sidebar)  sidebar.classList.remove('sidebar-open');
+        if (overlay)  overlay.classList.remove('active');
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            if (sidebar && sidebar.classList.contains('sidebar-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+    }
+
+    // Init select2 globally
+    $(document).ready(function () {
+        if ($.fn.select2) {
+            $('.select2').select2({ theme: 'bootstrap4' });
+        }
+
+        // Auto-dismiss alerts after 5s
+        setTimeout(function () {
+            $('.alert.alert-success, .alert.alert-warning').fadeOut('slow');
+        }, 5000);
+    });
+})();
+</script>
+
+<!-- Page-specific scripts -->
+@yield('js')
+@stack('scripts')
+
 </body>
 </html>

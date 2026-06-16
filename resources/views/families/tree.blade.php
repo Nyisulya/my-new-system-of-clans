@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('layouts.main')
 
 @section('title', $family->name . ' - Family Tree')
 

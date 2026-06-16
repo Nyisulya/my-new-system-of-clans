@@ -41,10 +41,6 @@ Route::middleware(['auth'])->group(function () {
     // Branch Management
     Route::resource('branches', \App\Http\Controllers\Web\BranchController::class);
 
-    // Relationship Calculator
-    Route::get('relationships', [\App\Http\Controllers\Web\RelationshipController::class, 'index'])->name('relationships.index');
-    Route::post('relationships/calculate', [\App\Http\Controllers\Web\RelationshipController::class, 'calculate'])->name('relationships.calculate');
-
     // Timeline
     Route::get('timeline', [\App\Http\Controllers\Web\TimelineController::class, 'index'])->name('timeline.index');
 
