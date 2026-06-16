@@ -41,12 +41,15 @@
 
         {{-- Password field --}}
         <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+            <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                    placeholder="{{ __('Password') }}" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                 </div>
+                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password" aria-label="Show password">
+                    <span class="fas fa-eye"></span>
+                </button>
             </div>
             @error('password')
                 <span class="invalid-feedback" role="alert">
@@ -57,12 +60,15 @@
 
         {{-- Confirm password field --}}
         <div class="input-group mb-3">
-            <input type="password" name="password_confirmation" class="form-control"
+            <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
                    placeholder="{{ __('Confirm Password') }}" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                 </div>
+                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password_confirmation" aria-label="Show password">
+                    <span class="fas fa-eye"></span>
+                </button>
             </div>
         </div>
 
@@ -92,4 +98,17 @@
 @section('adminlte_js')
     {{-- Mobile Enhancements --}}
     <script src="{{ asset('js/mobile-enhancements.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.password-toggle').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var targetId = button.getAttribute('data-target');
+                    var input = document.getElementById(targetId);
+                    if (!input) return;
+                    input.type = input.type === 'password' ? 'text' : 'password';
+                    button.setAttribute('aria-label', input.type === 'password' ? 'Show password' : 'Hide password');
+                });
+            });
+        });
+    </script>
 @stop
