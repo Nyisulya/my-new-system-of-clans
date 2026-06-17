@@ -516,6 +516,57 @@ html, body {
 .btn-primary { background: var(--accent) !important; border-color: var(--accent) !important; }
 .btn-primary:hover { background: var(--accent-hover) !important; border-color: var(--accent-hover) !important; }
 
+/* ==========================================
+   ACTION BUTTONS (Table icon-only buttons)
+   Compact 28x28px on ALL screen sizes
+   ========================================== */
+.action-buttons {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+}
+
+.action-buttons a,
+.action-buttons a.btn,
+.action-buttons button,
+.action-buttons .btn,
+.btn-xs {
+  min-height: unset !important;
+  min-width: unset !important;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 6px !important;
+  flex-shrink: 0 !important;
+  text-decoration: none !important;
+}
+
+.action-buttons a i,
+.action-buttons a.btn i,
+.action-buttons button i,
+.action-buttons .btn i,
+.btn-xs i {
+  font-size: 12px !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  pointer-events: none;
+}
+
+.action-buttons form {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  line-height: 1 !important;
+}
+
 /* Tables */
 .table th {
   font-size: 12px !important;
