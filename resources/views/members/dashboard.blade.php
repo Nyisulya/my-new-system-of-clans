@@ -57,38 +57,40 @@
                     </li>
                 </ul>
                 <div class="d-grid gap-2">
-                    <a href="{{ route('members.edit', $member) }}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> Edit Profile</a>
-                    
-                    @php 
-                        $spouses = $member->spouses();
-                        $spouseCount = $spouses->count();
-                        $firstSpouse = $spouses->first();
-                    @endphp
-                    
-                    <a href="{{ route('members.create', [
-                        'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
-                        'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
-                        'clan_id' => $member->clan_id,
-                        'family_id' => $member->family_id
-                    ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Add Child</a>
-                    
-                    @if($member->gender == 'male')
-                        {{-- Always show for males to support polygamy --}}
+                    @can('update', $member)
+                        <a href="{{ route('members.edit', $member) }}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> Edit Profile</a>
+                        
+                        @php 
+                            $spouses = $member->spouses();
+                            $spouseCount = $spouses->count();
+                            $firstSpouse = $spouses->first();
+                        @endphp
+                        
                         <a href="{{ route('members.create', [
-                            'spouse_id' => $member->id,
-                            'gender' => 'female'
-                        ]) }}" class="btn btn-info btn-block">
-                            <i class="fas fa-heart"></i> {{ $spouseCount > 0 ? 'Add Another Wife' : 'Add Wife' }}
-                        </a>
-                    @elseif($member->gender == 'female' && $spouseCount == 0)
-                        {{-- Only show for females if they have no husband --}}
-                        <a href="{{ route('members.create', [
-                            'spouse_id' => $member->id,
-                            'gender' => 'male'
-                        ]) }}" class="btn btn-info btn-block">
-                            <i class="fas fa-heart"></i> Add Husband
-                        </a>
-                    @endif
+                            'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
+                            'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
+                            'clan_id' => $member->clan_id,
+                            'family_id' => $member->family_id
+                        ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Add Child</a>
+                        
+                        @if($member->gender == 'male')
+                            {{-- Always show for males to support polygamy --}}
+                            <a href="{{ route('members.create', [
+                                'spouse_id' => $member->id,
+                                'gender' => 'female'
+                            ]) }}" class="btn btn-info btn-block">
+                                <i class="fas fa-heart"></i> {{ $spouseCount > 0 ? 'Add Another Wife' : 'Add Wife' }}
+                            </a>
+                        @elseif($member->gender == 'female' && $spouseCount == 0)
+                            {{-- Only show for females if they have no husband --}}
+                            <a href="{{ route('members.create', [
+                                'spouse_id' => $member->id,
+                                'gender' => 'male'
+                            ]) }}" class="btn btn-info btn-block">
+                                <i class="fas fa-heart"></i> Add Husband
+                            </a>
+                        @endif
+                    @endcan
                     
                     @can('delete', $member)
                         <form action="{{ route('members.destroy', $member) }}" method="POST" class="mt-2">

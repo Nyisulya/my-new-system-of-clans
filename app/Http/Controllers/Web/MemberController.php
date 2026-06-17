@@ -362,6 +362,8 @@ class MemberController extends Controller
      */
     public function edit(Member $member)
     {
+        $this->authorize('update', $member);
+
         $clans = Clan::with('families')->get();
         $families = Family::where('clan_id', $member->clan_id)->get();
         $branches = Branch::where('family_id', $member->family_id)->get();
@@ -474,6 +476,8 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        $this->authorize('delete', $member);
+
         // Delete profile photo
         if ($member->profile_photo) {
             $this->imageService->deleteImage($member->profile_photo);
@@ -499,6 +503,8 @@ class MemberController extends Controller
      */
     public function dashboard(Member $member)
     {
+        $this->authorize('viewDashboard', $member);
+
         $member->load(['childrenAsFather', 'childrenAsMother', 'clan', 'family']);
         $children = $member->children()->get();
         

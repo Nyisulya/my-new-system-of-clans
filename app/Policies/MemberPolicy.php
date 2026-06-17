@@ -35,11 +35,31 @@ class MemberPolicy
     }
 
     /**
+     * Determine whether the user can view the model's dashboard.
+     */
+    public function viewDashboard(User $user, Member $member): bool
+    {
+        // Admin can view anyone's dashboard
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Regular members can only view their own dashboard
+        return $user->member_id === $member->id;
+    }
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, Member $member): bool
     {
-        return $user->isAdmin();
+        // Admin can edit anyone
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Regular members can only edit their own profile
+        return $user->member_id === $member->id;
     }
 
     /**
@@ -47,7 +67,13 @@ class MemberPolicy
      */
     public function delete(User $user, Member $member): bool
     {
-        return $user->isAdmin();
+        // Admin can delete anyone
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Regular members can delete their own profile
+        return $user->member_id === $member->id;
     }
 
     /**
