@@ -1,52 +1,52 @@
 @extends('layouts.main')
 
-@section('title', $family->name . ' - Family Tree')
+@section('title', $family->name . ' - Mti wa Ukoo')
 
 @section('content_header')
     <h1>
-        <i class="fas fa-sitemap"></i> {{ $family->name }} Family Tree
-        <small>Members Overview</small>
+        <i class="fas fa-sitemap"></i> Mti wa Ukoo wa {{ $family->name }}
+        <small>Muhtasari wa Wanafamilia</small>
     </h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-table"></i> Family Members</h3>
+            <h3 class="card-title"><i class="fas fa-table"></i> Wanafamilia</h3>
         </div>
         <div class="card-body">
             <div class="row mb-3">
                 <div class="col-md-12 mb-3">
                     <button id="toggle-founder-view" class="btn btn-warning btn-lg btn-block">
-                        <i class="fas fa-crown"></i> <span id="toggle-text">Show Clan Founder Only</span>
+                        <i class="fas fa-crown"></i> <span id="toggle-text">Onyesha Mwanzilishi wa Ukoo Pekee</span>
                     </button>
                     <small class="text-muted d-block text-center mt-2">
-                        <i class="fas fa-info-circle"></i> Toggle to view only Generation 1 (Founder + Wives) or all generations
+                        <i class="fas fa-info-circle"></i> Badilisha ili kuona Kizazi cha 1 pekee (Mwanzilishi + Wakeze) au vizazi vyote
                     </small>
                 </div>
                 <div class="col-md-3">
-                    <label>Generation</label>
+                    <label>Kizazi</label>
                     <select id="filter-generation" class="form-control select2">
-                        <option value="">All Generations</option>
+                        <option value="">Vizazi Vyote</option>
                         @foreach($allMembers->pluck('generation_number')->unique()->sort() as $gen)
-                            <option value="{{ $gen }}">Generation {{ $gen }}</option>
+                            <option value="{{ $gen }}">Kizazi cha {{ $gen }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label>Gender</label>
+                    <label>Jinsia</label>
                     <select id="filter-gender" class="form-control select2">
-                        <option value="">All Genders</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="">Jinsia Zote</option>
+                        <option value="Mwanaume">Mwanaume</option>
+                        <option value="Mwanamke">Mwanamke</option>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label>Status</label>
+                    <label>Hali</label>
                     <select id="filter-status" class="form-control select2">
-                        <option value="">All Statuses</option>
-                        <option value="Alive">Alive</option>
-                        <option value="Deceased">Deceased</option>
+                        <option value="">Hali Zote</option>
+                        <option value="Hai">Hai</option>
+                        <option value="Marehemu">Marehemu</option>
                     </select>
                 </div>
             </div>
@@ -55,13 +55,13 @@
                     <thead>
                         <tr>
                             <th></th> {{-- Expand button --}}
-                            <th>Photo</th>
-                            <th>Name</th>
-                            <th>Gen</th>
-                            <th>Gender</th>
-                            <th>Children</th>
-                            <th>Status</th>
-                            <th>Action</th>
+                            <th>Picha</th>
+                            <th>Jina</th>
+                            <th>Kizazi</th>
+                            <th>Jinsia</th>
+                            <th>Watoto</th>
+                            <th>Hali</th>
+                            <th>Vitendo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,7 +84,7 @@
                                 
                                 $founderGroup = $isGenOne || $isSpouseOfGenOne ? 'yes' : 'no';
                             @endphp
-                            <tr data-child-value="{{ $member->biography ?? 'No biography available.' }}" 
+                            <tr data-child-value="{{ $member->biography ?? 'Hakuna wasifu uliopo.' }}" 
                                 data-founder-group="{{ $founderGroup }}">
                                 <td class="details-control text-center text-primary" style="cursor: pointer;">
                                     <i class="fas fa-plus-circle"></i>
@@ -95,20 +95,20 @@
                                 <td>
                                     <strong>{{ $member->full_name }}</strong>
                                     @if($isSpouseOfGenOne && !$isGenOne)
-                                        <span class="badge badge-info badge-sm ml-1">Spouse</span>
+                                        <span class="badge badge-info badge-sm ml-1">Mwenzi</span>
                                     @endif
                                     <br>
                                     <small class="text-muted">
                                         {{ $member->date_of_birth ? $member->date_of_birth->format('Y') : '?' }} - 
-                                        {{ $member->status == 'deceased' && $member->date_of_death ? $member->date_of_death->format('Y') : ($member->status == 'alive' ? 'Present' : '?') }}
+                                        {{ $member->status == 'deceased' && $member->date_of_death ? $member->date_of_death->format('Y') : ($member->status == 'alive' ? 'Sasa' : '?') }}
                                     </small>
                                 </td>
                                 <td><span class="badge badge-light">{{ $member->generation_number }}</span></td>
                                 <td>
                                     @if($member->gender == 'male')
-                                        <i class="fas fa-mars text-blue"></i> Male
+                                        <i class="fas fa-mars text-blue"></i> Mwanaume
                                     @elseif($member->gender == 'female')
-                                        <i class="fas fa-venus text-pink"></i> Female
+                                        <i class="fas fa-venus text-pink"></i> Mwanamke
                                     @else
                                         {{ ucfirst($member->gender) }}
                                     @endif
@@ -122,13 +122,13 @@
                                 </td>
                                 <td>
                                     @if($member->status == 'alive')
-                                        <span class="badge badge-success">Alive</span>
+                                        <span class="badge badge-success">Hai</span>
                                     @else
-                                        <span class="badge badge-secondary">Deceased</span>
+                                        <span class="badge badge-secondary">Marehemu</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('members.dashboard', $member->id) }}" class="btn btn-xs btn-primary" title="Dashboard">
+                                    <a href="{{ route('members.dashboard', $member->id) }}" class="btn btn-xs btn-primary" title="Dashibodi">
                                         <i class="fas fa-tachometer-alt"></i>
                                     </a>
                                     @php
@@ -144,7 +144,7 @@
                                         'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse?->id ?? null),
                                         'clan_id' => $member->clan_id,
                                         'family_id' => $member->family_id
-                                    ]) }}" class="btn btn-xs btn-success" title="Add Child">
+                                    ]) }}" class="btn btn-xs btn-success" title="Ongeza Mtoto">
                                         <i class="fas fa-baby"></i>
                                     </a>
                                 </td>
@@ -211,7 +211,7 @@
                     table.draw();
                     
                     $(this).removeClass('btn-warning').addClass('btn-success');
-                    $('#toggle-text').text('Show All Generations');
+                    $('#toggle-text').text('Onyesha Vizazi Vyote');
                     $(this).find('i').removeClass('fa-crown').addClass('fa-sitemap');
                     
                     // Disable generation filter dropdown
@@ -222,7 +222,7 @@
                     table.draw();
                     
                     $(this).removeClass('btn-success').addClass('btn-warning');
-                    $('#toggle-text').text('Show Clan Founder Only');
+                    $('#toggle-text').text('Onyesha Mwanzilishi wa Ukoo Pekee');
                     $(this).find('i').removeClass('fa-sitemap').addClass('fa-crown');
                     
                     // Enable generation filter dropdown
@@ -262,7 +262,7 @@
 
             function format(d) {
                 return '<div class="p-3 bg-light border-left border-info">' +
-                    '<strong>Biography/Notes:</strong><br>' +
+                    '<strong>Wasifu/Maelezo:</strong><br>' +
                     d +
                     '</div>';
             }

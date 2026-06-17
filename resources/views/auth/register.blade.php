@@ -17,7 +17,7 @@
     @php( $dashboard_url = $dashboard_url ? url($dashboard_url) : '' )
 @endif
 
-@section('auth_header', __('Register New Member'))
+@section('auth_header', 'Sajili Mwanachama Mpya')
 
 @section('auth_body')
     <form action="{{ $register_url }}" method="post">
@@ -26,7 +26,7 @@
         {{-- Name field --}}
         <div class="input-group mb-3">
             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                   value="{{ old('name') }}" placeholder="{{ __('Full Name') }}" autofocus required>
+                   value="{{ old('name') }}" placeholder="Jina Kamili" autofocus required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-user"></span>
@@ -42,12 +42,12 @@
         {{-- Password field --}}
         <div class="input-group mb-3">
             <input id="password" type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-                   placeholder="{{ __('Password') }}" required>
+                   placeholder="Nenosiri (Password)" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                 </div>
-                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password" aria-label="Show password">
+                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password" aria-label="Onyesha nenosiri">
                     <span class="fas fa-eye"></span>
                 </button>
             </div>
@@ -61,12 +61,12 @@
         {{-- Confirm password field --}}
         <div class="input-group mb-3">
             <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
-                   placeholder="{{ __('Confirm Password') }}" required>
+                   placeholder="Thibitisha Nenosiri" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock"></span>
                 </div>
-                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password_confirmation" aria-label="Show password">
+                <button type="button" class="btn btn-outline-secondary password-toggle" data-target="password_confirmation" aria-label="Onyesha nenosiri">
                     <span class="fas fa-eye"></span>
                 </button>
             </div>
@@ -75,13 +75,13 @@
         {{-- Info message --}}
         <div class="alert alert-info">
             <i class="fas fa-info-circle"></i> 
-            <small>Your name will be used as your username to login. You can update your profile details after registration.</small>
+            <small>Jina lako litatumika kama jina la kuingilia kwenye mfumo. Unaweza kusasisha maelezo ya wasifu wako baada ya usajili.</small>
         </div>
 
         {{-- Register button --}}
         <button type="submit" class="btn btn-primary btn-block">
             <span class="fas fa-user-plus"></span>
-            {{ __('Register') }}
+            Sajili
         </button>
 
     </form>
@@ -90,7 +90,7 @@
 @section('auth_footer')
     <p class="mb-0">
         <a href="{{ route('login') }}">
-            {{ __('I already have an account') }}
+            Tayari nina akaunti
         </a>
     </p>
 @stop
@@ -106,7 +106,7 @@
                     var input = document.getElementById(targetId);
                     if (!input) return;
                     input.type = input.type === 'password' ? 'text' : 'password';
-                    button.setAttribute('aria-label', input.type === 'password' ? 'Show password' : 'Hide password');
+                    button.setAttribute('aria-label', input.type === 'password' ? 'Onyesha nenosiri' : 'Ficha nenosiri');
                 });
             });
         });

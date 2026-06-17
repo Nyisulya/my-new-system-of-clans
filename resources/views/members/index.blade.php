@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Members')
+@section('title', __('common.members'))
 
 @section('content_header')
     <h1>
@@ -8,9 +8,9 @@
         @if(request('category'))
             {{ ucwords(str_replace('_', ' ', request('category'))) }}
         @else
-            Family Members
+            Wanafamilia
         @endif
-        <small>Manage all family members</small>
+        <small>Simamia wanachama wote wa familia</small>
     </h1>
 @stop
 
@@ -19,14 +19,14 @@
         <div class="card-header">
             <h3 class="card-title">
                 @if(request('category'))
-                    {{ ucwords(str_replace('_', ' ', request('category'))) }} List
+                    Orodha ya {{ ucwords(str_replace('_', ' ', request('category'))) }}
                 @else
-                    Members List
+                    Orodha ya Wanafamilia
                 @endif
             </h3>
             <div class="card-tools">
                 <a href="{{ route('members.create') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Add New Member</span>
+                    <i class="fas fa-plus"></i> <span class="d-none d-sm-inline">Ongeza Mwanachama Mpya</span>
                 </a>
             </div>
         </div>
@@ -37,25 +37,25 @@
                 <input type="hidden" name="category" value="{{ request('category') }}">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-3 mb-2">
-                        <input type="text" name="search" class="form-control" placeholder="Search by name..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="Tafuta kwa jina..." value="{{ request('search') }}">
                     </div>
                     <div class="col-12 col-sm-6 col-md-2 mb-2">
                         <select name="gender" class="form-control" onchange="this.form.submit()">
-                            <option value="">All Genders</option>
-                            <option value="male" {{ request('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                            <option value="female" {{ request('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="">Jinsia Zote</option>
+                            <option value="male" {{ request('gender') == 'male' ? 'selected' : '' }}>Mwanaume</option>
+                            <option value="female" {{ request('gender') == 'female' ? 'selected' : '' }}>Mwanamke</option>
                         </select>
                     </div>
                     <div class="col-12 col-sm-6 col-md-2 mb-2">
                         <select name="status" class="form-control" onchange="this.form.submit()">
-                            <option value="">All Status</option>
-                            <option value="alive" {{ request('status') == 'alive' ? 'selected' : '' }}>Alive</option>
-                            <option value="deceased" {{ request('status') == 'deceased' ? 'selected' : '' }}>Deceased</option>
+                            <option value="">Hali Zote</option>
+                            <option value="alive" {{ request('status') == 'alive' ? 'selected' : '' }}>Hai</option>
+                            <option value="deceased" {{ request('status') == 'deceased' ? 'selected' : '' }}>Marehemu</option>
                         </select>
                     </div>
                     <div class="col-12 col-sm-6 col-md-3 mb-2">
                         <select name="family_id" class="form-control" onchange="this.form.submit()">
-                            <option value="">All Families</option>
+                            <option value="">Familia Zote</option>
                             @foreach($families as $family)
                                 <option value="{{ $family->id }}" {{ request('family_id') == $family->id ? 'selected' : '' }}>
                                     {{ $family->name }}
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-12 col-md-2 mb-2">
                         <button type="submit" class="btn btn-primary btn-block w-100">
-                            <i class="fas fa-search"></i> Filter
+                            <i class="fas fa-search"></i> Chuja
                         </button>
                     </div>
                 </div>
@@ -76,15 +76,15 @@
                 <table class="table table-hover no-mobile-cards">
                     <thead>
                         <tr>
-                            <th>Photo</th>
-                            <th>Name</th>
-                            <th class="d-none d-sm-table-cell">Gender</th>
-                            <th class="d-none d-md-table-cell">DOB</th>
-                            <th class="d-none d-lg-table-cell">Age</th>
-                            <th>Generation</th>
-                            <th class="d-none d-md-table-cell">Family</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>Picha</th>
+                            <th>Jina</th>
+                            <th class="d-none d-sm-table-cell">Jinsia</th>
+                            <th class="d-none d-md-table-cell">Tarehe ya Kuzaliwa</th>
+                            <th class="d-none d-lg-table-cell">Umri</th>
+                            <th>Kizazi</th>
+                            <th class="d-none d-md-table-cell">Familia</th>
+                            <th>Hali</th>
+                            <th>Vitendo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,34 +99,34 @@
                                 </td>
                                 <td class="d-none d-sm-table-cell">
                                     @if($member->gender == 'male')
-                                        <i class="fas fa-mars text-primary"></i> <span class="d-none d-md-inline">Male</span>
+                                        <i class="fas fa-mars text-primary"></i> <span class="d-none d-md-inline">Mwanaume</span>
                                     @elseif($member->gender == 'female')
-                                        <i class="fas fa-venus text-danger"></i> <span class="d-none d-md-inline">Female</span>
+                                        <i class="fas fa-venus text-danger"></i> <span class="d-none d-md-inline">Mwanamke</span>
                                     @else
-                                        Other
+                                        Nyingine
                                     @endif
                                 </td>
                                 <td class="d-none d-md-table-cell">{{ $member->date_of_birth?->format('M d, Y') }}</td>
-                                <td class="d-none d-lg-table-cell">{{ $member->age }} years</td>
+                                <td class="d-none d-lg-table-cell">{{ $member->age }} miaka</td>
                                 <td><span class="badge badge-info">Gen {{ $member->generation_number }}</span></td>
                                 <td class="d-none d-md-table-cell">{{ $member->family->name ?? 'N/A' }}</td>
                                 <td>
                                     @if($member->status == 'alive')
-                                        <span class="badge badge-success">Alive</span>
+                                        <span class="badge badge-success">Hai</span>
                                     @else
-                                        <span class="badge badge-secondary">Deceased</span>
+                                        <span class="badge badge-secondary">Marehemu</span>
                                     @endif
                                 </td>
                                 <td onclick="event.stopPropagation();">
                                     <div class="action-buttons">
-                                        <a href="{{ route('members.dashboard', $member) }}" class="btn btn-xs btn-primary" title="Dashboard">
+                                        <a href="{{ route('members.dashboard', $member) }}" class="btn btn-xs btn-primary" title="Dashibodi">
                                             <i class="fas fa-tachometer-alt"></i>
                                         </a>
-                                        <a href="{{ route('members.show', $member) }}" class="btn btn-xs btn-info" title="View Profile">
+                                        <a href="{{ route('members.show', $member) }}" class="btn btn-xs btn-info" title="Angalia Wasifu">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @can('update', $member)
-                                            <a href="{{ route('members.edit', $member) }}" class="btn btn-xs btn-warning" title="Edit">
+                                            <a href="{{ route('members.edit', $member) }}" class="btn btn-xs btn-warning" title="Hariri">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         @endcan
@@ -135,7 +135,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-xs btn-danger" 
-                                                        onclick="return confirm('Are you sure?')" title="Delete">
+                                                        onclick="return confirm('Je, una uhakika?')" title="Futa">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
@@ -143,13 +143,13 @@
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                            @empty
                             <tr>
                                 <td colspan="9" class="text-center">
-                                    <p class="text-muted">No members found. <a href="{{ route('members.create') }}">Add your first member</a></p>
+                                    <p class="text-muted">Hakuna wanachama waliopatikana. <a href="{{ route('members.create') }}">Ongeza mwanachama wako wa kwanza</a></p>
                                 </td>
                             </tr>
-                        @endforelse
+                            @endforelse
                     </tbody>
                 </table>
             </div>

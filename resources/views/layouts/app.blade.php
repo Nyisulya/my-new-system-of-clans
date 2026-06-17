@@ -55,7 +55,7 @@
         </div>
         <div class="sidebar-brand-text">
             {{ config('app.name', 'Clan System') }}
-            <small>Family Tree Management</small>
+            <small>{{ __('common.family_tree_management') }}</small>
         </div>
     </a>
 
@@ -63,90 +63,90 @@
     <nav class="sidebar-nav">
 
         {{-- Main --}}
-        <div class="sidebar-section-title">Main</div>
+        <div class="sidebar-section-title">{{ __('common.main') }}</div>
 
         <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="fas fa-tachometer-alt"></i>
-            Dashboard
+            {{ __('common.dashboard') }}
         </a>
 
         {{-- Members --}}
-        <div class="sidebar-section-title">People</div>
+        <div class="sidebar-section-title">{{ __('common.people') }}</div>
 
         <a href="{{ route('members.index') }}" class="sidebar-item {{ request()->routeIs('members.*') && !request()->routeIs('members.create') ? 'active' : '' }}">
             <i class="fas fa-users"></i>
-            All Members
+            {{ __('common.all_members') }}
         </a>
 
         <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
             <i class="fas fa-user-plus"></i>
-            Add Member
+            {{ __('common.add_member') }}
         </a>
 
         <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
             <i class="fas fa-user-friends"></i>
-            Parents
+            {{ __('common.parents') }}
         </a>
 
         {{-- Clans & Families --}}
-        <div class="sidebar-section-title">Structure</div>
+        <div class="sidebar-section-title">{{ __('common.structure') }}</div>
 
         <a href="{{ route('clans.index') }}" class="sidebar-item {{ request()->routeIs('clans.*') ? 'active' : '' }}">
             <i class="fas fa-shield-alt"></i>
-            Clans
+            {{ __('common.clans') }}
         </a>
 
         <a href="{{ route('families.index') }}" class="sidebar-item {{ request()->routeIs('families.*') ? 'active' : '' }}">
             <i class="fas fa-home"></i>
-            Families
+            {{ __('common.families') }}
         </a>
 
         <a href="{{ route('branches.index') }}" class="sidebar-item {{ request()->routeIs('branches.*') ? 'active' : '' }}">
             <i class="fas fa-code-branch"></i>
-            Branches
+            {{ __('common.branches') }}
         </a>
 
         {{-- Community --}}
-        <div class="sidebar-section-title">Community</div>
+        <div class="sidebar-section-title">{{ __('common.community') }}</div>
 
         <a href="{{ route('announcements.index') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
             <i class="fas fa-bullhorn"></i>
-            Announcements
+            {{ __('common.announcements') }}
         </a>
 
         <a href="{{ route('campaigns.index') }}" class="sidebar-item {{ request()->routeIs('campaigns.*') ? 'active' : '' }}">
             <i class="fas fa-hand-holding-heart"></i>
-            Campaigns
+            {{ __('common.campaigns') }}
         </a>
 
         <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
             <i class="fas fa-calendar-alt"></i>
-            Calendar
+            {{ __('common.calendar') }}
         </a>
 
         {{-- Media & Records --}}
-        <div class="sidebar-section-title">Records</div>
+        <div class="sidebar-section-title">{{ __('common.records') }}</div>
 
         <a href="{{ route('galleries.index') }}" class="sidebar-item {{ request()->routeIs('galleries.*') ? 'active' : '' }}">
             <i class="fas fa-images"></i>
-            Galleries
+            {{ __('common.galleries') }}
         </a>
 
         <a href="{{ route('timeline.index') }}" class="sidebar-item {{ request()->routeIs('timeline.*') ? 'active' : '' }}">
             <i class="fas fa-stream"></i>
-            Timeline
+            {{ __('common.timeline') }}
         </a>
 
         <a href="{{ route('gedcom.index') }}" class="sidebar-item {{ request()->routeIs('gedcom.*') ? 'active' : '' }}">
             <i class="fas fa-file-export"></i>
-            GEDCOM
+            {{ __('common.gedcom') }}
         </a>
 
         <div class="sidebar-divider"></div>
 
         <a href="{{ route('notifications.index') }}" class="sidebar-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
             <i class="fas fa-bell"></i>
-            Notifications
+            {{ __('common.notifications') }}
         </a>
 
     </nav>
@@ -158,12 +158,12 @@
                 {{ strtoupper(substr(Auth::user()->name ?? 'U', 0, 2)) }}
             </div>
             <div class="sidebar-user-info">
-                <div class="sidebar-user-name">{{ Auth::user()->name ?? 'User' }}</div>
+                <div class="sidebar-user-name">{{ Auth::user()->name ?? __('common.user') }}</div>
                 <div class="sidebar-user-role">{{ Auth::user()->email ?? '' }}</div>
             </div>
             <a href="{{ route('logout') }}"
                class="sidebar-logout-btn"
-               title="Logout"
+               title="{{ __('common.logout') }}"
                onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
@@ -211,13 +211,13 @@
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-item-text">
-                    <small class="text-muted">Signed in as</small><br>
+                    <small class="text-muted">{{ __('common.signed_in_as') }}</small><br>
                     <strong>{{ Auth::user()->name }}</strong>
                 </div>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    <i class="fas fa-sign-out-alt mr-2"></i> {{ __('common.logout') }}
                 </a>
             </div>
         </div>
@@ -276,7 +276,7 @@
 
     {{-- Footer --}}
     <footer class="app-footer">
-        <span>&copy; {{ date('Y') }} <strong>Felician Joseph Nyisulya</strong>. All rights reserved.</span>
+        <span>&copy; {{ date('Y') }} <strong>Felician Joseph Nyisulya</strong>. {{ __('common.all_rights_reserved') }}</span>
         <span><i class="fas fa-phone-alt mr-1"></i> +255 756 670 798</span>
     </footer>
 </div>
