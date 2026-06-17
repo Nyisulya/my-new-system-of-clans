@@ -36,16 +36,11 @@ class MemberPolicy
 
     /**
      * Determine whether the user can view the model's dashboard.
+     * All authenticated members can view any dashboard (read-only).
      */
     public function viewDashboard(User $user, Member $member): bool
     {
-        // Admin can view anyone's dashboard
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        // Regular members can only view their own dashboard
-        return $user->member_id === $member->id;
+        return true; // All authenticated users can view any member's dashboard
     }
 
     /**
