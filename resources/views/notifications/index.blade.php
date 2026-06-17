@@ -39,9 +39,11 @@
                         </div>
                         <div>
                             @if(!$notification->read_at)
-                                <a href="{{ route('notifications.mark-read', $notification->id) }}" class="btn btn-sm btn-success">
-                                    <i class="fas fa-check"></i> Imesomwa
-                                </a>
+                                <div class="action-buttons">
+                                    <a href="{{ route('notifications.mark-read', $notification->id) }}" class="btn btn-xs btn-success" title="Imesomwa">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                </div>
                             @endif
                         </div>
                     </div>

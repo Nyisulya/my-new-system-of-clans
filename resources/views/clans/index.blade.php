@@ -31,6 +31,7 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -59,18 +60,20 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('clans.edit', $clan) }}" class="btn btn-sm btn-warning" title="Hariri">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('clans.destroy', $clan) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" 
-                                            onclick="return confirm('Je, una uhakika unataka kufuta ukoo huu? Kitendo hiki hakiwezi kubatilishwa.')" 
-                                            title="Futa">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="action-buttons">
+                                    <a href="{{ route('clans.edit', $clan) }}" class="btn btn-xs btn-warning" title="Hariri">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('clans.destroy', $clan) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-xs btn-danger" 
+                                                onclick="return confirm('Je, una uhakika unataka kufuta ukoo huu? Kitendo hiki hakiwezi kubatilishwa.')" 
+                                                title="Futa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -80,6 +83,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
             <div class="mt-3">
                 {{ $clans->links() }}
             </div>

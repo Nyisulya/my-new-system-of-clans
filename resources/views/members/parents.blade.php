@@ -24,6 +24,7 @@
                     <p class="mt-2">Bofya kitufe cha <strong>"Ongeza Mwanzilishi"</strong> hapo juu ili kuongeza waanzilishi wa kizazi cha kwanza cha ukoo.</p>
                 </div>
             @else
+                <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -52,21 +53,27 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('members.dashboard', $parent) }}" class="btn btn-sm btn-primary mr-1">
-                                        <i class="fas fa-tachometer-alt"></i> Angalia Dashibodi
-                                    </a>
-                                    <form action="{{ route('members.destroy', $parent) }}" method="POST" class="d-inline" onsubmit="return confirm('Je, una uhakika unataka kumfuta mwanzilishi huyu? Hii itamwondoa kwenye mfumo.');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Futa
-                                        </button>
-                                    </form>
+                                    <div class="action-buttons">
+                                        <a href="{{ route('members.dashboard', $parent) }}" class="btn btn-xs btn-primary" title="Angalia Dashibodi">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                        </a>
+                                        <a href="{{ route('members.edit', $parent) }}" class="btn btn-xs btn-warning" title="Hariri">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('members.destroy', $parent) }}" method="POST" onsubmit="return confirm('Je, una uhakika unataka kumfuta mwanzilishi huyu? Hii itamwondoa kwenye mfumo.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-xs btn-danger" title="Futa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                </div>
             @endif
         </div>
     </div>

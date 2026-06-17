@@ -31,6 +31,7 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -70,22 +71,22 @@
                                 @endif
                             </td>
                             <td>
-                                {{-- Crown button - goes to founder page with dashboard layout --}}
-                                <a href="{{ route('families.founder', $family) }}" class="btn btn-sm btn-warning" title="Angalia Dashibodi ya Mwanzilishi">
-                                    <i class="fas fa-crown"></i>
-                                </a>
-                                
-                                <a href="{{ route('families.tree', $family) }}" class="btn btn-sm btn-info" title="Angalia Mti Kamili">
-                                    <i class="fas fa-sitemap"></i>
-                                </a>
-                                <form action="{{ route('families.destroy', $family) }}" method="POST" style="display: inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Futa Familia" 
-                                            onclick="return confirm('Je, una uhakika unataka kufuta {{ $family->name }}? Hii itafuta pia wanachama wote wa familia hii. Kitendo hiki hakiwezi kutenduliwa!')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="action-buttons">
+                                    <a href="{{ route('families.founder', $family) }}" class="btn btn-xs btn-warning" title="Dashibodi ya Mwanzilishi">
+                                        <i class="fas fa-crown"></i>
+                                    </a>
+                                    <a href="{{ route('families.tree', $family) }}" class="btn btn-xs btn-info" title="Angalia Mti Kamili">
+                                        <i class="fas fa-sitemap"></i>
+                                    </a>
+                                    <form action="{{ route('families.destroy', $family) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-xs btn-danger" title="Futa Familia" 
+                                                onclick="return confirm('Je, una uhakika unataka kufuta {{ $family->name }}? Hii itafuta pia wanachama wote wa familia hii. Kitendo hiki hakiwezi kutenduliwa!')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -95,6 +96,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
             <div class="mt-3">
                 {{ $families->links() }}
             </div>

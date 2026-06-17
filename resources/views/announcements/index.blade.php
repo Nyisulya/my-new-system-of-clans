@@ -53,16 +53,18 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('announcements.edit', $announcement) }}" class="btn btn-sm btn-info">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('announcements.destroy', $announcement) }}" method="POST" class="d-inline" onsubmit="return confirm('Je, una uhakika?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="action-buttons">
+                                    <a href="{{ route('announcements.edit', $announcement) }}" class="btn btn-xs btn-info" title="Hariri">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('announcements.destroy', $announcement) }}" method="POST" onsubmit="return confirm('Je, una uhakika?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-xs btn-danger" title="Futa">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

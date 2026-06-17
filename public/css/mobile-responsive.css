@@ -12,15 +12,16 @@
     box-sizing: border-box;
 }
 
-/* Touch-friendly minimum sizes */
-.btn,
-button,
-input[type="submit"],
-input[type="button"],
+/* Touch-friendly minimum sizes — scoped to navigation & form actions only */
+/* Excludes .btn-xs (table action buttons) so they stay compact */
+.navbar .btn,
 .nav-link,
-a.btn {
+.sidebar-item,
+.topbar-icon-btn,
+input[type="submit"]:not(.btn-xs),
+input[type="button"]:not(.btn-xs),
+button[type="submit"]:not(.btn-xs):not(.action-buttons *) {
     min-height: 44px;
-    min-width: 44px;
     padding: 10px 15px;
     font-size: 16px;
     /* Prevents zoom on iOS */
@@ -493,8 +494,12 @@ img {
    16. ACCESSIBILITY & TOUCH IMPROVEMENTS
    ============================================ */
 
-/* Larger tap targets for links */
-a {
+/* Larger tap targets for navigation links only — NOT table action buttons */
+.nav-link,
+.sidebar-item,
+.topbar-icon-btn,
+.dropdown-item,
+.pagination .page-link {
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -669,6 +674,54 @@ body {
 /* Ensure buttons don't wrap text awkwardly */
 .btn {
     white-space: nowrap;
+}
+
+/* ============================================
+   24. TABLE ACTION BUTTONS — COMPACT ON ALL SCREENS
+   ============================================ */
+
+/* Force action buttons to stay small on ALL screen sizes */
+.action-buttons {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 3px;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.action-buttons .btn,
+.action-buttons a.btn,
+.action-buttons button,
+.btn-xs {
+    min-height: unset !important;
+    min-width: unset !important;
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 5px !important;
+    flex-shrink: 0;
+}
+
+.action-buttons .btn i,
+.action-buttons a.btn i,
+.action-buttons button i,
+.btn-xs i {
+    font-size: 13px !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+}
+
+/* Delete form inside action buttons stays inline */
+.action-buttons form {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-flex !important;
 }
 
 /* Make sure pagination is responsive */

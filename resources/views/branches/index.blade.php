@@ -24,6 +24,7 @@
             </div>
         </div>
         <div class="card-body">
+            <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -56,6 +57,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
             <div class="mt-3">
                 {{ $branches->links() }}
             </div>
