@@ -354,38 +354,7 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        $member->load([
-            'clan',
-            'family',
-            'branch',
-            'father',
-            'mother',
-            'marriagesAsHusband.wife',
-            'marriagesAsWife.husband',
-            'childrenAsFather',
-            'childrenAsMother',
-            'creator',
-            'updater'
-        ]);
-
-        // Get siblings
-        $siblings = collect();
-        if ($member->father_id || $member->mother_id) {
-            $siblings = Member::where('id', '!=', $member->id)
-                ->where(function ($q) use ($member) {
-                    if ($member->father_id && $member->mother_id) {
-                        $q->where('father_id', $member->father_id)
-                          ->where('mother_id', $member->mother_id);
-                    } elseif ($member->father_id) {
-                        $q->where('father_id', $member->father_id);
-                    } else {
-                        $q->where('mother_id', $member->mother_id);
-                    }
-                })
-                ->get();
-        }
-
-        return view('members.show', compact('member', 'siblings'));
+        return redirect()->route('members.dashboard', $member);
     }
 
     /**

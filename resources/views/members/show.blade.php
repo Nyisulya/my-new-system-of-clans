@@ -222,7 +222,7 @@
                                             <i class="fas fa-heart text-danger"></i> Wife {{ $index + 1 }}
                                         @endif
                                     </h6>
-                                    <a href="{{ route('members.show', $spouse) }}">
+                                    <a href="{{ route('members.dashboard', $spouse) }}">
                                         {{ $spouse->full_name }}
                                     </a>
                                     <br><small class="text-muted">{{ ucfirst($spouse->status) }}</small>
@@ -236,7 +236,7 @@
                             <ul class="list-group mb-3">
                                 @foreach($siblings as $sibling)
                                     <li class="list-group-item">
-                                        <a href="{{ route('members.show', $sibling) }}">{{ $sibling->full_name }}</a>
+                                        <a href="{{ route('members.dashboard', $sibling) }}">{{ $sibling->full_name }}</a>
                                         <span class="badge badge-info float-right">Gen {{ $sibling->generation_number }}</span>
                                     </li>
                                 @endforeach
@@ -248,7 +248,7 @@
                             <ul class="list-group">
                                 @foreach($member->children as $child)
                                     <li class="list-group-item">
-                                        <a href="{{ route('members.show', $child) }}">{{ $child->full_name }}</a>
+                                        <a href="{{ route('members.dashboard', $child) }}">{{ $child->full_name }}</a>
                                         <span class="badge badge-info float-right">Gen {{ $child->generation_number }}</span>
                                         <br><small class="text-muted">{{ $child->status }}</small>
                                     </li>

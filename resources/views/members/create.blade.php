@@ -39,7 +39,7 @@
                     <ul class="mb-0 pl-3">
                         @foreach(session('partial_matches') as $match)
                             <li>
-                                <a href="{{ route('members.show', $match->id) }}" target="_blank" class="text-dark font-weight-bold">
+                                <a href="{{ route('members.dashboard', $match->id) }}" target="_blank" class="text-dark font-weight-bold">
                                     {{ $match->full_name }} 
                                 </a>
                                 <span class="text-muted">(Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }})</span>

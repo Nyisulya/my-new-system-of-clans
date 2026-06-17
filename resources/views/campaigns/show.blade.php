@@ -81,7 +81,7 @@
                                     <td>{{ $contribution->date->format('M d, Y') }}</td>
                                     <td>
                                         @if($contribution->member)
-                                            <a href="{{ route('members.show', $contribution->member_id) }}">
+                                            <a href="{{ route('members.dashboard', $contribution->member_id) }}">
                                                 {{ $contribution->member->full_name }}
                                             </a>
                                         @else

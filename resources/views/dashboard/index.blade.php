@@ -240,7 +240,7 @@
                                     </td>
                                     <td>{{ $member->created_at->diffForHumans() }}</td>
                                     <td>
-                                        <a href="{{ route('members.show', $member) }}" class="btn btn-xs btn-info" title="View">
+                                        <a href="{{ route('members.dashboard', $member) }}" class="btn btn-xs btn-info" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @can('update', $member)

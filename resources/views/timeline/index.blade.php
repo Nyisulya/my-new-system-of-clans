@@ -28,9 +28,9 @@
                                         <span class="time"><i class="fas fa-clock"></i> {{ $event['date']->format('d M') }}</span>
                                         <h3 class="timeline-header">
                                             @if($event['type'] == 'birth')
-                                                <a href="{{ route('members.show', $event['model']->id) }}">{{ $event['title'] }}</a>
+                                                <a href="{{ route('members.dashboard', $event['model']->id) }}">{{ $event['title'] }}</a>
                                             @elseif($event['type'] == 'death')
-                                                <a href="{{ route('members.show', $event['model']->id) }}">{{ $event['title'] }}</a>
+                                                <a href="{{ route('members.dashboard', $event['model']->id) }}">{{ $event['title'] }}</a>
                                             @else
                                                 {{ $event['title'] }}
                                             @endif

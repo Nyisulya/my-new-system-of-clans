@@ -136,7 +136,7 @@
                             @forelse($recentMembers as $member)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('members.show', $member->id) }}">
+                                        <a href="{{ route('members.dashboard', $member->id) }}">
                                             {{ $member->full_name }}
                                         </a>
                                     </td>

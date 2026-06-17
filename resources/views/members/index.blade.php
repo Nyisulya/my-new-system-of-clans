@@ -122,9 +122,6 @@
                                         <a href="{{ route('members.dashboard', $member) }}" class="btn btn-xs btn-primary" title="Dashibodi">
                                             <i class="fas fa-tachometer-alt"></i>
                                         </a>
-                                        <a href="{{ route('members.show', $member) }}" class="btn btn-xs btn-info" title="Angalia Wasifu">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
                                         @can('update', $member)
                                             <a href="{{ route('members.edit', $member) }}" class="btn btn-xs btn-warning" title="Hariri">
                                                 <i class="fas fa-edit"></i>
