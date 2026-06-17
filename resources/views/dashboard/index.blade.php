@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashibodi - Mti wa Ukoo')
+@section('title', 'Ukoo wa Nyahende)
 @section('page_title', 'Dashibodi')
 
 @section('content_header')
