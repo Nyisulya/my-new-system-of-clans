@@ -17,13 +17,13 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $stats['total_members'] }}</h3>
-                    <p>Total Members</p>
+                    <p>Wanachame wote</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-users"></i>
                 </div>
                 <a href="{{ route('members.index') }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -32,13 +32,13 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{ $stats['alive_members'] }}</h3>
-                    <p>Living Members</p>
+                    <p>Wanachama walio hai</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-heartbeat"></i>
                 </div>
                 <a href="{{ route('members.index', ['status' => 'alive']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -47,13 +47,13 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>{{ $stats['total_generations'] }}</h3>
-                    <p>Generations</p>
+                    <p>Vizazi</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <a href="{{ route('families.index') }}" class="small-box-footer">
-                    View Families <i class="fas fa-arrow-circle-right"></i>
+                    Angalia vizazi <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -62,13 +62,13 @@
             <div class="small-box bg-danger">
                 <div class="inner">
                     <h3>{{ $stats['deceased_members'] }}</h3>
-                    <p>Deceased Members</p>
+                    <p>Wanachama walio fariki</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-dove"></i>
                 </div>
                 <a href="{{ route('members.index', ['status' => 'deceased']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -81,13 +81,13 @@
             <div class="small-box bg-primary">
                 <div class="inner">
                     <h3>{{ $totalParents }}</h3>
-                    <p>Parents</p>
+                    <p>Wazazi</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-user-friends"></i>
                 </div>
                 <a href="{{ route('members.index', ['category' => 'parents']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -95,13 +95,13 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $totalChildren }}</h3>
-                    <p>Children</p>
+                    <p>Watoto</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-baby"></i>
                 </div>
                 <a href="{{ route('members.index', ['category' => 'children']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -109,13 +109,13 @@
             <div class="small-box bg-purple">
                 <div class="inner">
                     <h3>{{ $totalGrandchildren }}</h3>
-                    <p>Grandchildren</p>
+                    <p>Wajukuu</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-child"></i>
                 </div>
                 <a href="{{ route('members.index', ['category' => 'grandchildren']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -123,13 +123,13 @@
             <div class="small-box bg-teal">
                 <div class="inner">
                     <h3>{{ $totalGreatGrandchildren }}</h3>
-                    <p>Great-Grandchildren</p>
+                    <p>Vitukuu</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-leaf"></i>
                 </div>
                 <a href="{{ route('members.index', ['category' => 'great_grandchildren']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -137,13 +137,13 @@
             <div class="small-box bg-maroon">
                 <div class="inner">
                     <h3>{{ $totalGreatGreatGrandchildren }}</h3>
-                    <p>Great-Great-Grandchildren</p>
+                    <p>Vilembwe</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-seedling"></i>
                 </div>
                 <a href="{{ route('members.index', ['category' => 'great_great_grandchildren']) }}" class="small-box-footer">
-                    View List <i class="fas fa-arrow-circle-right"></i>
+                    Angalia List <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -151,7 +151,7 @@
             <div class="small-box bg-orange">
                 <div class="inner">
                     <h3>{{ $totalGreatGreatGreatGrandchildren }}</h3>
-                    <p>3x Great-Grandchildren</p>
+                    <p>Vilebwekeze</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-tree"></i>

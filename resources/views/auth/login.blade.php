@@ -316,13 +316,13 @@
                         <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8M6 13C4.9 13 4 13.9 4 15C4 16.1 4.9 17 6 17C7.1 17 8 16.1 8 15C8 13.9 7.1 13 6 13M18 13C16.9 13 16 13.9 16 15C16 16.1 16.9 17 18 17C19.1 17 20 16.1 20 15C20 13.9 19.1 13 18 13M6 18C4.3 18 3 19.3 3 21H9C9 19.3 7.7 18 6 18M18 18C16.3 18 15 19.3 15 21H21C21 19.3 19.7 18 18 18Z"/>
                     </svg>
                 </div>
-                <h1>Welcome Back</h1>
+                <h1>Welcome</h1>
                 <p class="subtitle">Sign in to access your family tree</p>
             </div>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.
+                    <strong>Whoops!</strong> Tafadhali weka taarifa sahihi.
                 </div>
             @endif
 
@@ -336,7 +336,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="name">Username (Full Name)</label>
+                    <label for="name">Username (Jine kamili)</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8Z"/>
@@ -348,7 +348,7 @@
                             value="{{ old('name') }}" 
                             required 
                             autofocus
-                            placeholder="Enter your full name"
+                            placeholder="ingiza jina kamili"
                         >
                     </div>
                     @error('name')
@@ -367,7 +367,7 @@
                             id="password" 
                             name="password" 
                             required
-                            placeholder="Enter your password"
+                            placeholder="Ingiza  password yako"
                         >
                         <button type="button" class="password-toggle" data-target="password" aria-label="Show password">
                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -397,9 +397,9 @@
             </form>
 
             <div class="register-section">
-                <p>Don't have an account?</p>
+                <p>Huna account?</p>
                 <a href="{{ route('register') }}" class="btn-register">
-                    Create New Account
+                    Fungua Account mpya
                 </a>
             </div>
         </div>
