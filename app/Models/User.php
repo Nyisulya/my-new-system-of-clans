@@ -112,7 +112,7 @@ class User extends Authenticatable
      */
     public function canEditMembers(): bool
     {
-        return in_array($this->role, ['admin', 'editor']);
+        return $this->isAdmin();
     }
 
     /**

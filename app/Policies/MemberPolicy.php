@@ -39,13 +39,7 @@ class MemberPolicy
      */
     public function update(User $user, Member $member): bool
     {
-        // Admin can edit anyone
-        if ($user->isAdmin()) {
-            return true;
-        }
-        
-        // Regular members can only edit their own profile
-        return $user->member_id === $member->id;
+        return $user->isAdmin();
     }
 
     /**
@@ -53,13 +47,7 @@ class MemberPolicy
      */
     public function delete(User $user, Member $member): bool
     {
-        // Admin can delete anyone
-        if ($user->isAdmin()) {
-            return true;
-        }
-        
-        // Regular members can delete their own profile
-        return $user->member_id === $member->id;
+        return $user->isAdmin();
     }
 
     /**
