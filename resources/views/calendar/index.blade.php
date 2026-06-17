@@ -1,59 +1,59 @@
 @extends('layouts.app')
 
-@section('title', 'Family Calendar')
+@section('title', 'Kalenda ya Familia')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-calendar-alt text-primary"></i> Family Events Calendar</h1>
+        <h1><i class="fas fa-calendar-alt text-primary"></i> Kalenda ya Matukio ya Familia</h1>
         <a href="{{ route('calendar.export') }}" class="btn btn-primary">
-            <i class="fas fa-file-export"></i> Export to Calendar (.ics)
+            <i class="fas fa-file-export"></i> Hamisha Kalenda (.ics)
         </a>
     </div>
 @stop
 
 @section('content')
     <div class="row">
-        {{-- Left Column: Upcoming Events & Filters --}}
+        {{-- Safu ya Kushoto: Matukio Yanayokuja & Vichujio --}}
         <div class="col-md-3">
-            {{-- Filters --}}
+            {{-- Vichujio --}}
             <div class="card card-outline card-info">
                 <div class="card-header">
-                    <h3 class="card-title">Filter Events</h3>
+                    <h3 class="card-title">Chuja Matukio</h3>
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-0">
                         <div class="custom-control custom-checkbox mb-2">
                             <input class="custom-control-input event-filter" type="checkbox" id="filterBirthday" value="event-birthday" checked>
                             <label for="filterBirthday" class="custom-control-label text-success">
-                                <i class="fas fa-birthday-cake mr-1"></i> Birthdays
+                                <i class="fas fa-birthday-cake mr-1"></i> Siku za Kuzaliwa
                             </label>
                         </div>
                         <div class="custom-control custom-checkbox mb-2">
                             <input class="custom-control-input event-filter" type="checkbox" id="filterMarriage" value="event-marriage" checked>
                             <label for="filterMarriage" class="custom-control-label text-warning">
-                                <i class="fas fa-ring mr-1"></i> Anniversaries
+                                <i class="fas fa-ring mr-1"></i> Miaka ya Ndoa
                             </label>
                         </div>
                         <div class="custom-control custom-checkbox">
                             <input class="custom-control-input event-filter" type="checkbox" id="filterDeath" value="event-death" checked>
                             <label for="filterDeath" class="custom-control-label text-secondary">
-                                <i class="fas fa-dove mr-1"></i> Deaths
+                                <i class="fas fa-dove mr-1"></i> Vifo
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- Upcoming Events --}}
+            {{-- Matukio Yanayokuja --}}
             <div class="card card-primary card-outline">
                 <div class="card-header">
-                    <h3 class="card-title">Upcoming (30 Days)</h3>
+                    <h3 class="card-title">Yanayokuja (Siku 30)</h3>
                 </div>
                 <div class="card-body p-0">
                     @if(empty($upcomingEvents))
                         <div class="p-3 text-center text-muted">
                             <i class="fas fa-calendar-times fa-2x mb-2"></i>
-                            <p>No upcoming events.</p>
+                            <p>Hakuna matukio yanayokuja.</p>
                         </div>
                     @else
                         <ul class="products-list product-list-in-card pl-2 pr-2">
@@ -73,34 +73,34 @@
                                             <span class="product-title">
                                                 {{ $event['husband']->first_name }} & {{ $event['wife']->first_name }}
                                                 <span class="badge float-right badge-warning">
-                                                    {{ $event['date']->format('M d') }}
+                                                    {{ $event['date']->format('d M') }}
                                                 </span>
                                             </span>
                                             <span class="product-description">
-                                                {{ $event['years'] }}th Anniversary
+                                                Miaka {{ $event['years'] }} ya Ndoa
                                                 @if($event['days_left'] == 0)
-                                                    <span class="text-danger font-weight-bold ml-1">(Today!)</span>
+                                                    <span class="text-danger font-weight-bold ml-1">(Leo!)</span>
                                                 @elseif($event['days_left'] == 1)
-                                                    <span class="text-warning font-weight-bold ml-1">(Tomorrow)</span>
+                                                    <span class="text-warning font-weight-bold ml-1">(Kesho)</span>
                                                 @endif
                                             </span>
                                         @else
                                             <a href="{{ route('members.dashboard', $event['member']->id) }}" class="product-title">
                                                 {{ $event['member']->first_name }}
                                                 <span class="badge float-right {{ $event['type'] == 'birthday' ? 'badge-success' : 'badge-secondary' }}">
-                                                    {{ $event['date']->format('M d') }}
+                                                    {{ $event['date']->format('d M') }}
                                                 </span>
                                             </a>
                                             <span class="product-description">
                                                 @if($event['type'] == 'birthday')
-                                                    Turning {{ $event['age'] }}
+                                                    Anafikia miaka {{ $event['age'] }}
                                                 @else
-                                                    {{ $event['years'] }} Years Gone
+                                                    Miaka {{ $event['years'] }} Tangu Afariki
                                                 @endif
                                                 @if($event['days_left'] == 0)
-                                                    <span class="text-danger font-weight-bold ml-1">(Today!)</span>
+                                                    <span class="text-danger font-weight-bold ml-1">(Leo!)</span>
                                                 @elseif($event['days_left'] == 1)
-                                                    <span class="text-warning font-weight-bold ml-1">(Tomorrow)</span>
+                                                    <span class="text-warning font-weight-bold ml-1">(Kesho)</span>
                                                 @endif
                                             </span>
                                         @endif
@@ -113,11 +113,11 @@
             </div>
         </div>
 
-        {{-- Right Column: Full Calendar --}}
+        {{-- Safu ya Kulia: Kalenda Kamili --}}
         <div class="col-md-9">
             <div class="card card-primary">
                 <div class="card-body p-0">
-                    {{-- THE CALENDAR --}}
+                    {{-- KALENDA --}}
                     <div id="calendar"></div>
                 </div>
             </div>
@@ -147,10 +147,10 @@
                     right : 'month,agendaWeek,agendaDay'
                 },
                 buttonText: {
-                    today: 'today',
-                    month: 'month',
-                    week : 'week',
-                    day  : 'day'
+                    today: 'Leo',
+                    month: 'Mwezi',
+                    week : 'Wiki',
+                    day  : 'Siku'
                 },
                 events    : allEvents,
                 editable  : false,
@@ -163,7 +163,7 @@
                     }
                 },
                 eventRender: function(event, element) {
-                    // Filter logic
+                    // Mantiki ya kuchuja
                     var showBirthday = $('#filterBirthday').is(':checked');
                     var showMarriage = $('#filterMarriage').is(':checked');
                     var showDeath = $('#filterDeath').is(':checked');
@@ -180,7 +180,7 @@
                 }
             });
 
-            // Re-render events when filters change
+            // Onyesha tena matukio vichujio vikibadilika
             $('.event-filter').change(function() {
                 $('#calendar').fullCalendar('rerenderEvents');
             });

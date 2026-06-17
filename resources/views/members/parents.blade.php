@@ -1,34 +1,34 @@
 @extends('layouts.app')
 
-@section('title', 'First Generation (Founders)')
+@section('title', 'Kizazi cha Kwanza (Waanzilishi)')
 
 @section('content_header')
-    <h1><i class="fas fa-user-friends"></i> First Generation (Founders)</h1>
+    <h1><i class="fas fa-user-friends"></i> Kizazi cha Kwanza (Waanzilishi)</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Clan Founders</h3>
+            <h3 class="card-title">Waanzilishi wa Ukoo</h3>
             <div class="card-tools">
                 <a href="{{ route('members.create', ['generation_number' => 1]) }}" class="btn btn-success btn-sm mr-2">
-                    <i class="fas fa-plus"></i> Add Founder
+                    <i class="fas fa-plus"></i> Ongeza Mwanzilishi
                 </a>
-                <span class="badge badge-info">{{ $parents->count() }} Founders</span>
+                <span class="badge badge-info">{{ $parents->count() }} Waanzilishi</span>
             </div>
         </div>
         <div class="card-body">
             @if($parents->isEmpty())
                 <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> No first generation founders found in the system.
-                    <p class="mt-2">Click the <strong>"Add Founder"</strong> button above to add the first generation clan founders.</p>
+                    <i class="fas fa-info-circle"></i> Hakuna waanzilishi wa kizazi cha kwanza waliopatikana kwenye mfumo.
+                    <p class="mt-2">Bofya kitufe cha <strong>"Ongeza Mwanzilishi"</strong> hapo juu ili kuongeza waanzilishi wa kizazi cha kwanza cha ukoo.</p>
                 </div>
             @else
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Actions</th>
+                            <th>Jina</th>
+                            <th>Vitendo</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,13 +53,13 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('members.dashboard', $parent) }}" class="btn btn-sm btn-primary mr-1">
-                                        <i class="fas fa-tachometer-alt"></i> View Dashboard
+                                        <i class="fas fa-tachometer-alt"></i> Angalia Dashibodi
                                     </a>
-                                    <form action="{{ route('members.destroy', $parent) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this founder? This will remove them from the system.');">
+                                    <form action="{{ route('members.destroy', $parent) }}" method="POST" class="d-inline" onsubmit="return confirm('Je, una uhakika unataka kumfuta mwanzilishi huyu? Hii itamwondoa kwenye mfumo.');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Delete
+                                            <i class="fas fa-trash"></i> Futa
                                         </button>
                                     </form>
                                 </td>

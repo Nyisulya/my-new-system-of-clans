@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Branches')
+@section('title', 'Matawi')
 
 @section('content_header')
-    <h1><i class="fas fa-code-branch"></i> Branches</h1>
+    <h1><i class="fas fa-code-branch"></i> Matawi</h1>
 @stop
 
 @section('content')
@@ -16,10 +16,10 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">All Branches</h3>
+            <h3 class="card-title">Matawi Yote</h3>
             <div class="card-tools">
                 <a href="{{ route('branches.create') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Add Branch
+                    <i class="fas fa-plus"></i> Ongeza Tawi
                 </a>
             </div>
         </div>
@@ -27,31 +27,31 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Family</th>
-                        <th>Location</th>
-                        <th>Members</th>
-                        <th>Status</th>
+                        <th>Jina</th>
+                        <th>Familia</th>
+                        <th>Mahali</th>
+                        <th>Wanachama</th>
+                        <th>Hali</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($branches as $branch)
                         <tr>
                             <td><strong>{{ $branch->name }}</strong></td>
-                            <td>{{ $branch->family->name ?? 'N/A' }}</td>
-                            <td>{{ $branch->location ?? 'N/A' }}</td>
+                            <td>{{ $branch->family->name ?? 'Haijulikani' }}</td>
+                            <td>{{ $branch->location ?? 'Haijulikani' }}</td>
                             <td><span class="badge badge-primary">{{ $branch->member_count }}</span></td>
                             <td>
                                 @if($branch->is_active)
-                                    <span class="badge badge-success">Active</span>
+                                    <span class="badge badge-success">Hai</span>
                                 @else
-                                    <span class="badge badge-secondary">Inactive</span>
+                                    <span class="badge badge-secondary">Haifanyi kazi</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No branches found</td>
+                            <td colspan="5" class="text-center">Hakuna matawi yaliyopatikana</td>
                         </tr>
                     @endforelse
                 </tbody>

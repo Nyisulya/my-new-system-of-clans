@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Clans')
+@section('title', 'Ukoo')
 
 @section('content_header')
-    <h1><i class="fas fa-sitemap"></i> Clans</h1>
+    <h1><i class="fas fa-sitemap"></i> Ukoo</h1>
 @stop
 
 @section('content')
@@ -23,10 +23,10 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">All Clans</h3>
+            <h3 class="card-title">Ukoo Wote</h3>
             <div class="card-tools">
                 <a href="{{ route('clans.create') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Add Clan
+                    <i class="fas fa-plus"></i> Ongeza Ukoo
                 </a>
             </div>
         </div>
@@ -34,13 +34,13 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Origin</th>
-                        <th>Founded</th>
-                        <th>Families</th>
-                        <th>Members</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Jina</th>
+                        <th>Asili</th>
+                        <th>Kuanzishwa</th>
+                        <th>Familia</th>
+                        <th>Wanachama</th>
+                        <th>Hali</th>
+                        <th>Vitendo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -53,21 +53,21 @@
                             <td><span class="badge badge-primary">{{ $clan->members_count }}</span></td>
                             <td>
                                 @if($clan->is_active)
-                                    <span class="badge badge-success">Active</span>
+                                    <span class="badge badge-success">Hai</span>
                                 @else
-                                    <span class="badge badge-secondary">Inactive</span>
+                                    <span class="badge badge-secondary">Haitumiki</span>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('clans.edit', $clan) }}" class="btn btn-sm btn-warning" title="Edit">
+                                <a href="{{ route('clans.edit', $clan) }}" class="btn btn-sm btn-warning" title="Hariri">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <form action="{{ route('clans.destroy', $clan) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" 
-                                            onclick="return confirm('Are you sure you want to delete this clan? This action cannot be undone.')" 
-                                            title="Delete">
+                                            onclick="return confirm('Je, una uhakika unataka kufuta ukoo huu? Kitendo hiki hakiwezi kubatilishwa.')" 
+                                            title="Futa">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -75,7 +75,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted">No clans found</td>
+                            <td colspan="7" class="text-center text-muted">Hakuna ukoo uliopatikana</td>
                         </tr>
                     @endforelse
                 </tbody>

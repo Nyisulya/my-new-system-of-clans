@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Add Member')
+@section('title', 'Ongeza Mwanachama')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-user-plus text-primary"></i> Add New Member</h1>
+        <h1><i class="fas fa-user-plus text-primary"></i> Ongeza Mwanachama Mpya</h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('members.index') }}">Members</a></li>
-            <li class="breadcrumb-item active">Add New</li>
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashibodi</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('members.index') }}">Wanafamilia</a></li>
+            <li class="breadcrumb-item active">Ongeza Mpya</li>
         </ol>
     </div>
 @stop
@@ -25,24 +25,24 @@
                 <div class="d-flex align-items-center">
                     <i class="fas fa-exclamation-triangle fa-2x mr-3"></i>
                     <div>
-                        <h5 class="alert-heading">Potential Duplicate Found!</h5>
+                        <h5 class="alert-heading">Uwezekano wa Mwanachama Kufanana Umepatikana!</h5>
                         <p class="mb-0">{{ session('warning') }}</p>
                     </div>
                 </div>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Funga">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 
                 @if(session('partial_matches'))
                     <hr>
-                    <p class="mb-1"><strong>Similar records:</strong></p>
+                    <p class="mb-1"><strong>Rekodi zinazofanana:</strong></p>
                     <ul class="mb-0 pl-3">
                         @foreach(session('partial_matches') as $match)
                             <li>
                                 <a href="{{ route('members.show', $match->id) }}" target="_blank" class="text-dark font-weight-bold">
                                     {{ $match->full_name }} 
                                 </a>
-                                <span class="text-muted">(Born: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Unknown' }})</span>
+                                <span class="text-muted">(Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }})</span>
                             </li>
                         @endforeach
                     </ul>
@@ -53,7 +53,7 @@
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><i class="fas fa-times-circle"></i> Error!</strong> {{ session('error') }}
+                <strong><i class="fas fa-times-circle"></i> Itilafu!</strong> {{ session('error') }}
             </div>
         @endif
 
@@ -63,36 +63,36 @@
                 {{-- Personal Details Card --}}
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-user mr-1"></i> Personal Details</h3>
+                        <h3 class="card-title"><i class="fas fa-user mr-1"></i> Maelezo Binafsi</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>First Name <span class="text-danger">*</span></label>
+                                    <label>Jina la Kwanza <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                         </div>
                                         <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" 
-                                               value="{{ old('first_name') }}" placeholder="First Name" required>
+                                               value="{{ old('first_name') }}" placeholder="Jina la Kwanza" required>
                                     </div>
                                     @error('first_name') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Middle Name</label>
+                                    <label>Jina la Kati</label>
                                     <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
-                                           value="{{ old('middle_name') }}" placeholder="Middle Name">
+                                           value="{{ old('middle_name') }}" placeholder="Jina la Kati">
                                     @error('middle_name') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Last Name <span class="text-danger">*</span></label>
+                                    <label>Jina la Mwisho / Ukoo <span class="text-danger">*</span></label>
                                     <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
-                                           value="{{ old('last_name') }}" placeholder="Last Name" required>
+                                           value="{{ old('last_name') }}" placeholder="Jina la Mwisho" required>
                                     @error('last_name') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -101,16 +101,16 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Gender <span class="text-danger">*</span></label>
+                                    <label>Jinsia <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
                                         </div>
                                         <select name="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                                            <option value="">Select...</option>
-                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                                            <option value="">Chagua...</option>
+                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Mwanaume</option>
+                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Mwanamke</option>
+                                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Nyingine</option>
                                         </select>
                                     </div>
                                     @error('gender') <span class="text-danger small">{{ $message }}</span> @enderror
@@ -118,7 +118,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Date of Birth <span class="text-danger">*</span></label>
+                                    <label>Tarehe ya Kuzaliwa <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
@@ -131,10 +131,10 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Status <span class="text-danger">*</span></label>
+                                    <label>Hali <span class="text-danger">*</span></label>
                                     <select name="status" id="statusSelect" class="form-control @error('status') is-invalid @enderror" required>
-                                        <option value="alive" {{ old('status', 'alive') == 'alive' ? 'selected' : '' }}>Alive</option>
-                                        <option value="deceased" {{ old('status') == 'deceased' ? 'selected' : '' }}>Deceased</option>
+                                        <option value="alive" {{ old('status', 'alive') == 'alive' ? 'selected' : '' }}>Hai</option>
+                                        <option value="deceased" {{ old('status') == 'deceased' ? 'selected' : '' }}>Marehemu</option>
                                     </select>
                                     @error('status') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
@@ -144,21 +144,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Place of Birth</label>
+                                    <label>Mahali pa Kuzaliwa</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                                         </div>
                                         <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
-                                               value="{{ old('place_of_birth') }}" placeholder="City, Country">
+                                               value="{{ old('place_of_birth') }}" placeholder="Mji, Nchi">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Maiden Name <small class="text-muted">(Optional)</small></label>
+                                    <label>Jina la Msichana <small class="text-muted">(Hiari)</small></label>
                                     <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
-                                           value="{{ old('maiden_name') }}" placeholder="Maiden Name">
+                                           value="{{ old('maiden_name') }}" placeholder="Jina la Msichana">
                                 </div>
                             </div>
                         </div>
@@ -166,20 +166,20 @@
                         {{-- Deceased Fields (Hidden by default) --}}
                         <div id="deceasedFields" style="display: none;">
                             <hr>
-                            <h6 class="text-secondary mb-3">Death Details</h6>
+                            <h6 class="text-secondary mb-3">Maelezo ya Kifo</h6>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Date of Death</label>
+                                        <label>Tarehe ya Kifo</label>
                                         <input type="date" name="date_of_death" class="form-control @error('date_of_death') is-invalid @enderror" 
                                                value="{{ old('date_of_death') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Place of Death</label>
+                                        <label>Mahali pa Kifo</label>
                                         <input type="text" name="place_of_death" class="form-control @error('place_of_death') is-invalid @enderror" 
-                                               value="{{ old('place_of_death') }}" placeholder="City, Country">
+                                               value="{{ old('place_of_death') }}" placeholder="Mji, Nchi">
                                     </div>
                                 </div>
                             </div>
@@ -190,19 +190,19 @@
                 {{-- Family Organization Card --}}
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-sitemap mr-1"></i> Family Structure</h3>
+                        <h3 class="card-title"><i class="fas fa-sitemap mr-1"></i> Muundo wa Familia</h3>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Clan <span class="text-danger">*</span></label>
+                                    <label>Ukoo <span class="text-danger">*</span></label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="clan_name" class="form-control" value="{{ old('clan_name') }}" placeholder="Spouse's Clan" required>
-                                        <small class="text-muted">Enter spouse's clan name</small>
+                                        <input type="text" name="clan_name" class="form-control" value="{{ old('clan_name') }}" placeholder="Ukoo wa Mwenzi" required>
+                                        <small class="text-muted">Ingiza jina la ukoo wa mwenzi</small>
                                     @else
                                         <select name="clan_id" class="form-control select2" required>
-                                            <option value="">Select Clan...</option>
+                                            <option value="">Chagua Ukoo...</option>
                                             @foreach($clans as $clan)
                                                 <option value="{{ $clan->id }}" {{ old('clan_id', $selectedClanId ?? '') == $clan->id ? 'selected' : '' }}>
                                                     {{ $clan->name }}
@@ -214,12 +214,12 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Family <span class="text-danger">*</span></label>
+                                    <label>Familia <span class="text-danger">*</span></label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="family_name" class="form-control" value="{{ old('family_name') }}" placeholder="Spouse's Family" required>
+                                        <input type="text" name="family_name" class="form-control" value="{{ old('family_name') }}" placeholder="Familia ya Mwenzi" required>
                                     @else
                                         <select name="family_id" class="form-control select2" required>
-                                            <option value="">Select Family...</option>
+                                            <option value="">Chagua Familia...</option>
                                             @foreach($clans as $clan)
                                                 @foreach($clan->families as $family)
                                                     <option value="{{ $family->id }}" {{ old('family_id', $selectedFamilyId ?? '') == $family->id ? 'selected' : '' }}>
@@ -233,12 +233,12 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Branch</label>
+                                    <label>Tawi</label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name') }}" placeholder="Branch (Optional)">
+                                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name') }}" placeholder="Tawi (Hiari)">
                                     @else
                                         <select name="branch_id" class="form-control select2">
-                                            <option value="">None</option>
+                                            <option value="">Hakuna</option>
                                         </select>
                                     @endif
                                 </div>
@@ -246,16 +246,16 @@
                         </div>
 
                         <hr>
-                        <h6 class="text-secondary mb-3">Relationships</h6>
+                        <h6 class="text-secondary mb-3">Uhusiano (Wazazi/Mwenzi)</h6>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Father</label>
+                                    <label>Baba</label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="father_name" class="form-control" placeholder="Father's Name">
+                                        <input type="text" name="father_name" class="form-control" placeholder="Jina la Baba">
                                     @else
                                         <select name="father_id" class="form-control select2">
-                                            <option value="">Unknown / None</option>
+                                            <option value="">Haijulikani / Hakuna</option>
                                             @foreach($potentialFathers as $father)
                                                 <option value="{{ $father->id }}" {{ old('father_id', $selectedFatherId ?? '') == $father->id ? 'selected' : '' }}>
                                                     {{ $father->full_name }}
@@ -267,12 +267,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Mother</label>
+                                    <label>Mama</label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="mother_name" class="form-control" placeholder="Mother's Name">
+                                        <input type="text" name="mother_name" class="form-control" placeholder="Jina la Mama">
                                     @else
                                         <select name="mother_id" class="form-control select2">
-                                            <option value="">Unknown / None</option>
+                                            <option value="">Haijulikani / Hakuna</option>
                                             @foreach($potentialMothers as $mother)
                                                 <option value="{{ $mother->id }}" {{ old('mother_id', $selectedMotherId ?? '') == $mother->id ? 'selected' : '' }}>
                                                     {{ $mother->full_name }}
@@ -287,7 +287,7 @@
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Spouse <small class="text-muted">(Optional)</small></label>
+                                    <label>Mwenzi <small class="text-muted">(Hiari)</small></label>
                                     @if(isset($selectedSpouse))
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -296,9 +296,9 @@
                                             <input type="text" class="form-control" value="{{ $selectedSpouse->full_name }}" readonly>
                                             <input type="hidden" name="spouse_id" value="{{ $selectedSpouse->id }}">
                                         </div>
-                                        <small class="text-success">Adding spouse for {{ $selectedSpouse->full_name }}</small>
+                                        <small class="text-success">Kumwongeza mwenzi wa {{ $selectedSpouse->full_name }}</small>
                                     @else
-                                        <input type="text" name="spouse_name" class="form-control" value="{{ old('spouse_name') }}" placeholder="Enter name to create spouse profile automatically">
+                                        <input type="text" name="spouse_name" class="form-control" value="{{ old('spouse_name') }}" placeholder="Ingiza jina ili kutengeneza wasifu wa mwenzi moja kwa moja">
                                     @endif
                                 </div>
                             </div>
@@ -319,14 +319,14 @@
                                  id="profilePreview"
                                  style="width: 120px; height: 120px; object-fit: cover;">
                         </div>
-                        <h3 class="profile-username text-center text-muted">Upload Photo</h3>
+                        <h3 class="profile-username text-center text-muted">Pakia Picha</h3>
                         
                         <div class="form-group mt-3">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="profilePhoto" name="profile_photo" accept="image/*">
-                                <label class="custom-file-label" for="profilePhoto">Choose file</label>
+                                <label class="custom-file-label" for="profilePhoto">Chagua faili</label>
                             </div>
-                            <small class="text-muted d-block text-center mt-1">Max 2MB (JPG, PNG)</small>
+                            <small class="text-muted d-block text-center mt-1">Upeo wa 2MB (JPG, PNG)</small>
                         </div>
                     </div>
                 </div>
@@ -334,65 +334,65 @@
                 {{-- Contact Info Card --}}
                 <div class="card card-success card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-address-book mr-1"></i> Contact Info</h3>
+                        <h3 class="card-title"><i class="fas fa-address-book mr-1"></i> Mawasiliano</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label><i class="fas fa-envelope mr-1 text-muted"></i> Email</label>
-                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Email Address">
+                            <label><i class="fas fa-envelope mr-1 text-muted"></i> Barua Pepe</label>
+                            <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Barua Pepe">
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-phone mr-1 text-muted"></i> Phone</label>
-                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Phone Number">
+                            <label><i class="fas fa-phone mr-1 text-muted"></i> Simu</label>
+                            <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Namba ya Simu">
                         </div>
 
                         {{-- Cascading Location Picker --}}
                         <div class="card bg-light border-0">
                             <div class="card-body p-3">
-                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Location Details</h6>
+                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Maelezo ya Mahali</h6>
                                 
                                 {{-- 1. Country --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">1. Country</label>
+                                    <label class="small text-muted mb-0">1. Nchi</label>
                                     <select id="countrySelect" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select Country...</option>
+                                        <option value="">Chagua Nchi...</option>
                                         {{-- Populated via JS --}}
                                     </select>
                                 </div>
 
                                 {{-- 2. Region --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">2. Region / State</label>
+                                    <label class="small text-muted mb-0">2. Mkoa / Jimbo</label>
                                     <select id="regionSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select Country First...</option>
+                                        <option value="">Chagua Nchi Kwanza...</option>
                                     </select>
                                 </div>
 
                                 {{-- 3. District --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">3. District / County</label>
+                                    <label class="small text-muted mb-0">3. Wilaya</label>
                                     <select id="districtSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select Region First...</option>
+                                        <option value="">Chagua Mkoa Kwanza...</option>
                                     </select>
                                 </div>
 
                                 {{-- 4. Street --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">4. Street / Village / Area</label>
+                                    <label class="small text-muted mb-0">4. Mtaa / Kijiji</label>
                                     <select id="streetSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select District First...</option>
+                                        <option value="">Chagua Wilaya Kwanza...</option>
                                     </select>
                                 </div>
 
                                 <button type="button" id="resetLocation" class="btn btn-xs btn-outline-danger mt-2">
-                                    <i class="fas fa-undo"></i> Reset Location
+                                    <i class="fas fa-undo"></i> Futa Mahali
                                 </button>
                             </div>
                         </div>
 
                         {{-- Hidden Fields for Location Data --}}
                         <div id="locationDetails" class="d-none bg-white border p-3 rounded mt-2">
-                            <h6 class="text-success"><i class="fas fa-check-circle"></i> Location Locked</h6>
+                            <h6 class="text-success"><i class="fas fa-check-circle"></i> Mahali Pamehifadhiwa</h6>
                             <p class="mb-1 small text-muted" id="displayAddress"></p>
                             <input type="hidden" name="address" id="address">
                             <input type="hidden" name="street" id="street">
@@ -409,20 +409,20 @@
                 {{-- Additional Info Card --}}
                 <div class="card card-secondary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> Extras</h3>
+                        <h3 class="card-title"><i class="fas fa-info-circle mr-1"></i> Maelezo ya Ziada</h3>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Occupation</label>
-                            <input type="text" name="occupation" class="form-control" value="{{ old('occupation') }}" placeholder="Job Title">
+                            <label>Kazi / Shughuli</label>
+                            <input type="text" name="occupation" class="form-control" value="{{ old('occupation') }}" placeholder="Kazi/Kikazi">
                         </div>
                         <div class="form-group">
-                            <label>Biography</label>
-                            <textarea name="biography" class="form-control" rows="3" placeholder="Short bio...">{{ old('biography') }}</textarea>
+                            <label>Wasifu</label>
+                            <textarea name="biography" class="form-control" rows="3" placeholder="Wasifu mfupi...">{{ old('biography') }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Private Notes</label>
-                            <textarea name="notes" class="form-control" rows="2" placeholder="Internal notes...">{{ old('notes') }}</textarea>
+                            <label>Maelezo Binafsi ya Ndani</label>
+                            <textarea name="notes" class="form-control" rows="2" placeholder="Maelezo ya ndani ya siri...">{{ old('notes') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -431,10 +431,10 @@
         <div class="row mb-5">
             <div class="col-12">
                 <button type="submit" class="btn btn-success btn-lg float-right">
-                    <i class="fas fa-save mr-1"></i> {{ session('warning') ? 'Confirm & Create' : 'Create Member' }}
+                    <i class="fas fa-save mr-1"></i> {{ session('warning') ? 'Thibitisha & Hifadhi' : 'Hifadhi Mwanachama' }}
                 </button>
                 <a href="{{ route('members.index') }}" class="btn btn-secondary btn-lg float-right mr-2">
-                    <i class="fas fa-times mr-1"></i> Cancel
+                    <i class="fas fa-times mr-1"></i> Ghairi
                 </a>
             </div>
         </div>

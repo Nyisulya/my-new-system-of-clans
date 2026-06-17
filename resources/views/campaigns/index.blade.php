@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Campaigns')
+@section('title', 'Kampeni')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-hand-holding-usd"></i> Campaigns</h1>
+        <h1><i class="fas fa-hand-holding-usd"></i> Kampeni</h1>
         <a href="{{ route('campaigns.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> New Campaign
+            <i class="fas fa-plus"></i> Kampeni Mpya
         </a>
     </div>
 @stop
@@ -18,32 +18,32 @@
                 <div class="card card-widget widget-user">
                     <div class="widget-user-header bg-info">
                         <h3 class="widget-user-username">{{ $campaign->title }}</h3>
-                        <h5 class="widget-user-desc">Target: {{ number_format($campaign->target_amount) }}</h5>
+                        <h5 class="widget-user-desc">Lengo: {{ number_format($campaign->target_amount) }}</h5>
                     </div>
                     <div class="card-footer p-0">
                         <ul class="nav flex-column">
                             <li class="nav-item">
                                 <span class="nav-link">
-                                    Raised <span class="float-right badge bg-primary">{{ number_format($campaign->contributions_sum_amount ?? 0) }}</span>
+                                    Kilichokusanywa <span class="float-right badge bg-primary">{{ number_format($campaign->contributions_sum_amount ?? 0) }}</span>
                                 </span>
                             </li>
                             <li class="nav-item">
                                 <div class="progress progress-xs mt-2 mb-2 ml-3 mr-3">
                                     <div class="progress-bar bg-success" style="width: {{ $campaign->progress_percentage }}%"></div>
                                 </div>
-                                <span class="text-center d-block text-muted text-sm mb-2">{{ $campaign->progress_percentage }}% Complete</span>
+                                <span class="text-center d-block text-muted text-sm mb-2">{{ $campaign->progress_percentage }}% Imekamilika</span>
                             </li>
                             <li class="nav-item">
                                 <span class="nav-link">
-                                    Status 
+                                    Hali 
                                     <span class="float-right badge badge-{{ $campaign->status == 'active' ? 'success' : 'secondary' }}">
-                                        {{ ucfirst($campaign->status) }}
+                                        {{ $campaign->status == 'active' ? 'Inafanya kazi' : ucfirst($campaign->status) }}
                                     </span>
                                 </span>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('campaigns.show', $campaign) }}" class="nav-link text-center bg-light">
-                                    View Details <i class="fas fa-arrow-circle-right"></i>
+                                    Angalia Maelezo <i class="fas fa-arrow-circle-right"></i>
                                 </a>
                             </li>
                         </ul>
@@ -53,7 +53,7 @@
         @empty
             <div class="col-12">
                 <div class="alert alert-info">
-                    No campaigns found. Create one to start collecting contributions!
+                    Hakuna kampeni zilizopatikana. Unda moja ili kuanza kukusanya michango!
                 </div>
             </div>
         @endforelse

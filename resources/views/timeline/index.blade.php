@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Family Timeline')
+@section('title', 'Mstari wa Wakati wa Familia')
 
 @section('content_header')
-    <h1><i class="fas fa-history"></i> Family Timeline</h1>
+    <h1><i class="fas fa-history"></i> Mstari wa Wakati wa Familia</h1>
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="col-md-12">
                 @if($groupedEvents->isEmpty())
                     <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> No events found. Add members with birth/death dates or marriages to populate the timeline.
+                        <i class="fas fa-info-circle"></i> Hakuna matukio yaliyopatikana. Ongeza wanachama wenye tarehe za kuzaliwa/kufariki au ndoa ili kuijaza mstari wa wakati.
                     </div>
                 @else
                     <div class="timeline">
@@ -25,7 +25,7 @@
                                 <div>
                                     <i class="{{ $event['icon'] }} {{ $event['color'] }}"></i>
                                     <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock"></i> {{ $event['date']->format('M d') }}</span>
+                                        <span class="time"><i class="fas fa-clock"></i> {{ $event['date']->format('d M') }}</span>
                                         <h3 class="timeline-header">
                                             @if($event['type'] == 'birth')
                                                 <a href="{{ route('members.show', $event['model']->id) }}">{{ $event['title'] }}</a>

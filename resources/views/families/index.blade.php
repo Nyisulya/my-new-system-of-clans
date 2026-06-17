@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Families')
+@section('title', 'Familia')
 
 @section('content_header')
-    <h1><i class="fas fa-home"></i> Families</h1>
+    <h1><i class="fas fa-home"></i> Familia</h1>
 @stop
 
 @section('content')
@@ -23,10 +23,10 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">All Families</h3>
+            <h3 class="card-title">Familia Zote</h3>
             <div class="card-tools">
                 <a href="{{ route('families.create') }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus"></i> Add Family
+                    <i class="fas fa-plus"></i> Ongeza Familia
                 </a>
             </div>
         </div>
@@ -34,14 +34,14 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Clan</th>
-                        <th>Founder</th>
-                        <th>Members</th>
-                        <th>Established</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Jina</th>
+                        <th>Jina la Ukoo</th>
+                        <th>Ukoo</th>
+                        <th>Mwanzilishi</th>
+                        <th>Wanachama</th>
+                        <th>Ilianzishwa</th>
+                        <th>Hali</th>
+                        <th>Vitendo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,7 +49,7 @@
                         <tr>
                             <td><strong>{{ $family->name }}</strong></td>
                             <td>{{ $family->surname }}</td>
-                            <td>{{ $family->clan->name ?? 'N/A' }}</td>
+                            <td>{{ $family->clan->name ?? 'Haijulikani' }}</td>
                             <td>
                                 @php
                                     $founder = $family->members->first();
@@ -57,32 +57,32 @@
                                 @if($founder)
                                     <a href="{{ route('members.dashboard', $founder) }}">{{ $founder->full_name }}</a>
                                 @else
-                                    <span class="text-muted">No founder</span>
+                                    <span class="text-muted">Hakuna mwanzilishi</span>
                                 @endif
                             </td>
                             <td><span class="badge badge-primary">{{ $family->members_count }}</span></td>
-                            <td>{{ $family->established_date?->format('Y') ?? 'N/A' }}</td>
+                            <td>{{ $family->established_date?->format('Y') ?? 'Haijulikani' }}</td>
                             <td>
                                 @if($family->is_active)
-                                    <span class="badge badge-success">Active</span>
+                                    <span class="badge badge-success">Hai</span>
                                 @else
-                                    <span class="badge badge-secondary">Inactive</span>
+                                    <span class="badge badge-secondary">Haifanyi kazi</span>
                                 @endif
                             </td>
                             <td>
                                 {{-- Crown button - goes to founder page with dashboard layout --}}
-                                <a href="{{ route('families.founder', $family) }}" class="btn btn-sm btn-warning" title="View Founder Dashboard">
+                                <a href="{{ route('families.founder', $family) }}" class="btn btn-sm btn-warning" title="Angalia Dashibodi ya Mwanzilishi">
                                     <i class="fas fa-crown"></i>
                                 </a>
                                 
-                                <a href="{{ route('families.tree', $family) }}" class="btn btn-sm btn-info" title="View Full Tree">
+                                <a href="{{ route('families.tree', $family) }}" class="btn btn-sm btn-info" title="Angalia Mti Kamili">
                                     <i class="fas fa-sitemap"></i>
                                 </a>
                                 <form action="{{ route('families.destroy', $family) }}" method="POST" style="display: inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete Family" 
-                                            onclick="return confirm('Are you sure you want to delete {{ $family->name }}? This will also delete all members in this family. This action cannot be undone!')">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Futa Familia" 
+                                            onclick="return confirm('Je, una uhakika unataka kufuta {{ $family->name }}? Hii itafuta pia wanachama wote wa familia hii. Kitendo hiki hakiwezi kutenduliwa!')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -90,7 +90,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">No families found</td>
+                            <td colspan="8" class="text-center">Hakuna familia zilizopatikana</td>
                         </tr>
                     @endforelse
                 </tbody>
