@@ -197,6 +197,21 @@
     </div>
 
     <div class="topbar-right">
+        {{-- Language Selector --}}
+        <div class="dropdown">
+            <a href="#" class="topbar-icon-btn" data-toggle="dropdown" role="button" title="Badilisha Lugha / Change Language">
+                <i class="fas fa-globe"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}" href="{{ route('language.switch', 'en') }}">
+                    🇬🇧 English
+                </a>
+                <a class="dropdown-item {{ app()->getLocale() == 'sw' ? 'active' : '' }}" href="{{ route('language.switch', 'sw') }}">
+                    🇹🇿 Kiswahili
+                </a>
+            </div>
+        </div>
+
         {{-- Notifications bell --}}
         <a href="{{ route('notifications.index') }}" class="topbar-icon-btn" title="Notifications">
             <i class="fas fa-bell"></i>
