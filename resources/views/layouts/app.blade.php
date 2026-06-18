@@ -374,10 +374,7 @@
             $('.select2').select2({ theme: 'bootstrap4' });
         }
 
-        // Auto-dismiss alerts after 5s
-        setTimeout(function () {
-            $('.alert.alert-success, .alert.alert-warning').fadeOut('slow');
-        }, 5000);
+        // Banners will not auto-dismiss automatically to ensure they remain visible for review
     });
 })();
 </script>
