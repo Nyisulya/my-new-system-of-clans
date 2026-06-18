@@ -131,22 +131,24 @@
                                     <a href="{{ route('members.dashboard', $member->id) }}" class="btn btn-xs btn-primary" title="Dashibodi">
                                         <i class="fas fa-tachometer-alt"></i>
                                     </a>
-                                    @php
-                                        $spouses = $member->spouses();
-                                        $spouseCount = is_countable($spouses) ? $spouses->count() : 0;
-                                        $firstSpouse = null;
-                                        if ($spouseCount > 0) {
-                                            $firstSpouse = $spouses->first();
-                                        }
-                                    @endphp
-                                    <a href="{{ route('members.create', [
-                                        'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse?->id ?? null),
-                                        'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse?->id ?? null),
-                                        'clan_id' => $member->clan_id,
-                                        'family_id' => $member->family_id
-                                    ]) }}" class="btn btn-xs btn-success" title="Ongeza Mtoto">
-                                        <i class="fas fa-baby"></i>
-                                    </a>
+                                    @can('update', $member)
+                                        @php
+                                            $spouses = $member->spouses();
+                                            $spouseCount = is_countable($spouses) ? $spouses->count() : 0;
+                                            $firstSpouse = null;
+                                            if ($spouseCount > 0) {
+                                                $firstSpouse = $spouses->first();
+                                            }
+                                        @endphp
+                                        <a href="{{ route('members.create', [
+                                            'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse?->id ?? null),
+                                            'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse?->id ?? null),
+                                            'clan_id' => $member->clan_id,
+                                            'family_id' => $member->family_id
+                                        ]) }}" class="btn btn-xs btn-success" title="Ongeza Mtoto">
+                                            <i class="fas fa-baby"></i>
+                                        </a>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

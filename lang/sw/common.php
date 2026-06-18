@@ -55,6 +55,7 @@ return [
     'timeline' => 'Historia ya Matukio',
 
     'signed_in_as' => 'Umeingia kama',
+    'my_profile' => 'Wasifu Wangu',
     'logout' => 'Ondoka',
     'all_rights_reserved' => 'Haki zote zimehifadhiwa.',
     'family_tree_management' => 'Usimamizi wa Mti wa Ukoo',

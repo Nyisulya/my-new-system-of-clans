@@ -345,13 +345,15 @@
                             </table>
                         @else
                             <div class="alert alert-info"><i class="fas fa-info-circle"></i> Hakuna watoto waliorekodiwa kwa mwanachama huyu.</div>
-                            @php $firstSpouse = $member->spouses()->first(); @endphp
-                            <a href="{{ route('members.create', [
-                                'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
-                                'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
-                                'clan_id' => $member->clan_id,
-                                'family_id' => $member->family_id
-                            ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ongeza Mtoto wa Kwanza</a>
+                            @can('update', $member)
+                                @php $firstSpouse = $member->spouses()->first(); @endphp
+                                <a href="{{ route('members.create', [
+                                    'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
+                                    'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
+                                    'clan_id' => $member->clan_id,
+                                    'family_id' => $member->family_id
+                                ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ongeza Mtoto wa Kwanza</a>
+                            @endcan
                         @endif
                     </div>
                     <!-- Details Tab -->

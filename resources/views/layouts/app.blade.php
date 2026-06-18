@@ -246,6 +246,12 @@
                     <strong>{{ Auth::user()->name }}</strong>
                 </div>
                 <div class="dropdown-divider"></div>
+                @if(Auth::user()->member_id !== null)
+                    <a class="dropdown-item" href="{{ route('members.dashboard', Auth::user()->member_id) }}">
+                        <i class="fas fa-user-circle mr-2"></i> {{ __('common.my_profile') }}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                @endif
                 <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
                     <i class="fas fa-sign-out-alt mr-2"></i> {{ __('common.logout') }}

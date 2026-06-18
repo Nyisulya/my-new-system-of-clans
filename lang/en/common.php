@@ -55,6 +55,7 @@ return [
     'timeline' => 'Timeline',
 
     'signed_in_as' => 'Signed in as',
+    'my_profile' => 'My Profile',
     'logout' => 'Logout',
     'all_rights_reserved' => 'All rights reserved.',
     'family_tree_management' => 'Family Tree Management',
