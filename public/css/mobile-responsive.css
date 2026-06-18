@@ -16,7 +16,6 @@
 /* Excludes .btn-xs (table action buttons) so they stay compact */
 .navbar .btn,
 .nav-link,
-.sidebar-item,
 .topbar-icon-btn,
 input[type="submit"]:not(.btn-xs),
 input[type="button"]:not(.btn-xs),
@@ -496,12 +495,17 @@ img {
 
 /* Larger tap targets for navigation links only — NOT table action buttons */
 .nav-link,
-.sidebar-item,
 .topbar-icon-btn,
 .dropdown-item,
 .pagination .page-link {
     min-height: 44px;
     display: inline-flex;
+    align-items: center;
+}
+
+.sidebar-item {
+    min-height: 44px;
+    display: flex;
     align-items: center;
 }
 
