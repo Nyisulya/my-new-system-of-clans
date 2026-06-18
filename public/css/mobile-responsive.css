@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    Mobile Responsive Styles for Clan Management System
    Mobile-First Approach with Touch-Friendly Design
    ============================================ */
@@ -793,4 +793,62 @@ body {
 /* Fix for short content pages */
 body.layout-fixed .content-wrapper {
     margin-bottom: 0;
+}
+
+/* ============================================
+   25. CUSTOM TOPBAR & SIDEBAR RESPONSIVENESS
+   ============================================ */
+
+@media (max-width: 992px) {
+    .app-topbar {
+        left: 0 !important;
+        padding: 0 16px !important;
+    }
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+    .app-sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+    .app-content {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .topbar-left {
+        gap: 8px !important;
+    }
+    .topbar-page-title {
+        font-size: 13.5px !important;
+        max-width: 140px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .topbar-right {
+        gap: 6px !important;
+    }
+    .topbar-icon-btn {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .topbar-user-btn {
+        padding: 4px 6px !important;
+        gap: 4px !important;
+    }
+    .topbar-avatar {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 10px !important;
+    }
+    .topbar-user-btn .topbar-name {
+        display: none !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .topbar-page-title {
+        display: none !important;
+    }
 }

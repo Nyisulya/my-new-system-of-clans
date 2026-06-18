@@ -299,12 +299,51 @@
         }
 
         @media (max-width: 480px) {
-            .login-card {
-                padding: 32px 24px;
+            .login-container {
+                padding: 12px;
             }
-            
+            .login-card {
+                padding: 32px 20px;
+                border-radius: 20px;
+            }
             h1 {
                 font-size: 24px;
+            }
+            .logo-icon {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 12px;
+            }
+            .logo-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+            input[type="text"],
+            input[type="password"] {
+                padding: 12px 42px 12px 42px;
+                font-size: 15px;
+            }
+            .input-icon {
+                left: 12px;
+                width: 18px;
+                height: 18px;
+            }
+            .password-toggle {
+                right: 12px;
+            }
+            .password-toggle svg {
+                width: 18px;
+                height: 18px;
+            }
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            .btn-login {
+                padding: 14px;
+                font-size: 15px;
             }
         }
     </style>

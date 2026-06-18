@@ -596,6 +596,64 @@
                 text-align: center;
             }
         }
+
+        @media (max-width: 576px) {
+            .header-container {
+                padding: 12px 16px;
+                gap: 8px;
+            }
+            .brand-link {
+                font-size: 16px;
+                gap: 8px;
+            }
+            .brand-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+            }
+            .brand-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+            .nav-actions {
+                gap: 8px;
+            }
+            .lang-switch {
+                padding: 2px;
+            }
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+            .btn {
+                padding: 8px 12px;
+                font-size: 13px;
+                border-radius: 8px;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-link span {
+                font-size: 14px;
+            }
+            .btn span {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .brand-link span {
+                display: none; /* Hide brand text, only show icon */
+            }
+            .btn span {
+                display: none; /* Hide button text, only show icons */
+            }
+            .btn {
+                padding: 8px 12px;
+                border-radius: 6px;
+            }
+        }
     </style>
 </head>
 <body>
