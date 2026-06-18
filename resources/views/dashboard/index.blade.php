@@ -93,92 +93,38 @@
         </div>
     </div>
     
-    <h5 class="mb-2 mt-4">{{ __('common.positions_in_clan') }}</h5>
+    <h5 class="mb-2 mt-4">{{ __('common.generations_in_clan') }}</h5>
     <div class="row">
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-primary">
-                <div class="inner">
-                    <h3>{{ $totalParents }}</h3>
-                    <p>{{ __('common.parents') }}</p>
+        @php
+            $bgClasses = ['bg-primary', 'bg-info', 'bg-purple', 'bg-teal', 'bg-maroon', 'bg-orange', 'bg-success', 'bg-secondary'];
+            $iconClasses = ['fa-crown', 'fa-user-friends', 'fa-child', 'fa-users', 'fa-leaf', 'fa-seedling', 'fa-tree', 'fa-layer-group'];
+        @endphp
+        @forelse($generationCounts as $genNum => $count)
+            @php
+                $bgClass = $bgClasses[($genNum - 1) % count($bgClasses)];
+                $iconClass = $iconClasses[($genNum - 1) % count($iconClasses)];
+            @endphp
+            <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+                <div class="small-box {{ $bgClass }}">
+                    <div class="inner">
+                        <h3>{{ $count }}</h3>
+                        <p>{{ __('common.generation_title', ['number' => $genNum]) }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas {{ $iconClass }}"></i>
+                    </div>
+                    <a href="#" class="small-box-footer view-category" data-category="generation_{{ $genNum }}" data-title="{{ __('common.generation_title', ['number' => $genNum]) }}">
+                        {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
+                    </a>
                 </div>
-                <div class="icon">
-                    <i class="fas fa-user-friends"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'parents']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
             </div>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ $totalChildren }}</h3>
-                    <p>{{ __('common.children') }}</p>
+        @empty
+            <div class="col-12">
+                <div class="alert alert-info">
+                    {{ __('common.no_members_added_yet') }}
                 </div>
-                <div class="icon">
-                    <i class="fas fa-baby"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'children']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
             </div>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-purple">
-                <div class="inner">
-                    <h3>{{ $totalGrandchildren }}</h3>
-                    <p>{{ __('common.grandchildren') }}</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-child"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'grandchildren']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-teal">
-                <div class="inner">
-                    <h3>{{ $totalGreatGrandchildren }}</h3>
-                    <p>{{ __('common.great_grandchildren') }}</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-leaf"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'great_grandchildren']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-maroon">
-                <div class="inner">
-                    <h3>{{ $totalGreatGreatGrandchildren }}</h3>
-                    <p>{{ __('common.great_great_grandchildren') }}</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-seedling"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'great_great_grandchildren']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-            <div class="small-box bg-orange">
-                <div class="inner">
-                    <h3>{{ $totalGreatGreatGreatGrandchildren }}</h3>
-                    <p>{{ __('common.great_great_great_grandchildren') }}</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-tree"></i>
-                </div>
-                <a href="{{ route('members.index', ['category' => 'great_great_great_grandchildren']) }}" class="small-box-footer">
-                    {{ __('common.view_list') }} <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
+        @endforelse
     </div>
 
     @can('admin-only')

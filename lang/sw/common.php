@@ -78,6 +78,8 @@ return [
     'view_generations' => 'Angalia vizazi',
     'deceased_members' => 'Wanachama walio fariki',
     'positions_in_clan' => 'Nafasi kwenye Ukoo',
+    'generations_in_clan' => 'Vizazi kwenye Ukoo',
+    'generation_title' => 'Kizazi cha :number',
     'children' => 'Watoto',
     'grandchildren' => 'Wajukuu',
     'great_grandchildren' => 'Vitukuu',

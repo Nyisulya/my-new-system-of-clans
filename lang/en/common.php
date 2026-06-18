@@ -78,6 +78,8 @@ return [
     'view_generations' => 'View Generations',
     'deceased_members' => 'Deceased Members',
     'positions_in_clan' => 'Positions in the Clan',
+    'generations_in_clan' => 'Generations in the Clan',
+    'generation_title' => 'Generation :number',
     'children' => 'Children',
     'grandchildren' => 'Grandchildren',
     'great_grandchildren' => 'Great-grandchildren',

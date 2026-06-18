@@ -29,67 +29,72 @@ class DashboardController extends Controller
 
         $query = Member::where('clan_id', $clan->id);
 
-        switch ($category) {
-            case 'all_members':
-                // No filter needed
-                break;
-            case 'living_members':
-                $query->where('status', 'alive');
-                break;
-            case 'deceased_members':
-                $query->where('status', 'deceased');
-                break;
-            case 'parents':
-                $query->has('children');
-                break;
-            case 'children':
-                $query->where(function($q) {
-                    $q->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                });
-                break;
-            case 'grandchildren':
-                $query->where(function($q) {
-                    $q->whereHas('father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                });
-                break;
-            case 'great_grandchildren':
-                $query->where(function($q) {
-                    $q->whereHas('father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                });
-                break;
-            case 'great_great_grandchildren':
-                $query->where(function($q) {
-                    $q->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('mother.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                });
-                break;
-            case 'great_great_great_grandchildren':
-                $query->where(function($q) {
-                    $q->whereHas('father', function($f) {
-                        $f->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                    })->orWhereHas('mother', function($m) {
-                        $m->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                          ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+        if ($category && str_starts_with($category, 'generation_')) {
+            $genNum = (int) str_replace('generation_', '', $category);
+            $query->where('generation_number', $genNum);
+        } else {
+            switch ($category) {
+                case 'all_members':
+                    // No filter needed
+                    break;
+                case 'living_members':
+                    $query->where('status', 'alive');
+                    break;
+                case 'deceased_members':
+                    $query->where('status', 'deceased');
+                    break;
+                case 'parents':
+                    $query->has('children');
+                    break;
+                case 'children':
+                    $query->where(function($q) {
+                        $q->whereNotNull('father_id')->orWhereNotNull('mother_id');
                     });
-                });
-                break;
-            default:
-                return response()->json(['html' => '<p>Invalid category.</p>']);
+                    break;
+                case 'grandchildren':
+                    $query->where(function($q) {
+                        $q->whereHas('father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+                    });
+                    break;
+                case 'great_grandchildren':
+                    $query->where(function($q) {
+                        $q->whereHas('father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+                    });
+                    break;
+                case 'great_great_grandchildren':
+                    $query->where(function($q) {
+                        $q->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                          ->orWhereHas('mother.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+                    });
+                    break;
+                case 'great_great_great_grandchildren':
+                    $query->where(function($q) {
+                        $q->whereHas('father', function($f) {
+                            $f->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+                        })->orWhereHas('mother', function($m) {
+                            $m->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
+                              ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
+                        });
+                    });
+                    break;
+                default:
+                    return response()->json(['html' => '<p>Invalid category.</p>']);
+            }
         }
 
         $members = $query->select('id', 'first_name', 'middle_name', 'last_name', 'profile_photo_path')
@@ -137,12 +142,7 @@ class DashboardController extends Controller
                 'families' => collect(),
                 'clan' => null,
                 'user' => $user,
-                'totalParents' => 0,
-                'totalChildren' => 0,
-                'totalGrandchildren' => 0,
-                'totalGreatGrandchildren' => 0,
-                'totalGreatGreatGrandchildren' => 0,
-                'totalGreatGreatGreatGrandchildren' => 0,
+                'generationCounts' => [],
             ]);
         }
 
@@ -164,84 +164,22 @@ class DashboardController extends Controller
             ->withCount('members')
             ->get();
 
-        // Family Hierarchy Stats
-        $totalParents = Member::where('clan_id', $clan->id)->has('children')->count();
+        // Get dynamic generations with member counts
+        $maxGen = Member::where('clan_id', $clan->id)->max('generation_number') ?? 0;
         
-        $totalChildren = Member::where('clan_id', $clan->id)
-            ->where(function($q) {
-                $q->whereNotNull('father_id')->orWhereNotNull('mother_id');
-            })->count();
+        $generationCounts = [];
+        for ($i = 1; $i <= $maxGen; $i++) {
+            $generationCounts[$i] = 0;
+        }
 
-        $totalGrandchildren = Member::where('clan_id', $clan->id)
-            ->where(function($q) {
-                $q->whereHas('father', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                })->orWhereHas('mother', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                });
-            })->count();
+        $rawCounts = Member::where('clan_id', $clan->id)
+            ->select('generation_number', \DB::raw('count(*) as total'))
+            ->groupBy('generation_number')
+            ->get();
 
-        // Great-Grandchildren (Parents -> Grandparents -> Great-Grandparents)
-        $totalGreatGrandchildren = Member::where('clan_id', $clan->id)
-            ->where(function($q) {
-                $q->whereHas('father.father', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                })->orWhereHas('father.mother', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                })->orWhereHas('mother.father', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                })->orWhereHas('mother.mother', function($sq) {
-                    $sq->whereNotNull('father_id')->orWhereNotNull('mother_id');
-                });
-            })->count();
-
-        // Great-Great-Grandchildren
-        $totalGreatGreatGrandchildren = Member::where('clan_id', $clan->id)
-            ->where(function($q) {
-                // Check if any Great-Grandparent has a parent
-                $q->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('mother.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('mother.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('mother.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                  ->orWhereHas('mother.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-            })->count();
-
-        // Great-Great-Great-Grandchildren
-        $totalGreatGreatGreatGrandchildren = Member::where('clan_id', $clan->id)
-            ->where(function($q) {
-                // Check if any Great-Great-Grandparent has a parent
-                // We check one path for brevity as an example, but strictly should check all 16 paths.
-                // To avoid massive code duplication, we can rely on the fact that usually if one line extends, it's captured.
-                // But for correctness, let's try to be reasonably comprehensive or simplify.
-                // A cleaner way: Check if generation number >= 6 (if we trust generation_number field)
-                // Since we have generation_number in the database, let's use that! It's much faster and cleaner.
-                // Assuming Generation 1 is the root.
-                // Children = Gen 2
-                // Grandchildren = Gen 3
-                // Great-Grandchildren = Gen 4
-                // Great-Great-Grandchildren = Gen 5
-                // Great-Great-Great-Grandchildren = Gen 6+
-                
-                // However, the previous stats were calculated dynamically. Let's stick to dynamic for consistency if possible,
-                // OR switch to generation_number if it's reliable.
-                // Let's try the dynamic approach for one more level, but simplified:
-                // A member is a 3x-Great-Grandchild if they have a 2x-Great-Grandparent who has a parent.
-                
-                $q->whereHas('father', function($f) {
-                    $f->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                })->orWhereHas('mother', function($m) {
-                    $m->whereHas('father.father.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.father.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.father', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'))
-                      ->orWhereHas('father.mother.mother', fn($sq) => $sq->whereNotNull('father_id')->orWhereNotNull('mother_id'));
-                });
-            })->count();
+        foreach ($rawCounts as $rc) {
+            $generationCounts[$rc->generation_number] = $rc->total;
+        }
 
         return view('dashboard.index', compact(
             'stats',
@@ -250,12 +188,7 @@ class DashboardController extends Controller
             'families',
             'clan',
             'user',
-            'totalParents',
-            'totalChildren',
-            'totalGrandchildren',
-            'totalGreatGrandchildren',
-            'totalGreatGreatGrandchildren',
-            'totalGreatGreatGreatGrandchildren'
+            'generationCounts'
         ));
     }
 
