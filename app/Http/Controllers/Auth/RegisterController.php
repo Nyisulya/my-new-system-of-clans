@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Member;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -31,6 +32,16 @@ class RegisterController extends Controller
     protected $redirectTo = '/dashboard';
 
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -54,7 +65,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         // Create Member profile first
-        $member = \App\Models\Member::create([
+        $member = Member::create([
             'first_name' => $data['name'],
             'last_name' => '', // Can be updated later by user
             'status' => 'alive',
@@ -71,7 +82,7 @@ class RegisterController extends Controller
             'email' => null, // No email for local users
             'password' => Hash::make($data['password']),
             'member_id' => $member->id,
-            'role' => 'member', // Regular member role (can view all, edit only self)
+            'role' => 'member', // Regular member role
             'is_active' => true,
         ]);
     }
