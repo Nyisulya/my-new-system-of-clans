@@ -90,9 +90,9 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Date of Birth <span class="text-danger">*</span></label>
+                            <label>Date of Birth</label>
                             <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" 
-                                   value="{{ old('date_of_birth', $member->date_of_birth?->format('Y-m-d')) }}" required>
+                                   value="{{ old('date_of_birth', $member->date_of_birth?->format('Y-m-d')) }}">
                             @error('date_of_birth')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror

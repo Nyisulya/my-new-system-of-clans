@@ -118,13 +118,13 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Tarehe ya Kuzaliwa <span class="text-danger">*</span></label>
+                                    <label>Tarehe ya Kuzaliwa</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                         </div>
                                         <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" 
-                                               value="{{ old('date_of_birth') }}" required>
+                                               value="{{ old('date_of_birth') }}">
                                     </div>
                                     @error('date_of_birth') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>

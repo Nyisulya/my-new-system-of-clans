@@ -37,7 +37,7 @@ class StoreMemberRequest extends FormRequest
             'maiden_name' => ['nullable', 'string', 'max:255'],
             
             'gender' => ['required', Rule::in(['male', 'female', 'other'])],
-            'date_of_birth' => ['required', 'date', 'before:today'],
+            'date_of_birth' => ['nullable', 'date', 'before:today'],
             'place_of_birth' => ['nullable', 'string', 'max:255'],
             
             'father_id' => [
@@ -77,8 +77,16 @@ class StoreMemberRequest extends FormRequest
             'date_of_death' => [
                 'nullable',
                 'date',
-                'after:date_of_birth',
-                'required_if:status,deceased'
+                'required_if:status,deceased',
+                function ($attribute, $value, $fail) {
+                    if ($value && $this->input('date_of_birth')) {
+                        $dob = \Carbon\Carbon::parse($this->input('date_of_birth'));
+                        $dod = \Carbon\Carbon::parse($value);
+                        if ($dod->lt($dob)) {
+                            $fail('Date of death must be after date of birth.');
+                        }
+                    }
+                }
             ],
             'place_of_death' => ['nullable', 'string', 'max:255'],
             
