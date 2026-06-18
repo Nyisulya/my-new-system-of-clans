@@ -211,7 +211,10 @@
                             <select name="father_id" class="form-control @error('father_id') is-invalid @enderror">
                                 <option value="">None</option>
                                 @foreach($potentialFathers as $father)
-                                    <option value="{{ $father->id }}" {{ old('father_id', $member->father_id) == $father->id ? 'selected' : '' }}>
+                                    <option value="{{ $father->id }}" 
+                                            data-clan="{{ $father->clan_id }}" 
+                                            data-family="{{ $father->family_id }}"
+                                            {{ old('father_id', $member->father_id) == $father->id ? 'selected' : '' }}>
                                         {{ $father->full_name }} (Gen {{ $father->generation_number }})
                                     </option>
                                 @endforeach
@@ -428,6 +431,22 @@
 
             // --- 1. Initialize Select2 ---
             $('.select2').select2({ theme: 'bootstrap' });
+
+            // Auto-populate clan and family when father is selected
+            $('select[name="father_id"]').change(function() {
+                const selectedOption = $(this).find('option:selected');
+                const clanId = selectedOption.data('clan');
+                const familyId = selectedOption.data('family');
+
+                if (clanId) {
+                    $('select[name="clan_id"]').val(clanId).trigger('change');
+                }
+                if (familyId) {
+                    setTimeout(function() {
+                        $('select[name="family_id"]').val(familyId).trigger('change');
+                    }, 50);
+                }
+            });
 
             // --- 2. Country List (Comprehensive) ---
             const countries = [

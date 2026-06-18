@@ -12,10 +12,10 @@
 
 @section('content')
     @if(auth()->user()->member_id === null && !auth()->user()->isAdmin())
-        <div class="alert alert-warning alert-dismissible fade show mb-4 pr-5" role="alert">
+        <div class="alert alert-warning fade show mb-4 shadow-sm" role="alert">
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
                 <div class="mb-2 mb-md-0">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <i class="fas fa-exclamation-triangle mr-2 text-warning"></i>
                     {{ __('common.unlinked_profile_warning') }}
                 </div>
                 <div class="d-flex flex-wrap gap-2">
@@ -27,9 +27,6 @@
                     </a>
                 </div>
             </div>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
     @endif
 

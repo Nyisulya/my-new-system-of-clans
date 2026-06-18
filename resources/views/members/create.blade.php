@@ -281,7 +281,10 @@
                                         <select name="father_id" class="form-control select2">
                                             <option value="">Haijulikani / Hakuna</option>
                                             @foreach($potentialFathers as $father)
-                                                <option value="{{ $father->id }}" {{ old('father_id', $selectedFatherId ?? '') == $father->id ? 'selected' : '' }}>
+                                                <option value="{{ $father->id }}" 
+                                                        data-clan="{{ $father->clan_id }}" 
+                                                        data-family="{{ $father->family_id }}"
+                                                        {{ old('father_id', $selectedFatherId ?? '') == $father->id ? 'selected' : '' }}>
                                                     {{ $father->full_name }}
                                                 </option>
                                             @endforeach
@@ -814,6 +817,22 @@
                 
                 if (!confirm(msg)) {
                     e.preventDefault();
+                }
+            });
+
+            // Auto-populate clan and family when father is selected
+            $('select[name="father_id"]').change(function() {
+                const selectedOption = $(this).find('option:selected');
+                const clanId = selectedOption.data('clan');
+                const familyId = selectedOption.data('family');
+
+                if (clanId) {
+                    $('select[name="clan_id"]').val(clanId).trigger('change');
+                }
+                if (familyId) {
+                    setTimeout(function() {
+                        $('select[name="family_id"]').val(familyId).trigger('change');
+                    }, 50);
                 }
             });
 
