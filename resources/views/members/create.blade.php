@@ -35,28 +35,32 @@
                 
                 @if(session('partial_matches'))
                     <hr>
-                    <p class="mb-1"><strong>Rekodi zinazofanana (Je, huyu ni wewe?):</strong></p>
-                    <ul class="mb-0 pl-3">
+                    <p class="mb-2"><strong>Rekodi zinazofanana (Je, huyu ni wewe?):</strong></p>
+                    <div class="list-group">
                         @foreach(session('partial_matches') as $match)
-                            <li class="mb-2">
-                                <a href="{{ route('members.dashboard', $match->id) }}" target="_blank" class="text-dark font-weight-bold mr-2">
-                                    {{ $match->full_name }} 
-                                </a>
-                                <span class="text-muted mr-2">(Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }})</span>
+                            <div class="list-group-item list-group-item-warning d-flex flex-column flex-md-row justify-content-between align-items-md-center py-2 px-3 mb-2 shadow-sm rounded border-0" style="background-color: rgba(255, 255, 255, 0.4); border: 1px solid rgba(0,0,0,0.08);">
+                                <div class="mb-2 mb-md-0">
+                                    <span class="font-weight-bold text-dark d-block">
+                                        <i class="fas fa-user-circle mr-1 text-secondary"></i> {{ $match->full_name }}
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-birthday-cake mr-1"></i> Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }}
+                                    </small>
+                                </div>
                                 @if(auth()->user()->member_id === null && !auth()->user()->isAdmin())
-                                    <form action="{{ route('profile.claim.submit') }}" method="POST" class="d-inline ml-2">
+                                    <form action="{{ route('profile.claim.submit') }}" method="POST" class="d-inline">
                                         @csrf
                                         <input type="hidden" name="member_id" value="{{ $match->id }}">
-                                        <button type="submit" class="btn btn-xs btn-outline-dark px-2 py-0 align-middle link-direct-btn" 
+                                        <button type="submit" class="btn btn-sm btn-dark font-weight-bold link-direct-btn px-3 py-1 shadow-sm" 
                                                 data-name="{{ $match->full_name }}" 
                                                 data-dob="{{ $match->date_of_birth ? $match->date_of_birth->format('d M Y') : 'Hajajaza' }}">
                                             <i class="fas fa-link mr-1"></i> Unganisha na Akaunti Yangu
                                         </button>
                                     </form>
                                 @endif
-                            </li>
+                            </div>
                         @endforeach
-                    </ul>
+                    </div>
                 @endif
             </div>
         @endif
