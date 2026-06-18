@@ -4,13 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\MemberController;
 use App\Http\Controllers\Web\ClanController;
+use App\Http\Controllers\Web\LandingController;
 
-// Redirect root to dashboard or login
-Route::get('/', function () {
-    return auth()->check() 
-        ? redirect()->route('dashboard') 
-        : redirect()->route('login');
-});
+// Root landing page
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+// Language switcher (public so guests can switch languages on the landing page)
+Route::get('language/{locale}', [\App\Http\Controllers\Web\LanguageController::class, 'switch'])->name('language.switch');
 
 // Authentication routes
 Auth::routes();
@@ -76,7 +76,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('galleries/photos/{id}', [\App\Http\Controllers\Web\GalleryController::class, 'deletePhoto'])->name('galleries.delete-photo');
 
     // Language
-    Route::get('language/{locale}', [\App\Http\Controllers\Web\LanguageController::class, 'switch'])->name('language.switch');
     Route::get('test-language', function() {
         return view('test-language');
     })->name('test.language');
