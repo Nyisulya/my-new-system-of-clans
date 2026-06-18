@@ -13,7 +13,7 @@ class CampaignController extends Controller
     {
         $campaigns = Campaign::withSum('contributions', 'amount')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
         return view('campaigns.index', compact('campaigns'));
     }
 

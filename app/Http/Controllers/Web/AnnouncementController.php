@@ -11,7 +11,7 @@ class AnnouncementController extends Controller
 {
     public function index()
     {
-        $announcements = Announcement::orderBy('start_date', 'desc')->get();
+        $announcements = Announcement::orderBy('start_date', 'desc')->paginate(10);
         return view('announcements.index', compact('announcements'));
     }
 

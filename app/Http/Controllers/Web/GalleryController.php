@@ -22,7 +22,7 @@ class GalleryController extends Controller
     {
         $galleries = Gallery::withCount('photos')
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(12);
         return view('galleries.index', compact('galleries'));
     }
 

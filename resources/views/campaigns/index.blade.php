@@ -58,4 +58,10 @@
             </div>
         @endforelse
     </div>
+
+    @if($campaigns->hasPages())
+        <div class="d-flex justify-content-center mt-4 w-100">
+            {{ $campaigns->links() }}
+        </div>
+    @endif
 @stop

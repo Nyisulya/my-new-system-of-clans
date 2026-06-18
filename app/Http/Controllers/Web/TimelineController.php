@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Marriage;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TimelineController extends Controller
 {
@@ -66,11 +67,24 @@ class TimelineController extends Controller
         // Sort by date descending
         $events = $events->sortByDesc('date')->values();
 
-        // Group by Year
-        $groupedEvents = $events->groupBy(function ($item) {
+        // Paginate collection manually (15 items per page)
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $perPage = 15;
+        $currentPageItems = $events->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $paginatedEvents = new LengthAwarePaginator(
+            $currentPageItems,
+            $events->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
+        // Group current page items by Year
+        $groupedEvents = $currentPageItems->groupBy(function ($item) {
             return $item['date']->format('Y');
         });
 
-        return view('timeline.index', compact('groupedEvents'));
+        return view('timeline.index', compact('groupedEvents', 'paginatedEvents'));
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Member;
 use App\Policies\MemberPolicy;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +36,8 @@ class AppServiceProvider extends ServiceProvider
             \JeroenNoten\LaravelAdminLte\Events\BuildingMenu::class,
             [\App\Listeners\BuildSidebarMenu::class, 'handle']
         );
+
+        // Use Bootstrap 4 pagination templates
+        Paginator::useBootstrapFour();
     }
 }

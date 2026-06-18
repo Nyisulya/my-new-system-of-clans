@@ -75,5 +75,12 @@
                 </tbody>
             </table>
         </div>
+        @if($announcements->hasPages())
+            <div class="card-footer clearfix">
+                <div class="float-right text-sm">
+                    {{ $announcements->links() }}
+                </div>
+            </div>
+        @endif
     </div>
 @stop

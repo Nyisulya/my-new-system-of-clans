@@ -43,4 +43,10 @@
             </div>
         @endforelse
     </div>
+
+    @if($galleries->hasPages())
+        <div class="d-flex justify-content-center mt-4 w-100">
+            {{ $galleries->links() }}
+        </div>
+    @endif
 @stop

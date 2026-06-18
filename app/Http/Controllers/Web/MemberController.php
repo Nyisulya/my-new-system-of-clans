@@ -524,7 +524,7 @@ class MemberController extends Controller
             ->orderBy('clan_id')
             ->orderBy('family_id')
             ->orderBy('first_name')
-            ->get();
+            ->paginate(15);
         
         return view('members.parents', compact('parents'));
     }

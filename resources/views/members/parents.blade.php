@@ -14,7 +14,7 @@
                 <a href="{{ route('members.create', ['generation_number' => 1]) }}" class="btn btn-success btn-sm mr-2">
                     <i class="fas fa-plus"></i> Ongeza Mwanzilishi
                 </a>
-                <span class="badge badge-info">{{ $parents->count() }} Waanzilishi</span>
+                <span class="badge badge-info">{{ $parents->total() }} Waanzilishi</span>
             </div>
         </div>
         <div class="card-body">
@@ -76,5 +76,12 @@
                 </div>
             @endif
         </div>
+        @if($parents->hasPages())
+            <div class="card-footer clearfix">
+                <div class="float-right text-sm">
+                    {{ $parents->links() }}
+                </div>
+            </div>
+        @endif
     </div>
 @stop

@@ -48,6 +48,12 @@
                             <i class="fas fa-clock bg-gray"></i>
                         </div>
                     </div>
+
+                    @if($paginatedEvents->hasPages())
+                        <div class="d-flex justify-content-center mt-4 mb-4">
+                            {{ $paginatedEvents->links() }}
+                        </div>
+                    @endif
                 @endif
             </div>
         </div>
