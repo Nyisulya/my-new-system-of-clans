@@ -318,57 +318,63 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
         // Gender Distribution Chart
-        const genderCtx = document.getElementById('genderChart').getContext('2d');
-        new Chart(genderCtx, {
-            type: 'pie',
-            data: {
-                labels: ['{{ __('common.male') }}', '{{ __('common.female') }}'],
-                datasets: [{
-                    data: [{{ $stats['male_count'] }}, {{ $stats['female_count'] }}],
-                    backgroundColor: ['#3498db', '#e74c3c'],
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
-                }
-            }
-        });
-
-        // Age Distribution Chart
-        const ageCtx = document.getElementById('ageChart').getContext('2d');
-        new Chart(ageCtx, {
-            type: 'bar',
-            data: {
-                labels: @json($stats['age_distribution']->keys()),
-                datasets: [{
-                    label: '{{ __('common.members') }}',
-                    data: @json($stats['age_distribution']->values()),
-                    backgroundColor: '#3498db',
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
+        const genderCanvas = document.getElementById('genderChart');
+        if (genderCanvas) {
+            const genderCtx = genderCanvas.getContext('2d');
+            new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['{{ __('common.male') }}', '{{ __('common.female') }}'],
+                    datasets: [{
+                        data: [{{ $stats['male_count'] }}, {{ $stats['female_count'] }}],
+                        backgroundColor: ['#3498db', '#e74c3c'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
                         }
                     }
+                }
+            });
+        }
+
+        // Age Distribution Chart
+        const ageCanvas = document.getElementById('ageChart');
+        if (ageCanvas) {
+            const ageCtx = ageCanvas.getContext('2d');
+            new Chart(ageCtx, {
+                type: 'bar',
+                data: {
+                    labels: @json($stats['age_distribution']->keys()),
+                    datasets: [{
+                        label: '{{ __('common.members') }}',
+                        data: @json($stats['age_distribution']->values()),
+                        backgroundColor: '#3498db',
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        display: false
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Category Members Modal
         $(document).ready(function() {
