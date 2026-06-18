@@ -147,12 +147,39 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Tarehe ya Kuzaliwa</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="hidden" name="date_of_birth" id="dob_hidden" value="{{ old('date_of_birth') }}">
+                                    <div class="row">
+                                        <div class="col-4 pr-1">
+                                            <select id="dob_day" class="form-control @error('date_of_birth') is-invalid @enderror">
+                                                <option value="">Siku</option>
+                                                @for ($d = 1; $d <= 31; $d++)
+                                                    <option value="{{ sprintf('%02d', $d) }}">{{ sprintf('%02d', $d) }}</option>
+                                                @endfor
+                                            </select>
                                         </div>
-                                        <input type="date" name="date_of_birth" class="form-control @error('date_of_birth') is-invalid @enderror" 
-                                               value="{{ old('date_of_birth') }}">
+                                        <div class="col-4 px-1">
+                                            <select id="dob_month" class="form-control @error('date_of_birth') is-invalid @enderror">
+                                                <option value="">Mwezi</option>
+                                                @php
+                                                    $monthsSw = [
+                                                        '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
+                                                        '05' => 'Mei', '06' => 'Jun', '07' => 'Jul', '08' => 'Ago',
+                                                        '09' => 'Sep', '10' => 'Okt', '11' => 'Nov', '12' => 'Des'
+                                                    ];
+                                                @endphp
+                                                @foreach($monthsSw as $val => $label)
+                                                    <option value="{{ $val }}">{{ $label }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-4 pl-1">
+                                            <select id="dob_year" class="form-control @error('date_of_birth') is-invalid @enderror">
+                                                <option value="">Mwaka</option>
+                                                @for ($y = date('Y'); $y >= 1900; $y--)
+                                                    <option value="{{ $y }}">{{ $y }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
                                     </div>
                                     @error('date_of_birth') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
@@ -839,6 +866,31 @@
                     }, 50);
                 }
             });
+
+            // Date of Birth compilation from Day/Month/Year selects
+            function compileDOB() {
+                const day = $('#dob_day').val();
+                const month = $('#dob_month').val();
+                const year = $('#dob_year').val();
+                if (day && month && year) {
+                    $('#dob_hidden').val(`${year}-${month}-${day}`);
+                } else {
+                    $('#dob_hidden').val('');
+                }
+            }
+
+            $('#dob_day, #dob_month, #dob_year').change(compileDOB);
+
+            // Pre-populate selects from hidden field on load
+            const initialDob = $('#dob_hidden').val();
+            if (initialDob) {
+                const parts = initialDob.split('-');
+                if (parts.length === 3) {
+                    $('#dob_year').val(parts[0]);
+                    $('#dob_month').val(parts[1]);
+                    $('#dob_day').val(parts[2]);
+                }
+            }
 
             $('#statusSelect').change(toggleDeceased);
             toggleDeceased(); 
