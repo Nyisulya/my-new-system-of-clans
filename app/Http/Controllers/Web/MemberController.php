@@ -138,6 +138,39 @@ class MemberController extends Controller
      */
     public function create(Request $request)
     {
+        $user = $request->user();
+
+        if (!$user->isAdmin() && $user->member_id !== null) {
+            $selectedFatherId = $request->input('father_id');
+            $selectedMotherId = $request->input('mother_id');
+            $selectedSpouseId = $request->input('spouse_id');
+
+            // If none of the parent or spouse query params are set, redirect to pre-select the user as parent based on their gender
+            if (!$selectedFatherId && !$selectedMotherId && !$selectedSpouseId) {
+                $member = Member::find($user->member_id);
+                if ($member) {
+                    if ($member->gender === 'male') {
+                        return redirect()->route('members.create', [
+                            'father_id' => $member->id,
+                            'clan_id' => $member->clan_id,
+                            'family_id' => $member->family_id
+                        ]);
+                    } elseif ($member->gender === 'female') {
+                        return redirect()->route('members.create', [
+                            'mother_id' => $member->id,
+                            'clan_id' => $member->clan_id,
+                            'family_id' => $member->family_id
+                        ]);
+                    }
+                }
+            }
+
+            // If query params are set but none of them matches the user's member_id, abort with 403
+            if ($selectedFatherId != $user->member_id && $selectedMotherId != $user->member_id && $selectedSpouseId != $user->member_id) {
+                abort(403, 'Huruhusiwi kuongeza mwanachama ambaye si mtoto wako au mwenzi wako.');
+            }
+        }
+
         $clans = Clan::with('families')->get();
         $potentialFathers = Member::where('gender', 'male')->orderBy('first_name')->get();
         $potentialMothers = Member::where('gender', 'female')->orderBy('first_name')->get();

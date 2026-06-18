@@ -13,8 +13,27 @@ class StoreMemberRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Allow any authenticated user to create members
-        return $this->user() !== null;
+        $user = $this->user();
+        if (!$user) {
+            return false;
+        }
+
+        // Admins can create any member
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Unlinked users can create their own profile (self-registration)
+        if ($user->member_id === null) {
+            return true;
+        }
+
+        // Linked users can only create a member if they are one of the parents or the spouse
+        $fatherId = $this->input('father_id');
+        $motherId = $this->input('mother_id');
+        $spouseId = $this->input('spouse_id');
+
+        return ($fatherId == $user->member_id || $motherId == $user->member_id || $spouseId == $user->member_id);
     }
 
     /**
