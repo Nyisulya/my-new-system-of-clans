@@ -101,4 +101,13 @@ return [
     'members_list' => 'Members List',
     'loading_members' => 'Loading members...',
     'close' => 'Close',
+    'unlinked_profile_warning' => 'You have not joined the family tree yet. To appear in the family tree and fill in your details, please join as a member.',
+    'join_family_tree' => 'Join the Family Tree',
+    'system_users' => 'System Users',
+    'username' => 'Username',
+    'role' => 'Role',
+    'linked_member' => 'Linked Member',
+    'not_linked' => 'Not Linked',
+    'registration_date' => 'Registration Date',
+    'no_users_found' => 'No users found.',
 ];

@@ -337,6 +337,11 @@ class MemberController extends Controller
             \App\Models\Marriage::create($marriageData);
         }
 
+        // Link this member profile to the current user if they do not have one linked yet
+        if (!$request->user()->isAdmin() && $request->user()->member_id === null) {
+            $request->user()->update(['member_id' => $member->id]);
+        }
+
         // Redirect to parents page if Generation 1, otherwise to dashboard
         if (isset($data['generation_number']) && $data['generation_number'] == 1) {
             return redirect()

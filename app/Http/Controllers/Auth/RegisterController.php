@@ -57,31 +57,18 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     * Also creates a member profile and links them together.
      *
      * @param  array  $data
      * @return \App\Models\User
      */
     protected function create(array $data)
     {
-        // Create Member profile first
-        $member = Member::create([
-            'first_name' => $data['name'],
-            'last_name' => '', // Can be updated later by user
-            'status' => 'alive',
-            'generation_number' => 1, // Root generation for self-registered members
-            'clan_id' => null,
-            'family_id' => null,
-            'gender' => 'male', // Default, can be updated later
-            'date_of_birth' => null,
-        ]);
-
-        // Create User account linked to Member
+        // Create User account (member_id starts as null)
         return User::create([
             'name' => $data['name'],
             'email' => null, // No email for local users
             'password' => Hash::make($data['password']),
-            'member_id' => $member->id,
+            'member_id' => null,
             'role' => 'member', // Regular member role
             'is_active' => true,
         ]);

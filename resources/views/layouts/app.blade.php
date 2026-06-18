@@ -88,10 +88,21 @@
             {{ __('common.all_members') }}
         </a>
 
-        <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
-            <i class="fas fa-user-plus"></i>
-            {{ __('common.add_member') }}
-        </a>
+        @if(auth()->user()->isAdmin())
+            <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
+                <i class="fas fa-user-plus"></i>
+                {{ __('common.add_member') }}
+            </a>
+            <a href="{{ route('admin.users') }}" class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+                <i class="fas fa-users-cog"></i>
+                {{ __('common.system_users') }}
+            </a>
+        @elseif(auth()->user()->member_id === null)
+            <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
+                <i class="fas fa-user-plus text-warning"></i>
+                <span class="text-warning font-weight-bold">{{ __('common.join_family_tree') }}</span>
+            </a>
+        @endif
 
         <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
             <i class="fas fa-user-friends"></i>

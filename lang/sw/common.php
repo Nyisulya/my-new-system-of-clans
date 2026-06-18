@@ -101,4 +101,13 @@ return [
     'members_list' => 'Orodha ya Wanachama',
     'loading_members' => 'Inapakia wanachama...',
     'close' => 'Funga',
+    'unlinked_profile_warning' => 'Hujajiunga kwenye mti wa familia bado. Ili kuonekana kwenye mti wa familia na kuweza kujaza taarifa zako, tafadhali jiunge kama mwanachama.',
+    'join_family_tree' => 'Jiunge kwenye Mti wa Familia',
+    'system_users' => 'Watumiaji wa Mfumo',
+    'username' => 'Jina la Mtumiaji',
+    'role' => 'Nafasi (Role)',
+    'linked_member' => 'Mwanachama Aliyeunganishwa',
+    'not_linked' => 'Hajaunganishwa',
+    'registration_date' => 'Tarehe ya Usajili',
+    'no_users_found' => 'Hakuna watumiaji waliopatikana.',
 ];

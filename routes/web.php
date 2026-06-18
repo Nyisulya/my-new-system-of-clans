@@ -75,4 +75,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('test-language', function() {
         return view('test-language');
     })->name('test.language');
+
+    // Admin only routes
+    Route::middleware(['can:admin-only'])->group(function () {
+        Route::get('users', [\App\Http\Controllers\Web\UserController::class, 'index'])->name('admin.users');
+    });
 });

@@ -11,6 +11,19 @@
 @stop
 
 @section('content')
+    @if(auth()->user()->member_id === null && !auth()->user()->isAdmin())
+        <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            {{ __('common.unlinked_profile_warning') }}
+            <a href="{{ route('members.create') }}" class="btn btn-sm btn-light ml-2 font-weight-bold">
+                <i class="fas fa-user-plus mr-1"></i> {{ __('common.join_family_tree') }}
+            </a>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
     {{-- Statistics Cards --}}
     <div class="row">
         <div class="col-lg-3 col-6">

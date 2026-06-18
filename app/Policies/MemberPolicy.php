@@ -29,9 +29,8 @@ class MemberPolicy
      */
     public function create(User $user): bool
     {
-        // Only admins can create members for others
-        // Regular members auto-create their own on registration
-        return $user->isAdmin();
+        // Admins can create members, and regular users who are not linked can create their own profile
+        return $user->isAdmin() || $user->member_id === null;
     }
 
     /**
