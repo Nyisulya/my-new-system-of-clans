@@ -35,14 +35,25 @@
                 
                 @if(session('partial_matches'))
                     <hr>
-                    <p class="mb-1"><strong>Rekodi zinazofanana:</strong></p>
+                    <p class="mb-1"><strong>Rekodi zinazofanana (Je, huyu ni wewe?):</strong></p>
                     <ul class="mb-0 pl-3">
                         @foreach(session('partial_matches') as $match)
-                            <li>
-                                <a href="{{ route('members.dashboard', $match->id) }}" target="_blank" class="text-dark font-weight-bold">
+                            <li class="mb-2">
+                                <a href="{{ route('members.dashboard', $match->id) }}" target="_blank" class="text-dark font-weight-bold mr-2">
                                     {{ $match->full_name }} 
                                 </a>
-                                <span class="text-muted">(Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }})</span>
+                                <span class="text-muted mr-2">(Kuzaliwa: {{ $match->date_of_birth ? $match->date_of_birth->format('M d, Y') : 'Haijulikani' }})</span>
+                                @if(auth()->user()->member_id === null && !auth()->user()->isAdmin())
+                                    <form action="{{ route('profile.claim.submit') }}" method="POST" class="d-inline ml-2">
+                                        @csrf
+                                        <input type="hidden" name="member_id" value="{{ $match->id }}">
+                                        <button type="submit" class="btn btn-xs btn-outline-dark px-2 py-0 align-middle link-direct-btn" 
+                                                data-name="{{ $match->full_name }}" 
+                                                data-dob="{{ $match->date_of_birth ? $match->date_of_birth->format('d M Y') : 'Hajajaza' }}">
+                                            <i class="fas fa-link mr-1"></i> Unganisha na Akaunti Yangu
+                                        </button>
+                                    </form>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
@@ -54,6 +65,19 @@
             <div class="alert alert-danger alert-dismissible fade show">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong><i class="fas fa-times-circle"></i> Itilafu!</strong> {{ session('error') }}
+                @if(session('existing_member_id') && auth()->user()->member_id === null && !auth()->user()->isAdmin())
+                    <hr>
+                    <p class="mb-2"><strong>Je, huyu ni wasifu wako?</strong> Bonyeza kitufe hapa chini ili kujiunganisha nao moja kwa moja:</p>
+                    <form action="{{ route('profile.claim.submit') }}" method="POST" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="member_id" value="{{ session('existing_member_id') }}">
+                        <button type="submit" class="btn btn-sm btn-light font-weight-bold text-danger link-direct-btn"
+                                data-name="{{ old('first_name') }} {{ old('last_name') }}"
+                                data-dob="{{ old('date_of_birth') ? \Carbon\Carbon::parse(old('date_of_birth'))->format('d M Y') : 'Hajajaza' }}">
+                            <i class="fas fa-link mr-1"></i> Unganisha na Akaunti Yangu
+                        </button>
+                    </form>
+                @endif
             </div>
         @endif
 
@@ -778,6 +802,21 @@
                     $('#deceasedFields').slideUp();
                 }
             }
+            // Direct Link confirmation dialog
+            $(document).on('click', '.link-direct-btn', function(e) {
+                const name = $(this).data('name');
+                const dob = $(this).data('dob');
+                let msg = `Je, una uhakika wewe ni ${name}`;
+                if (dob && dob !== 'Hajajaza') {
+                    msg += ` (aliyezaliwa tarehe ${dob})`;
+                }
+                msg += `?\n\nIlani: Ukishajiunganisha, huwezi kubadilisha wasifu huu mwenyewe bila msaada wa Admin.`;
+                
+                if (!confirm(msg)) {
+                    e.preventDefault();
+                }
+            });
+
             $('#statusSelect').change(toggleDeceased);
             toggleDeceased(); 
         });
