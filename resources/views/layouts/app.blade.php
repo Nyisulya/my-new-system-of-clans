@@ -147,11 +147,6 @@
             Historia ya Matukio
         </a>
 
-        <a href="{{ route('gedcom.index') }}" class="sidebar-item {{ request()->routeIs('gedcom.*') ? 'active' : '' }}">
-            <i class="fas fa-file-export"></i>
-            GEDCOM Pakia/Pakua
-        </a>
-
         <div class="sidebar-divider"></div>
 
         <a href="{{ route('notifications.index') }}" class="sidebar-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">

@@ -53,7 +53,7 @@ return [
     'records' => 'Kumbukumbu',
     'galleries' => 'Picha za Familia',
     'timeline' => 'Historia ya Matukio',
-    'gedcom' => 'GEDCOM Pakia/Pakua',
+
     'signed_in_as' => 'Umeingia kama',
     'logout' => 'Ondoka',
     'all_rights_reserved' => 'Haki zote zimehifadhiwa.',

@@ -53,7 +53,7 @@ return [
     'records' => 'Records',
     'galleries' => 'Galleries',
     'timeline' => 'Timeline',
-    'gedcom' => 'GEDCOM',
+
     'signed_in_as' => 'Signed in as',
     'logout' => 'Logout',
     'all_rights_reserved' => 'All rights reserved.',

@@ -47,10 +47,6 @@ Route::middleware(['auth'])->group(function () {
     // Map
     Route::get('map', [\App\Http\Controllers\Web\MapController::class, 'index'])->name('maps.index');
 
-    // GEDCOM
-    Route::get('gedcom', [\App\Http\Controllers\Web\GedcomController::class, 'index'])->name('gedcom.index');
-    Route::post('gedcom/export', [\App\Http\Controllers\Web\GedcomController::class, 'export'])->name('gedcom.export');
-    Route::post('gedcom/import', [\App\Http\Controllers\Web\GedcomController::class, 'import'])->name('gedcom.import');
 
     // Calendar
     Route::get('calendar', [\App\Http\Controllers\Web\CalendarController::class, 'index'])->name('calendar.index');

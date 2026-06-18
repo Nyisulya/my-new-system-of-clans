@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', $member->full_name . ' - Dashboard')
+@section('title', $member->full_name . ' - Dashibodi')
 
 @section('content_header')
 <h1>
     <i class="fas fa-user-circle"></i> {{ $member->full_name }}
-    <small>Member Dashboard</small>
+    <small>Dashibodi ya Mwanachama</small>
 </h1>
 @stop
 
@@ -18,14 +18,14 @@
                 <div class="text-center">
                     <img class="profile-user-img img-fluid img-circle"
                          src="{{ $member->profile_photo_url }}"
-                         alt="User profile picture">
+                         alt="Picha ya mwanachama">
                 </div>
                 <h3 class="profile-username text-center">{{ $member->full_name }}</h3>
-                <p class="text-muted text-center">{{ $member->occupation ?? 'Member' }}</p>
+                <p class="text-muted text-center">{{ $member->occupation ?? 'Mwanachama' }}</p>
                 <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item"><b>Clan</b> <a class="float-right">{{ $member->clan->name ?? 'N/A' }}</a></li>
-                    <li class="list-group-item"><b>Family</b> <a class="float-right">{{ $member->family->name ?? 'N/A' }}</a></li>
-                    <li class="list-group-item"><b>Generation</b> <a class="float-right">{{ $member->generation_number }}</a></li>
+                    <li class="list-group-item"><b>Ukoo</b> <a class="float-right">{{ $member->clan->name ?? 'N/A' }}</a></li>
+                    <li class="list-group-item"><b>Familia</b> <a class="float-right">{{ $member->family->name ?? 'N/A' }}</a></li>
+                    <li class="list-group-item"><b>Kizazi</b> <a class="float-right">{{ $member->generation_number }}</a></li>
                     
                     @php 
                         $spouses = $member->spouses();
@@ -34,7 +34,7 @@
                     
                     @if($spouseCount > 0)
                         <li class="list-group-item">
-                            <b>{{ $member->gender == 'male' ? ($spouseCount > 1 ? 'Wives' : 'Wife') : 'Husband' }}</b>
+                            <b>{{ $member->gender == 'male' ? ($spouseCount > 1 ? 'Wake' : 'Mke') : 'Mume' }}</b>
                             <div class="float-right text-right">
                                 @foreach($spouses as $index => $spouse)
                                     <a href="{{ route('members.dashboard', $spouse->id) }}">
@@ -46,19 +46,19 @@
                         </li>
                     @endif
                     
-                    <li class="list-group-item"><b>Status</b>
+                    <li class="list-group-item"><b>Hali</b>
                         <a class="float-right">
                             @if($member->status == 'alive')
-                                <span class="badge badge-success">Alive</span>
+                                <span class="badge badge-success">Hai</span>
                             @else
-                                <span class="badge badge-secondary">Deceased</span>
+                                <span class="badge badge-secondary">Marehemu</span>
                             @endif
                         </a>
                     </li>
                 </ul>
                 <div class="d-grid gap-2">
                     @can('update', $member)
-                        <a href="{{ route('members.edit', $member) }}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> Edit Profile</a>
+                        <a href="{{ route('members.edit', $member) }}" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> Hariri Wasifu</a>
                         
                         @php 
                             $spouses = $member->spouses();
@@ -71,23 +71,21 @@
                             'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
                             'clan_id' => $member->clan_id,
                             'family_id' => $member->family_id
-                        ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Add Child</a>
+                        ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Ongeza Mtoto</a>
                         
                         @if($member->gender == 'male')
-                            {{-- Always show for males to support polygamy --}}
                             <a href="{{ route('members.create', [
                                 'spouse_id' => $member->id,
                                 'gender' => 'female'
                             ]) }}" class="btn btn-info btn-block">
-                                <i class="fas fa-heart"></i> {{ $spouseCount > 0 ? 'Add Another Wife' : 'Add Wife' }}
+                                <i class="fas fa-heart"></i> {{ $spouseCount > 0 ? 'Ongeza Mke Mwingine' : 'Ongeza Mke' }}
                             </a>
                         @elseif($member->gender == 'female' && $spouseCount == 0)
-                            {{-- Only show for females if they have no husband --}}
                             <a href="{{ route('members.create', [
                                 'spouse_id' => $member->id,
                                 'gender' => 'male'
                             ]) }}" class="btn btn-info btn-block">
-                                <i class="fas fa-heart"></i> Add Husband
+                                <i class="fas fa-heart"></i> Ongeza Mume
                             </a>
                         @endif
                     @endcan
@@ -97,8 +95,8 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-block" 
-                                    onclick="return confirm('Are you sure you want to delete this member? This action cannot be undone and will remove all associated data.')">
-                                <i class="fas fa-trash"></i> Delete Profile
+                                    onclick="return confirm('Je, una uhakika unataka kumfuta mwanachama huyu? Kitendo hiki hakiwezi kubatilishwa na kitafuta taarifa zote zinazohusiana naye.')">
+                                <i class="fas fa-trash"></i> Futa Wasifu
                             </button>
                         </form>
                     @endcan
@@ -112,11 +110,12 @@
         <div class="card">
             <div class="card-header p-2">
                 <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link active" href="#family-tree" data-toggle="tab">Family Tree</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact-info" data-toggle="tab">Contact Info</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#location" data-toggle="tab">Location</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#children" data-toggle="tab">Children</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#details" data-toggle="tab">Details</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#family-tree" data-toggle="tab">Mti wa Familia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact-info" data-toggle="tab">Mawasiliano</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#location" data-toggle="tab">Mahali</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#children" data-toggle="tab">Watoto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#details" data-toggle="tab">Maelezo Kamili</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Historia ya Matukio</a></li>
                 </ul>
             </div>
             <div class="card-body">
@@ -124,19 +123,19 @@
                     <!-- Family Tree Tab -->
                     <div class="tab-pane active" id="family-tree">
                         @if($member->father || $member->mother)
-                            <h5><i class="fas fa-user-friends"></i> Parents</h5>
+                            <h5><i class="fas fa-user-friends"></i> Wazazi</h5>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h6><i class="fas fa-mars text-primary"></i> Father</h6>
+                                            <h6><i class="fas fa-mars text-primary"></i> Baba</h6>
                                             @if($member->father)
                                                 <a href="{{ route('members.dashboard', $member->father->id) }}">
                                                     {{ $member->father->full_name }}
                                                 </a>
-                                                <br><small class="text-muted">Generation {{ $member->father->generation_number }}</small>
+                                                <br><small class="text-muted">Kizazi cha {{ $member->father->generation_number }}</small>
                                             @else
-                                                <span class="text-muted">Not recorded</span>
+                                                <span class="text-muted">Haijarekodiwa</span>
                                             @endif
                                         </div>
                                     </div>
@@ -144,14 +143,14 @@
                                 <div class="col-md-6">
                                     <div class="card">
                                         <div class="card-body">
-                                            <h6><i class="fas fa-venus text-danger"></i> Mother</h6>
+                                            <h6><i class="fas fa-venus text-danger"></i> Mama</h6>
                                             @if($member->mother)
                                                 <a href="{{ route('members.dashboard', $member->mother->id) }}">
                                                     {{ $member->mother->full_name }}
                                                 </a>
-                                                <br><small class="text-muted">Generation {{ $member->mother->generation_number }}</small>
+                                                <br><small class="text-muted">Kizazi cha {{ $member->mother->generation_number }}</small>
                                             @else
-                                                <span class="text-muted">Not recorded</span>
+                                                <span class="text-muted">Haijarekodiwa</span>
                                             @endif
                                         </div>
                                     </div>
@@ -165,23 +164,23 @@
                         @endphp
                         
                         @if($spouseCount > 0)
-                            <h5><i class="fas fa-heart text-danger"></i> {{ $member->gender == 'male' ? ($spouseCount > 1 ? 'Wives' : 'Wife') : 'Husband' }}</h5>
+                            <h5><i class="fas fa-heart text-danger"></i> {{ $member->gender == 'male' ? ($spouseCount > 1 ? 'Wake' : 'Mke') : 'Mume' }}</h5>
                             @foreach($spouses as $index => $spouse)
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         @if($member->gender == 'male' && $spouseCount > 1)
-                                            <h6><i class="fas fa-heart text-danger"></i> Wife {{ $index + 1 }}</h6>
+                                            <h6><i class="fas fa-heart text-danger"></i> Mke {{ $index + 1 }}</h6>
                                         @endif
                                         <a href="{{ route('members.dashboard', $spouse->id) }}">
                                             {{ $spouse->full_name }}
                                         </a>
-                                        <br><small class="text-muted">{{ ucfirst($spouse->status) }}</small>
+                                        <br><small class="text-muted">{{ $spouse->status == 'alive' ? 'Hai' : 'Marehemu' }}</small>
                                     </div>
                                 </div>
                             @endforeach
                         @else
                             <div class="alert alert-info">
-                                <i class="fas fa-info-circle"></i> No spouse recorded.
+                                <i class="fas fa-info-circle"></i> Hakuna mwenza aliyerekodiwa.
                             </div>
                         @endif
                         
@@ -203,12 +202,12 @@
                         @endphp
                         
                         @if($siblings->count() > 0)
-                            <h5 class="mt-3"><i class="fas fa-users"></i> Siblings</h5>
+                            <h5 class="mt-3"><i class="fas fa-users"></i> Ndugu (Kaka/Dada)</h5>
                             <ul class="list-group">
                                 @foreach($siblings as $sibling)
                                     <li class="list-group-item">
                                         <a href="{{ route('members.dashboard', $sibling->id) }}">{{ $sibling->full_name }}</a>
-                                        <span class="badge badge-info float-right">Gen {{ $sibling->generation_number }}</span>
+                                        <span class="badge badge-info float-right">Kizazi cha {{ $sibling->generation_number }}</span>
                                     </li>
                                 @endforeach
                             </ul>
@@ -217,18 +216,18 @@
                     <!-- Contact Info Tab -->
                     <div class="tab-pane" id="contact-info">
                         <ul class="list-group list-group-unbordered mb-3">
-                            <li class="list-group-item"><b>Email</b> <a class="float-right">{{ $member->email ?? 'N/A' }}</a></li>
-                            <li class="list-group-item"><b>Phone</b> <a class="float-right">{{ $member->phone ?? 'N/A' }}</a></li>
-                            <li class="list-group-item"><b>Address</b> <a class="float-right">{{ $member->address ?? 'N/A' }}</a></li>
-                            <li class="list-group-item"><b>City</b> <a class="float-right">{{ $member->city ?? 'N/A' }}</a></li>
-                            <li class="list-group-item"><b>Country</b> <a class="float-right">{{ $member->country ?? 'N/A' }}</a></li>
+                            <li class="list-group-item"><b>Barua Pepe</b> <a class="float-right">{{ $member->email ?? 'N/A' }}</a></li>
+                            <li class="list-group-item"><b>Simu</b> <a class="float-right">{{ $member->phone ?? 'N/A' }}</a></li>
+                            <li class="list-group-item"><b>Anwani</b> <a class="float-right">{{ $member->address ?? 'N/A' }}</a></li>
+                            <li class="list-group-item"><b>Mji/Jiji</b> <a class="float-right">{{ $member->city ?? 'N/A' }}</a></li>
+                            <li class="list-group-item"><b>Nchi</b> <a class="float-right">{{ $member->country ?? 'N/A' }}</a></li>
                         </ul>
                     </div>
                     
                     <!-- Location Tab -->
                     <div class="tab-pane" id="location">
                         @if($member->current_lat && $member->current_lng)
-                            <h5><i class="fas fa-map-marked-alt text-primary"></i> My Current Residence</h5>
+                            <h5><i class="fas fa-map-marked-alt text-primary"></i> Makazi Yangu ya Sasa</h5>
                             
                             {{-- Map Container --}}
                             <div id="memberLocationMap" style="height: 450px; width: 100%; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;"></div>
@@ -236,7 +235,7 @@
                             {{-- Address Information --}}
                             <div class="card">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-home text-success"></i> Full Address</h6>
+                                    <h6><i class="fas fa-home text-success"></i> Anwani Kamili</h6>
                                     <p class="mb-1">
                                         @php
                                             $addressParts = array_filter([
@@ -249,21 +248,21 @@
                                             ]);
                                             $fullAddress = implode(', ', $addressParts);
                                         @endphp
-                                        <strong>{{ $fullAddress ?: 'No detailed address available' }}</strong>
+                                        <strong>{{ $fullAddress ?: 'Hakuna maelezo ya kina ya anwani' }}</strong>
                                     </p>
                                     
                                     <hr>
                                     
                                     <div class="row small text-muted">
                                         <div class="col-md-6">
-                                            <i class="fas fa-map-pin"></i> <strong>Coordinates:</strong><br>
-                                            Latitude: {{ number_format($member->current_lat, 6) }}°<br>
-                                            Longitude: {{ number_format($member->current_lng, 6) }}°
+                                            <i class="fas fa-map-pin"></i> <strong>Viwahilishi (Coordinates):</strong><br>
+                                            Latitudo: {{ number_format($member->current_lat, 6) }}°<br>
+                                            Longitudo: {{ number_format($member->current_lng, 6) }}°
                                         </div>
                                         <div class="col-md-6">
-                                            <i class="fas fa-info-circle"></i> <strong>Map Info:</strong><br>
-                                            Zoom: Street level view<br>
-                                            Layers: Street & Satellite available
+                                            <i class="fas fa-info-circle"></i> <strong>Taarifa za Ramani:</strong><br>
+                                            Kuza: Muonekano wa mitaani<br>
+                                            Tabaka: Barabara na Satilaiti zinapatikana
                                         </div>
                                     </div>
                                 </div>
@@ -271,33 +270,33 @@
                         @else
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle"></i> 
-                                <strong>No Location Data</strong><br>
-                                Your residential location has not been recorded yet. 
-                                You can <a href="{{ route('members.edit', $member) }}" class="alert-link">edit your profile</a> to add location information.
+                                <strong>Hakuna Taarifa za Mahali</strong><br>
+                                Mahali unapoishi bado hapajarekodiwa. 
+                                Unaweza <a href="{{ route('members.edit', $member) }}" class="alert-link">kuhariri wasifu wako</a> ili kuongeza taarifa za mahali.
                             </div>
                             
                             @if($member->country || $member->city)
                             <div class="card">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-map-marker-alt"></i> Available Location Info</h6>
+                                    <h6><i class="fas fa-map-marker-alt"></i> Taarifa za Mahali Zinazopatikana</h6>
                                     <dl class="row mb-0">
                                         @if($member->country)
-                                        <dt class="col-sm-4">Country</dt>
+                                        <dt class="col-sm-4">Nchi</dt>
                                         <dd class="col-sm-8">{{ $member->country }}</dd>
                                         @endif
                                         
                                         @if($member->region)
-                                        <dt class="col-sm-4">Region</dt>
+                                        <dt class="col-sm-4">Mkoa</dt>
                                         <dd class="col-sm-8">{{ $member->region }}</dd>
                                         @endif
                                         
                                         @if($member->district)
-                                        <dt class="col-sm-4">District</dt>
+                                        <dt class="col-sm-4">Wilaya</dt>
                                         <dd class="col-sm-8">{{ $member->district }}</dd>
                                         @endif
                                         
                                         @if($member->city)
-                                        <dt class="col-sm-4">City</dt>
+                                        <dt class="col-sm-4">Mji/Jiji</dt>
                                         <dd class="col-sm-8">{{ $member->city }}</dd>
                                         @endif
                                     </dl>
@@ -313,10 +312,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Gender</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>Jina</th>
+                                        <th>Jinsia</th>
+                                        <th>Hali</th>
+                                        <th>Vitendo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -325,49 +324,89 @@
                                             <td><a href="{{ route('members.dashboard', $child->id) }}">{{ $child->full_name }}</a></td>
                                             <td>
                                                 @if($child->gender == 'male')
-                                                    <i class="fas fa-mars text-primary"></i>
+                                                    <i class="fas fa-mars text-primary"></i> Mwanaume
                                                 @elseif($child->gender == 'female')
-                                                    <i class="fas fa-venus text-danger"></i>
+                                                    <i class="fas fa-venus text-danger"></i> Mwanamke
                                                 @else
-                                                    <i class="fas fa-genderless"></i>
+                                                    <i class="fas fa-genderless"></i> Nyingine
                                                 @endif
                                             </td>
                                             <td>
                                                 @if($child->status == 'alive')
-                                                    <span class="badge badge-success">Alive</span>
+                                                    <span class="badge badge-success">Hai</span>
                                                 @else
-                                                    <span class="badge badge-secondary">Deceased</span>
+                                                    <span class="badge badge-secondary">Marehemu</span>
                                                 @endif
                                             </td>
-                                            <td><a href="{{ route('members.dashboard', $child->id) }}" class="btn btn-xs btn-info"><i class="fas fa-tachometer-alt"></i> Dashboard</a></td>
+                                            <td><a href="{{ route('members.dashboard', $child->id) }}" class="btn btn-xs btn-info"><i class="fas fa-tachometer-alt"></i> Dashibodi</a></td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         @else
-                            <div class="alert alert-info"><i class="fas fa-info-circle"></i> No children recorded for this member.</div>
+                            <div class="alert alert-info"><i class="fas fa-info-circle"></i> Hakuna watoto waliorekodiwa kwa mwanachama huyu.</div>
                             @php $firstSpouse = $member->spouses()->first(); @endphp
                             <a href="{{ route('members.create', [
                                 'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
                                 'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
                                 'clan_id' => $member->clan_id,
                                 'family_id' => $member->family_id
-                            ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add First Child</a>
+                            ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ongeza Mtoto wa Kwanza</a>
                         @endif
                     </div>
                     <!-- Details Tab -->
                     <div class="tab-pane" id="details">
                         <dl class="row">
-                            <dt class="col-sm-4">Full Name</dt><dd class="col-sm-8">{{ $member->full_name }}</dd>
-                            <dt class="col-sm-4">Gender</dt><dd class="col-sm-8">{{ ucfirst($member->gender) }}</dd>
-                            <dt class="col-sm-4">Date of Birth</dt><dd class="col-sm-8">{{ $member->date_of_birth ? $member->date_of_birth->format('F j, Y') : 'N/A' }}</dd>
-                            <dt class="col-sm-4">Occupation</dt><dd class="col-sm-8">{{ $member->occupation ?? 'N/A' }}</dd>
-                            <dt class="col-sm-4">Biography</dt><dd class="col-sm-8">{{ $member->biography ?? 'No biography available.' }}</dd>
+                            <dt class="col-sm-4">Jina Kamili</dt><dd class="col-sm-8">{{ $member->full_name }}</dd>
+                            <dt class="col-sm-4">Jinsia</dt><dd class="col-sm-8">{{ $member->gender == 'male' ? 'Mwanaume' : 'Mwanamke' }}</dd>
+                            <dt class="col-sm-4">Tarehe ya Kuzaliwa</dt><dd class="col-sm-8">{{ $member->date_of_birth ? $member->date_of_birth->translatedFormat('F j, Y') : 'N/A' }}</dd>
+                            <dt class="col-sm-4">Kazi/Shughuli</dt><dd class="col-sm-8">{{ $member->occupation ?? 'N/A' }}</dd>
+                            <dt class="col-sm-4">Wasifu/Maelezo</dt><dd class="col-sm-8">{{ $member->biography ?? 'Hakuna wasifu uliowekwa.' }}</dd>
                             @if($member->status == 'deceased')
-                                <dt class="col-sm-4">Date of Death</dt><dd class="col-sm-8">{{ $member->date_of_death ? $member->date_of_death->format('F j, Y') : 'N/A' }}</dd>
-                                <dt class="col-sm-4">Place of Death</dt><dd class="col-sm-8">{{ $member->place_of_death ?? 'N/A' }}</dd>
+                                <dt class="col-sm-4">Tarehe ya Kufariki</dt><dd class="col-sm-8">{{ $member->date_of_death ? $member->date_of_death->translatedFormat('F j, Y') : 'N/A' }}</dd>
+                                <dt class="col-sm-4">Mahali pa Kufariki</dt><dd class="col-sm-8">{{ $member->place_of_death ?? 'N/A' }}</dd>
                             @endif
                         </dl>
+                    </div>
+                    <!-- Timeline Tab -->
+                    <div class="tab-pane" id="timeline">
+                        <div class="timeline">
+                            @if($member->date_of_birth)
+                            <div>
+                                <i class="fas fa-birthday-cake bg-success"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fas fa-clock"></i> {{ $member->date_of_birth->format('Y') }}</span>
+                                    <h3 class="timeline-header">Alizaliwa</h3>
+                                    <div class="timeline-body">
+                                        Alizaliwa tarehe {{ $member->date_of_birth->translatedFormat('F d, Y') }}
+                                        @if($member->place_of_birth)
+                                            huko {{ $member->place_of_birth }}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($member->status == 'deceased' && $member->date_of_death)
+                            <div>
+                                <i class="fas fa-dove bg-secondary"></i>
+                                <div class="timeline-item">
+                                    <span class="time"><i class="fas fa-clock"></i> {{ $member->date_of_death->format('Y') }}</span>
+                                    <h3 class="timeline-header">Alifariki Dunia</h3>
+                                    <div class="timeline-body">
+                                        Alifariki tarehe {{ $member->date_of_death->translatedFormat('F d, Y') }}
+                                        @if($member->place_of_death)
+                                            huko {{ $member->place_of_death }}
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            <div>
+                                <i class="fas fa-clock bg-gray"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -383,6 +422,45 @@
           crossorigin="anonymous"/>
     
     <style>
+        /* Timeline Styles */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #dee2e6;
+        }
+        .timeline > div {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .timeline > div > i {
+            position: absolute;
+            left: -32px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: white;
+        }
+        .timeline-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            padding: 10px;
+        }
+        .timeline-header {
+            font-size: 16px;
+            margin: 0;
+        }
+        
         #memberLocationMap {
             z-index: 1;
         }
@@ -433,7 +511,7 @@
                     const lat = {{ $member->current_lat }};
                     const lng = {{ $member->current_lng }};
                     const memberName = "{{ $member->full_name }}";
-                    const fullAddress = @json($fullAddress ?? 'Location not specified');
+                    const fullAddress = @json($fullAddress ?? 'Anwani haijabainishwa');
                     
                     // Create map with smart zoom level for detailed street view
                     window.memberMap = L.map('memberLocationMap', {
@@ -472,9 +550,9 @@
                     
                     // Layer control for smart switching
                     const baseLayers = {
-                        "<i class='fas fa-map'></i> Street Map": streetMap,
-                        "<i class='fas fa-globe'></i> Satellite": satelliteMap,
-                        "<i class='fas fa-layer-group'></i> Hybrid": hybridMap
+                        "<i class='fas fa-map'></i> Ramani ya Barabara": streetMap,
+                        "<i class='fas fa-globe'></i> Satilaiti": satelliteMap,
+                        "<i class='fas fa-layer-group'></i> Hybrid (Mseto)": hybridMap
                     };
                     
                     L.control.layers(baseLayers, null, {
@@ -500,7 +578,7 @@
                             <p><i class="fas fa-map-marker-alt"></i> ${fullAddress}</p>
                             <hr style="margin: 8px 0;">
                             <small class="text-muted">
-                                <i class="fas fa-home"></i> My Current Residence<br>
+                                <i class="fas fa-home"></i> Makazi Yangu ya Sasa<br>
                                 <i class="fas fa-crosshairs"></i> ${lat.toFixed(6)}°, ${lng.toFixed(6)}°
                             </small>
                         </div>

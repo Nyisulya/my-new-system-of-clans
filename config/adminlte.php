@@ -442,12 +442,7 @@ return [
             'icon' => 'fas fa-calculator',
             'icon_color' => 'orange',
         ],
-        [
-            'text' => 'GEDCOM Import/Export',
-            'route' => 'gedcom.index',
-            'icon' => 'fas fa-file-export',
-            'icon_color' => 'cyan',
-        ],
+
         [
             'text' => 'Announcements (Admin)',
             'route' => 'announcements.index',
