@@ -25,7 +25,7 @@
                                 <div>
                                     <i class="{{ $event['icon'] }} {{ $event['color'] }}"></i>
                                     <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock"></i> {{ $event['date']->format('d M') }}</span>
+                                        <span class="time"><i class="fas fa-clock"></i> {{ $event['date']->translatedFormat('d M') }}</span>
                                         <h3 class="timeline-header">
                                             @if($event['type'] == 'birth')
                                                 <a href="{{ route('members.dashboard', $event['model']->id) }}">{{ $event['title'] }}</a>

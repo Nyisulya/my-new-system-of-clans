@@ -59,4 +59,14 @@ return [
     'all_rights_reserved' => 'Haki zote zimehifadhiwa.',
     'family_tree_management' => 'Usimamizi wa Mti wa Ukoo',
     'user' => 'Mtumiaji',
+
+    // Timeline
+    'birth_of' => 'Kuzaliwa kwa :name',
+    'born_to' => 'Alizaliwa na :father na :mother',
+    'death_of' => 'Kifo cha :name',
+    'passed_away_at_age' => 'Alifariki akiwa na umri wa miaka :age',
+    'marriage_of' => 'Ndoa ya :husband na :wife',
+    'married_in' => 'Walioana huko :location',
+    'unknown' => 'Asiyejulikana',
+    'unknown_location' => 'Mahali pasipojulikana',
 ];

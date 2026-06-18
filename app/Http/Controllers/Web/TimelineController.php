@@ -22,8 +22,11 @@ class TimelineController extends Controller
                 return [
                     'date' => $member->date_of_birth,
                     'type' => 'birth',
-                    'title' => 'Birth of ' . $member->full_name,
-                    'description' => 'Born to ' . ($member->father ? $member->father->full_name : 'Unknown') . ' and ' . ($member->mother ? $member->mother->full_name : 'Unknown'),
+                    'title' => __('common.birth_of', ['name' => $member->full_name]),
+                    'description' => __('common.born_to', [
+                        'father' => $member->father ? $member->father->full_name : __('common.unknown'),
+                        'mother' => $member->mother ? $member->mother->full_name : __('common.unknown')
+                    ]),
                     'icon' => 'fas fa-baby',
                     'color' => 'bg-success',
                     'model' => $member,
@@ -38,8 +41,8 @@ class TimelineController extends Controller
                 return [
                     'date' => $member->date_of_death,
                     'type' => 'death',
-                    'title' => 'Death of ' . $member->full_name,
-                    'description' => 'Passed away at age ' . $member->age,
+                    'title' => __('common.death_of', ['name' => $member->full_name]),
+                    'description' => __('common.passed_away_at_age', ['age' => $member->age]),
                     'icon' => 'fas fa-cross',
                     'color' => 'bg-secondary',
                     'model' => $member,
@@ -55,8 +58,13 @@ class TimelineController extends Controller
                 return [
                     'date' => $marriage->marriage_date,
                     'type' => 'marriage',
-                    'title' => 'Marriage of ' . $marriage->husband->first_name . ' & ' . $marriage->wife->first_name,
-                    'description' => 'Married in ' . ($marriage->location ?? 'Unknown location'),
+                    'title' => __('common.marriage_of', [
+                        'husband' => $marriage->husband->first_name,
+                        'wife' => $marriage->wife->first_name
+                    ]),
+                    'description' => __('common.married_in', [
+                        'location' => $marriage->location ?? __('common.unknown_location')
+                    ]),
                     'icon' => 'fas fa-rings',
                     'color' => 'bg-pink',
                     'model' => $marriage,

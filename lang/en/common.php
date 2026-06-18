@@ -59,4 +59,14 @@ return [
     'all_rights_reserved' => 'All rights reserved.',
     'family_tree_management' => 'Family Tree Management',
     'user' => 'User',
+
+    // Timeline
+    'birth_of' => 'Birth of :name',
+    'born_to' => 'Born to :father and :mother',
+    'death_of' => 'Death of :name',
+    'passed_away_at_age' => 'Passed away at age :age',
+    'marriage_of' => 'Marriage of :husband & :wife',
+    'married_in' => 'Married in :location',
+    'unknown' => 'Unknown',
+    'unknown_location' => 'Unknown location',
 ];
