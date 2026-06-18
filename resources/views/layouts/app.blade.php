@@ -64,8 +64,8 @@
             <i class="fas fa-shield-alt"></i>
         </div>
         <div class="sidebar-brand-text">
-            {{ config('app.name', 'Clan System') }}
-            <small>{{ __('common.family_tree_management') }}</small>
+            {{ config('app.name', 'Nyahende') }}
+            <small>Usimamizi wa Mti wa Ukoo</small>
         </div>
     </a>
 
@@ -73,90 +73,90 @@
     <nav class="sidebar-nav">
 
         {{-- Main --}}
-        <div class="sidebar-section-title">{{ __('common.main') }}</div>
+        <div class="sidebar-section-title">Menyu Kuu</div>
 
         <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="fas fa-tachometer-alt"></i>
-            {{ __('common.dashboard') }}
+            Dashibodi
         </a>
 
         {{-- Members --}}
-        <div class="sidebar-section-title">{{ __('common.people') }}</div>
+        <div class="sidebar-section-title">Wanafamilia</div>
 
         <a href="{{ route('members.index') }}" class="sidebar-item {{ request()->routeIs('members.*') && !request()->routeIs('members.create') ? 'active' : '' }}">
             <i class="fas fa-users"></i>
-            {{ __('common.all_members') }}
+            Wanachama Wote
         </a>
 
         <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
             <i class="fas fa-user-plus"></i>
-            {{ __('common.add_member') }}
+            Ongeza Mwanachama
         </a>
 
         <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
             <i class="fas fa-user-friends"></i>
-            {{ __('common.parents') }}
+            Wazazi
         </a>
 
         {{-- Clans & Families --}}
-        <div class="sidebar-section-title">{{ __('common.structure') }}</div>
+        <div class="sidebar-section-title">Muundo wa Ukoo</div>
 
         <a href="{{ route('clans.index') }}" class="sidebar-item {{ request()->routeIs('clans.*') ? 'active' : '' }}">
             <i class="fas fa-shield-alt"></i>
-            {{ __('common.clans') }}
+            Ukoo
         </a>
 
         <a href="{{ route('families.index') }}" class="sidebar-item {{ request()->routeIs('families.*') ? 'active' : '' }}">
             <i class="fas fa-home"></i>
-            {{ __('common.families') }}
+            Familia
         </a>
 
         <a href="{{ route('branches.index') }}" class="sidebar-item {{ request()->routeIs('branches.*') ? 'active' : '' }}">
             <i class="fas fa-code-branch"></i>
-            {{ __('common.branches') }}
+            Matawi
         </a>
 
         {{-- Community --}}
-        <div class="sidebar-section-title">{{ __('common.community') }}</div>
+        <div class="sidebar-section-title">Jamii</div>
 
         <a href="{{ route('announcements.index') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
             <i class="fas fa-bullhorn"></i>
-            {{ __('common.announcements') }}
+            Matangazo
         </a>
 
         <a href="{{ route('campaigns.index') }}" class="sidebar-item {{ request()->routeIs('campaigns.*') ? 'active' : '' }}">
             <i class="fas fa-hand-holding-heart"></i>
-            {{ __('common.campaigns') }}
+            Kampeni / Michango
         </a>
 
         <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
             <i class="fas fa-calendar-alt"></i>
-            {{ __('common.calendar') }}
+            Kalenda
         </a>
 
         {{-- Media & Records --}}
-        <div class="sidebar-section-title">{{ __('common.records') }}</div>
+        <div class="sidebar-section-title">Kumbukumbu</div>
 
         <a href="{{ route('galleries.index') }}" class="sidebar-item {{ request()->routeIs('galleries.*') ? 'active' : '' }}">
             <i class="fas fa-images"></i>
-            {{ __('common.galleries') }}
+            Picha za Familia
         </a>
 
         <a href="{{ route('timeline.index') }}" class="sidebar-item {{ request()->routeIs('timeline.*') ? 'active' : '' }}">
             <i class="fas fa-stream"></i>
-            {{ __('common.timeline') }}
+            Historia ya Matukio
         </a>
 
         <a href="{{ route('gedcom.index') }}" class="sidebar-item {{ request()->routeIs('gedcom.*') ? 'active' : '' }}">
             <i class="fas fa-file-export"></i>
-            {{ __('common.gedcom') }}
+            GEDCOM Pakia/Pakua
         </a>
 
         <div class="sidebar-divider"></div>
 
         <a href="{{ route('notifications.index') }}" class="sidebar-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">
             <i class="fas fa-bell"></i>
-            {{ __('common.notifications') }}
+            Arifa
         </a>
 
     </nav>
