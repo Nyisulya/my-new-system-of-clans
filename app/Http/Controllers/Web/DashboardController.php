@@ -97,7 +97,7 @@ class DashboardController extends Controller
             }
         }
 
-        $members = $query->select('id', 'first_name', 'middle_name', 'last_name', 'profile_photo_path')
+        $members = $query->select('id', 'first_name', 'middle_name', 'last_name', 'profile_photo')
             ->limit(100) // Limit to 100 to prevent crashing
             ->get();
 
