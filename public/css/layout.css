@@ -1,5 +1,5 @@
 /* ============================================
-   CLAN SYSTEM — Modern Sidebar Layout
+   CLAN SYSTEM â€” Modern Sidebar Layout
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -126,7 +126,8 @@ html, body {
 }
 
 .sidebar-item {
-  display: flex;
+  display: flex !important;
+  width: 100% !important;
   align-items: center;
   gap: 11px;
   padding: 9px 20px;

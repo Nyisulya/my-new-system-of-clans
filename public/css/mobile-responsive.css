@@ -1,4 +1,4 @@
-/* ============================================
+﻿/* ============================================
    Mobile Responsive Styles for Clan Management System
    Mobile-First Approach with Touch-Friendly Design
    ============================================ */
@@ -12,7 +12,7 @@
     box-sizing: border-box;
 }
 
-/* Touch-friendly minimum sizes — scoped to navigation & form actions only */
+/* Touch-friendly minimum sizes â€” scoped to navigation & form actions only */
 /* Excludes .btn-xs (table action buttons) so they stay compact */
 .navbar .btn,
 .nav-link,
@@ -493,7 +493,7 @@ img {
    16. ACCESSIBILITY & TOUCH IMPROVEMENTS
    ============================================ */
 
-/* Larger tap targets for navigation links only — NOT table action buttons */
+/* Larger tap targets for navigation links only â€” NOT table action buttons */
 .nav-link,
 .topbar-icon-btn,
 .dropdown-item,
@@ -681,7 +681,7 @@ body {
 }
 
 /* ============================================
-   24. TABLE ACTION BUTTONS — COMPACT ON ALL SCREENS
+   24. TABLE ACTION BUTTONS â€” COMPACT ON ALL SCREENS
    ============================================ */
 
 /* Force action buttons to stay small on ALL screen sizes */
