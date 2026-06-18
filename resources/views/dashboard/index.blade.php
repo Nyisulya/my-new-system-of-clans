@@ -12,12 +12,21 @@
 
 @section('content')
     @if(auth()->user()->member_id === null && !auth()->user()->isAdmin())
-        <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
-            <i class="fas fa-exclamation-triangle mr-2"></i>
-            {{ __('common.unlinked_profile_warning') }}
-            <a href="{{ route('members.create') }}" class="btn btn-sm btn-light ml-2 font-weight-bold">
-                <i class="fas fa-user-plus mr-1"></i> {{ __('common.join_family_tree') }}
-            </a>
+        <div class="alert alert-warning alert-dismissible fade show mb-4 pr-5" role="alert">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between">
+                <div class="mb-2 mb-md-0">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    {{ __('common.unlinked_profile_warning') }}
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('profile.claim.search') }}" class="btn btn-sm btn-primary mr-2 font-weight-bold">
+                        <i class="fas fa-search mr-1"></i> {{ __('common.find_my_profile') }}
+                    </a>
+                    <a href="{{ route('members.create') }}" class="btn btn-sm btn-success font-weight-bold">
+                        <i class="fas fa-user-plus mr-1"></i> {{ __('common.register_new_profile') }}
+                    </a>
+                </div>
+            </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>

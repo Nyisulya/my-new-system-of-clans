@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\MemberController;
 use App\Http\Controllers\Web\ClanController;
 use App\Http\Controllers\Web\LandingController;
+use App\Http\Controllers\Web\ProfileClaimController;
 
 // Root landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -21,6 +22,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/members', [DashboardController::class, 'getCategoryMembers'])->name('dashboard.members');
     Route::get('/home', [DashboardController::class, 'index'])->name('home');
+    
+    // Profile Claiming
+    Route::get('/profile/claim', [ProfileClaimController::class, 'showSearchForm'])->name('profile.claim.search');
+    Route::get('/profile/claim/search', [ProfileClaimController::class, 'search'])->name('profile.claim.ajax_search');
+    Route::post('/profile/claim', [ProfileClaimController::class, 'claim'])->name('profile.claim.submit');
     
     // Member Management
     Route::get('members/{member}/dashboard', [MemberController::class, 'dashboard'])->name('members.dashboard');
