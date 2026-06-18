@@ -157,6 +157,51 @@ class ProfileClaimTest extends TestCase
             'full_name' => 'Juma Karori',
             'date_of_birth' => __('common.not_specified'),
             'has_dob' => false,
+            'parents_desc' => null,
+            'has_parents' => false,
+        ]);
+    }
+
+    public function test_unlinked_users_can_search_for_profiles_with_parents(): void
+    {
+        $user = User::factory()->create([
+            'member_id' => null,
+        ]);
+
+        $father = Member::create([
+            'first_name' => 'Michael',
+            'last_name' => 'Doe',
+            'gender' => 'male',
+            'status' => 'alive',
+        ]);
+
+        $mother = Member::create([
+            'first_name' => 'Grace',
+            'last_name' => 'Doe',
+            'gender' => 'female',
+            'status' => 'alive',
+        ]);
+
+        $member = Member::create([
+            'first_name' => 'Juma',
+            'last_name' => 'Karori',
+            'gender' => 'male',
+            'status' => 'alive',
+            'date_of_birth' => null,
+            'father_id' => $father->id,
+            'mother_id' => $mother->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->getJson(route('profile.claim.ajax_search', ['query' => 'Juma']))
+            ->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'full_name' => 'Juma Karori',
+            'date_of_birth' => __('common.not_specified'),
+            'has_dob' => false,
+            'parents_desc' => __('common.child_of_both', ['father' => $father->full_name, 'mother' => $mother->full_name]),
+            'has_parents' => true,
         ]);
     }
 }

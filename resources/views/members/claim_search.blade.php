@@ -227,7 +227,9 @@ $(document).ready(function() {
                                             data-id="${member.id}" 
                                             data-name="${member.full_name}" 
                                             data-dob="${member.date_of_birth}"
-                                            data-has-dob="${member.has_dob ? 1 : 0}">
+                                            data-has-dob="${member.has_dob ? 1 : 0}"
+                                            data-parents="${member.parents_desc || ''}"
+                                            data-has-parents="${member.has_parents ? 1 : 0}">
                                         <i class="fas fa-link mr-1"></i> ` + "{{ __('common.link_to_my_account') }}" + `
                                     </button>
                                 </div>
@@ -252,16 +254,27 @@ $(document).ready(function() {
         const memberName = $(this).data('name');
         const memberDob = $(this).data('dob');
         const hasDob = $(this).data('has-dob');
+        const parentsDesc = $(this).data('parents');
+        const hasParents = $(this).data('has-parents');
 
         $('#modal-member-id').val(memberId);
         
         let confirmationMsg = '';
-        if (hasDob == 1) {
-            confirmationMsg = "{{ __('common.confirm_claim_question', ['name' => ':name', 'dob' => ':dob']) }}"
+        if (hasDob == 1 && hasParents == 1) {
+            confirmationMsg = "{{ __('common.confirm_claim_question_dob_parents', ['name' => ':name', 'dob' => ':dob', 'parents' => ':parents']) }}"
+                                        .replace(':name', memberName)
+                                        .replace(':dob', memberDob)
+                                        .replace(':parents', parentsDesc);
+        } else if (hasDob == 1) {
+            confirmationMsg = "{{ __('common.confirm_claim_question_dob_only', ['name' => ':name', 'dob' => ':dob']) }}"
                                         .replace(':name', memberName)
                                         .replace(':dob', memberDob);
+        } else if (hasParents == 1) {
+            confirmationMsg = "{{ __('common.confirm_claim_question_parents_only', ['name' => ':name', 'parents' => ':parents']) }}"
+                                        .replace(':name', memberName)
+                                        .replace(':parents', parentsDesc);
         } else {
-            confirmationMsg = "{{ __('common.confirm_claim_question_without_dob', ['name' => ':name']) }}"
+            confirmationMsg = "{{ __('common.confirm_claim_question_none', ['name' => ':name']) }}"
                                         .replace(':name', memberName);
         }
         

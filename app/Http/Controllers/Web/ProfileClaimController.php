@@ -43,10 +43,22 @@ class ProfileClaimController extends Controller
               ->orWhere('last_name', 'like', "%{$term}%")
               ->orWhere('middle_name', 'like', "%{$term}%");
         })
-        ->with(['clan', 'family'])
+        ->with(['clan', 'family', 'father', 'mother'])
         ->limit(10)
         ->get()
         ->map(function ($member) {
+            $fatherName = $member->father ? $member->father->full_name : null;
+            $motherName = $member->mother ? $member->mother->full_name : null;
+
+            $parentsDesc = null;
+            if ($fatherName && $motherName) {
+                $parentsDesc = __('common.child_of_both', ['father' => $fatherName, 'mother' => $motherName]);
+            } elseif ($fatherName) {
+                $parentsDesc = __('common.child_of_father', ['father' => $fatherName]);
+            } elseif ($motherName) {
+                $parentsDesc = __('common.child_of_mother', ['mother' => $motherName]);
+            }
+
             return [
                 'id' => $member->id,
                 'full_name' => $member->full_name,
@@ -55,6 +67,8 @@ class ProfileClaimController extends Controller
                 'clan_name' => $member->clan ? $member->clan->name : 'N/A',
                 'family_name' => $member->family ? $member->family->name : 'N/A',
                 'photo_url' => $member->profile_photo_url,
+                'parents_desc' => $parentsDesc,
+                'has_parents' => $parentsDesc !== null,
             ];
         });
 
