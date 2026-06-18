@@ -226,7 +226,8 @@ $(document).ready(function() {
                                     <button class="btn btn-sm btn-outline-primary link-profile-btn" 
                                             data-id="${member.id}" 
                                             data-name="${member.full_name}" 
-                                            data-dob="${member.date_of_birth}">
+                                            data-dob="${member.date_of_birth}"
+                                            data-has-dob="${member.has_dob ? 1 : 0}">
                                         <i class="fas fa-link mr-1"></i> ` + "{{ __('common.link_to_my_account') }}" + `
                                     </button>
                                 </div>
@@ -250,13 +251,19 @@ $(document).ready(function() {
         const memberId = $(this).data('id');
         const memberName = $(this).data('name');
         const memberDob = $(this).data('dob');
+        const hasDob = $(this).data('has-dob');
 
         $('#modal-member-id').val(memberId);
         
-        // Format confirmation message dynamically
-        const confirmationMsg = "{{ __('common.confirm_claim_question', ['name' => ':name', 'dob' => ':dob']) }}"
-                                    .replace(':name', memberName)
-                                    .replace(':dob', memberDob);
+        let confirmationMsg = '';
+        if (hasDob == 1) {
+            confirmationMsg = "{{ __('common.confirm_claim_question', ['name' => ':name', 'dob' => ':dob']) }}"
+                                        .replace(':name', memberName)
+                                        .replace(':dob', memberDob);
+        } else {
+            confirmationMsg = "{{ __('common.confirm_claim_question_without_dob', ['name' => ':name']) }}"
+                                        .replace(':name', memberName);
+        }
         
         $('#modal-member-name-title').text(confirmationMsg);
         $('#claimConfirmationModal').modal('show');

@@ -116,6 +116,8 @@ return [
     'no_profile_found' => 'No profile found with that name.',
     'confirm_claim_title' => 'Profile Confirmation',
     'confirm_claim_question' => 'Are you sure you are :name (born on :dob)?',
+    'confirm_claim_question_without_dob' => 'Are you sure you are :name?',
+    'not_specified' => 'Not specified',
     'confirm_claim_warning' => 'Notice: Once linked to this profile, you cannot change it yourself without admin assistance.',
     'yes_its_me' => "Yes, it's me",
     'search_results' => 'Search Results',

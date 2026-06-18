@@ -134,4 +134,29 @@ class ProfileClaimTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertNull($user->fresh()->member_id);
     }
+
+    public function test_unlinked_users_can_search_for_profiles_without_date_of_birth(): void
+    {
+        $user = User::factory()->create([
+            'member_id' => null,
+        ]);
+
+        $member = Member::create([
+            'first_name' => 'Juma',
+            'last_name' => 'Karori',
+            'gender' => 'male',
+            'status' => 'alive',
+            'date_of_birth' => null,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->getJson(route('profile.claim.ajax_search', ['query' => 'Juma']))
+            ->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'full_name' => 'Juma Karori',
+            'date_of_birth' => __('common.not_specified'),
+            'has_dob' => false,
+        ]);
+    }
 }

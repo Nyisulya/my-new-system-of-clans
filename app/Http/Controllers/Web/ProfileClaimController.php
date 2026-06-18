@@ -50,7 +50,8 @@ class ProfileClaimController extends Controller
             return [
                 'id' => $member->id,
                 'full_name' => $member->full_name,
-                'date_of_birth' => $member->date_of_birth ? $member->date_of_birth->format('d M Y') : 'Hajajaza',
+                'date_of_birth' => $member->date_of_birth ? $member->date_of_birth->format('d M Y') : __('common.not_specified'),
+                'has_dob' => $member->date_of_birth !== null,
                 'clan_name' => $member->clan ? $member->clan->name : 'N/A',
                 'family_name' => $member->family ? $member->family->name : 'N/A',
                 'photo_url' => $member->profile_photo_url,

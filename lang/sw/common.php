@@ -116,6 +116,8 @@ return [
     'no_profile_found' => 'Hakuna wasifu uliopatikana na jina hilo.',
     'confirm_claim_title' => 'Uthibitisho wa Wasifu',
     'confirm_claim_question' => 'Je, una uhakika wewe ni :name (aliyezaliwa tarehe :dob)?',
+    'confirm_claim_question_without_dob' => 'Je, una uhakika wewe ni :name?',
+    'not_specified' => 'Hajatajwa',
     'confirm_claim_warning' => 'Ilani: Ukishajiunganisha na wasifu huu, huwezi kuubadilisha tena mwenyewe bila kuomba msaada wa Admin.',
     'yes_its_me' => 'Ndiyo, ni mimi',
     'search_results' => 'Matokeo ya Utafutaji',
