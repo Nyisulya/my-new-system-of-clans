@@ -51,8 +51,8 @@
     <!-- Schema.org for Google -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "Organization",
+      "@@context": "https://schema.org",
+      "@@type": "Organization",
       "name": "Ukoo wa Nyahende",
       "url": "{{ url('/') }}",
       "logo": "{{ asset('images/brand-banner.png') }}",
