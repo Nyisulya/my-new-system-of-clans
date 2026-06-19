@@ -115,15 +115,63 @@
                                         <span class="text-sm" style="line-height: 1.2;">{{ $comment->content }}</span>
                                     </div>
                                     <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
-                                        {{ $comment->created_at->diffForHumans() }}
+                                        {{ $comment->created_at->diffForHumans() }} &middot; 
+                                        <a href="javascript:void(0);" onclick="$('#replyForm-{{ $comment->id }}').toggle(); $('#replyInput-{{ $comment->id }}').focus();" class="text-muted font-weight-bold" style="text-decoration: none;">Reply</a>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <!-- Replies -->
+                            <div class="ml-5" id="replies-list-{{ $comment->id }}">
+                                @foreach($comment->replies as $reply)
+                                <div class="d-flex mb-2">
+                                    <div class="mr-2 mt-1">
+                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                            <i class="fas fa-user" style="font-size: 10px;"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                            <strong class="d-block text-sm" style="line-height: 1.2;">
+                                                @if($reply->user->member)
+                                                    {{ $reply->user->member->first_name }} {{ $reply->user->member->last_name }}
+                                                @else
+                                                    {{ $reply->user->name }}
+                                                @endif
+                                            </strong>
+                                            <span class="text-sm" style="line-height: 1.2;">{{ $reply->content }}</span>
+                                        </div>
+                                        <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                            {{ $reply->created_at->diffForHumans() }}
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+
+                                <!-- Reply Form -->
+                                <form action="{{ route('posts.comment', $post) }}" method="POST" class="form-reply mt-2 mb-3" data-post-id="{{ $post->id }}" data-parent-id="{{ $comment->id }}" id="replyForm-{{ $comment->id }}" style="display: none;">
+                                    @csrf
+                                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-2">
+                                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                                <i class="fas fa-user" style="font-size: 10px;"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 position-relative">
+                                            <input type="text" name="content" id="replyInput-{{ $comment->id }}" class="form-control form-control-sm" placeholder="Jibu hapa..." style="border-radius: 20px; padding-right: 35px;" required>
+                                            <button type="submit" class="btn btn-sm text-primary position-absolute" style="right: 2px; top: 0px; background: transparent; border: none;">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         @endforeach
                     </div>
 
                     <!-- Comment Form -->
-                    <form action="{{ route('posts.comment', $post) }}" method="POST" class="form-comment mt-3" data-post-id="{{ $post->id }}" id="commentForm-{{ $post->id }}" style="display: none;">
+                    <form action="{{ route('posts.comment', $post) }}" method="POST" class="form-comment mt-3 border-top pt-3" data-post-id="{{ $post->id }}" id="commentForm-{{ $post->id }}">
                         @csrf
                         <div class="d-flex align-items-center">
                             <div class="mr-2">
@@ -200,7 +248,7 @@ $(document).ready(function() {
                     // Update count
                     $('#comment-count-' + postId).text(response.comments_count);
                     
-                    // Add new comment to top of the list
+                    // Add new comment to bottom of the list
                     let newCommentHtml = `
                         <div class="d-flex mb-2">
                             <div class="mr-2 mt-1">
@@ -214,19 +262,94 @@ $(document).ready(function() {
                                     <span class="text-sm" style="line-height: 1.2;">${response.comment.content}</span>
                                 </div>
                                 <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
-                                    ${response.comment.time}
+                                    Sasa hivi &middot; <a href="javascript:void(0);" onclick="$('#replyForm-${response.comment.id}').toggle(); $('#replyInput-${response.comment.id}').focus();" class="text-muted font-weight-bold" style="text-decoration: none;">Reply</a>
                                 </div>
                             </div>
+                        </div>
+                        <div class="ml-5" id="replies-list-${response.comment.id}">
+                            <!-- Reply Form -->
+                            <form action="${url}" method="POST" class="form-reply mt-2 mb-3" data-post-id="${postId}" data-parent-id="${response.comment.id}" id="replyForm-${response.comment.id}" style="display: none;">
+                                <input type="hidden" name="_token" value="${$('input[name="_token"]').val()}">
+                                <input type="hidden" name="parent_id" value="${response.comment.id}">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-2">
+                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                            <i class="fas fa-user" style="font-size: 10px;"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 position-relative">
+                                        <input type="text" name="content" id="replyInput-${response.comment.id}" class="form-control form-control-sm" placeholder="Jibu hapa..." style="border-radius: 20px; padding-right: 35px;" required>
+                                        <button type="submit" class="btn btn-sm text-primary position-absolute" style="right: 2px; top: 0px; background: transparent; border: none;">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     `;
                     $('#comments-list-' + postId).append(newCommentHtml);
                     
+                    // Re-bind reply form submit for newly added reply form
+                    bindReplyForms();
+
                     // Clear input
                     input.val('');
                 }
             }
         });
     });
+
+    // AJAX for Reply
+    function bindReplyForms() {
+        $('.form-reply').off('submit').on('submit', function(e) {
+            e.preventDefault();
+            let form = $(this);
+            let postId = form.data('post-id');
+            let parentId = form.data('parent-id');
+            let url = form.attr('action');
+            let input = $('#replyInput-' + parentId);
+            
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: form.serialize(),
+                success: function(response) {
+                    if(response.success) {
+                        // Update overall comment count
+                        $('#comment-count-' + postId).text(response.comments_count);
+                        
+                        // Add new reply just before the form
+                        let newReplyHtml = `
+                            <div class="d-flex mb-2">
+                                <div class="mr-2 mt-1">
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                        <i class="fas fa-user" style="font-size: 10px;"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                        <strong class="d-block text-sm" style="line-height: 1.2;">${response.comment.user_name}</strong>
+                                        <span class="text-sm" style="line-height: 1.2;">${response.comment.content}</span>
+                                    </div>
+                                    <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                        Sasa hivi
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        $(newReplyHtml).insertBefore(form);
+                        
+                        // Clear input and hide form
+                        input.val('');
+                        form.hide();
+                    }
+                }
+            });
+        });
+    }
+
+    // Initial binding
+    bindReplyForms();
 });
 </script>
 @stop

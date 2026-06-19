@@ -18,7 +18,10 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::with(['user.member', 'likes', 'comments.user.member'])
+        // Load only top-level comments and their replies
+        $posts = Post::with(['user.member', 'likes', 'comments' => function($q) {
+            $q->whereNull('parent_id')->with('replies.user.member', 'user.member');
+        }])
             ->latest()
             ->paginate(15);
             
@@ -89,10 +92,12 @@ class PostController extends Controller
     {
         $request->validate([
             'content' => 'required|string|max:1000',
+            'parent_id' => 'nullable|exists:post_comments,id',
         ]);
 
         $comment = $post->comments()->create([
             'user_id' => auth()->id(),
+            'parent_id' => $request->parent_id,
             'content' => $request->content,
         ]);
 
@@ -105,6 +110,7 @@ class PostController extends Controller
                 'success' => true,
                 'comment' => [
                     'id' => $comment->id,
+                    'parent_id' => $comment->parent_id,
                     'user_name' => $userName,
                     'content' => $comment->content,
                     'time' => $comment->created_at->diffForHumans()
