@@ -161,6 +161,11 @@
             {{ __('common.timeline') }}
         </a>
 
+        <a href="{{ route('posts.index') }}" class="sidebar-item {{ request()->routeIs('posts.*') ? 'active' : '' }}">
+            <i class="fas fa-rss"></i>
+            Simulizi / Feed
+        </a>
+
         <div class="sidebar-divider"></div>
 
         <a href="{{ route('notifications.index') }}" class="sidebar-item {{ request()->routeIs('notifications.*') ? 'active' : '' }}">

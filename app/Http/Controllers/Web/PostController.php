@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\Web;
+
+use App\Http\Controllers\Controller;
+use App\Models\Post;
+use Illuminate\Http\Request;
+use App\Services\ImageService;
+
+class PostController extends Controller
+{
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
+    public function index()
+    {
+        $posts = Post::with(['user.member', 'likes', 'comments.user.member'])
+            ->latest()
+            ->paginate(15);
+            
+        return view('posts.index', compact('posts'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'content' => 'required_without:image|string|max:10000',
+            'image' => 'nullable|image|max:5120',
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $result = $this->imageService->uploadProfilePhoto($request->file('image'), 'posts');
+            $imagePath = $result['path'];
+        }
+
+        Post::create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+            'image_path' => $imagePath,
+        ]);
+
+        return back()->with('success', 'Post yako imetumwa kikamilifu!');
+    }
+
+    public function destroy(Post $post)
+    {
+        if ($post->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
+            return back()->with('error', 'Huruhusiwi kufuta post hii.');
+        }
+
+        if ($post->image_path) {
+            $this->imageService->deleteImage($post->image_path);
+        }
+
+        $post->delete();
+
+        return back()->with('success', 'Post imefutwa.');
+    }
+
+    public function toggleLike(Post $post)
+    {
+        $like = $post->likes()->where('user_id', auth()->id())->first();
+        if ($like) {
+            $like->delete();
+        } else {
+            $post->likes()->create(['user_id' => auth()->id()]);
+        }
+        return back();
+    }
+
+    public function storeComment(Request $request, Post $post)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Comment imetumwa.');
+    }
+}

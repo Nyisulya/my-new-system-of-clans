@@ -68,9 +68,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('calendar', [\App\Http\Controllers\Web\CalendarController::class, 'index'])->name('calendar.index');
     Route::get('calendar/export', [\App\Http\Controllers\Web\CalendarController::class, 'export'])->name('calendar.export');
 
-    // Announcements
+    // Announcements & Posts
     Route::get('announcements/feed', [\App\Http\Controllers\Web\AnnouncementController::class, 'feed'])->name('announcements.feed');
     Route::resource('announcements', \App\Http\Controllers\Web\AnnouncementController::class);
+
+    // Posts (Timeline)
+    Route::get('posts', [\App\Http\Controllers\Web\PostController::class, 'index'])->name('posts.index');
+    Route::post('posts', [\App\Http\Controllers\Web\PostController::class, 'store'])->name('posts.store');
+    Route::delete('posts/{post}', [\App\Http\Controllers\Web\PostController::class, 'destroy'])->name('posts.destroy');
+    Route::post('posts/{post}/like', [\App\Http\Controllers\Web\PostController::class, 'toggleLike'])->name('posts.like');
+    Route::post('posts/{post}/comment', [\App\Http\Controllers\Web\PostController::class, 'storeComment'])->name('posts.comment');
 
     // Contributions
     Route::post('contributions/pay', [\App\Http\Controllers\Web\ContributionController::class, 'pay'])->name('contributions.pay');
