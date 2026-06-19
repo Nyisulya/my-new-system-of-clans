@@ -68,17 +68,23 @@
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <!-- Styles -->
     <style>
         :root {
-            --primary-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-grad: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
+            --primary-grad: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            --accent-grad: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-dark: #0f172a;
+            --text-muted: #475569;
             --bg-light: #f8fafc;
-            --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 30px 60px -15px rgba(124, 58, 237, 0.2);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -90,7 +96,10 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--text-dark);
-            background-color: #ffffff;
+            background-color: #fdfdfd;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.05) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.05) 0, transparent 50%);
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -102,9 +111,11 @@
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
             transition: var(--transition-smooth);
         }
 
@@ -283,6 +294,23 @@
             justify-content: center;
         }
 
+        .hero-graphic::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary-grad);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: pulse-glow 6s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(0.9); opacity: 0.1; }
+            100% { transform: scale(1.1); opacity: 0.25; }
+        }
+
         .tree-illustration {
             width: 100%;
             max-width: 420px;
@@ -313,19 +341,21 @@
         }
 
         .stat-card {
-            background: #ffffff;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 32px 24px;
             border-radius: 20px;
             text-align: center;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(226, 232, 240, 0.5);
+            border: 1px solid var(--glass-border);
             transition: var(--transition-smooth);
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.12);
-            border-color: #667eea;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+            border-color: rgba(124, 58, 237, 0.3);
         }
 
         .stat-num {
@@ -403,11 +433,13 @@
         }
 
         .feature-card {
-            background: #ffffff;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 40px 32px;
             border-radius: 24px;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--card-shadow);
             transition: var(--transition-smooth);
             display: flex;
             flex-direction: column;
@@ -415,9 +447,9 @@
         }
 
         .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
-            border-color: #667eea;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--hover-shadow);
+            border-color: rgba(124, 58, 237, 0.4);
         }
 
         .feature-icon {
@@ -736,7 +768,7 @@
                         @endif
                     </h1>
                     
-                    <p class="hero-subtitle">
+                    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
                         @if(app()->getLocale() == 'sw')
                             Kuunganisha familia zetu, kuhifadhi mti wetu wa ukoo, kushirikiana katika matukio, kampeni, na kuendeleza historia na urithi wetu kwa vizazi vya sasa na vijavyo.
                         @else
@@ -744,7 +776,7 @@
                         @endif
                     </p>
                     
-                    <div class="hero-btns">
+                    <div class="hero-btns" data-aos="fade-up" data-aos-delay="200">
                         <a href="{{ route('login') }}" class="btn btn-primary" id="heroStartBtn">
                             <i class="fas fa-tree"></i>
                             <span>{{ app()->getLocale() == 'sw' ? 'Fungua Mti wa Ukoo' : 'Explore Family Tree' }}</span>
@@ -758,7 +790,7 @@
                     </div>
                 </div>
 
-                <div class="hero-graphic">
+                <div class="hero-graphic" data-aos="zoom-in" data-aos-delay="300">
                     <!-- Custom SVG representing connected family members with pulse animations -->
                     <svg class="tree-illustration" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                         <!-- Connecting lines -->
@@ -821,19 +853,19 @@
         <!-- Stats Section -->
         <section class="stats-section" id="statsSection">
             <div class="stats-container">
-                <div class="stat-card" id="statMembers">
+                <div class="stat-card" id="statMembers" data-aos="fade-up" data-aos-delay="0">
                     <div class="stat-num">{{ $stats['members'] }}</div>
                     <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Wanafamilia' : 'Family Members' }}</div>
                 </div>
-                <div class="stat-card" id="statFamilies">
+                <div class="stat-card" id="statFamilies" data-aos="fade-up" data-aos-delay="100">
                     <div class="stat-num">{{ $stats['families'] }}</div>
                     <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Familia' : 'Families' }}</div>
                 </div>
-                <div class="stat-card" id="statClans">
+                <div class="stat-card" id="statClans" data-aos="fade-up" data-aos-delay="200">
                     <div class="stat-num">{{ $stats['clans'] }}</div>
                     <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Koo' : 'Clans' }}</div>
                 </div>
-                <div class="stat-card" id="statBranches">
+                <div class="stat-card" id="statBranches" data-aos="fade-up" data-aos-delay="300">
                     <div class="stat-num">{{ $stats['branches'] }}</div>
                     <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Matawi' : 'Branches' }}</div>
                 </div>
@@ -841,7 +873,7 @@
         </section>
 
         <!-- Intro Section -->
-        <section class="intro-section" id="aboutSection">
+        <section class="intro-section" id="aboutSection" data-aos="fade-up">
             <span class="section-badge">{{ app()->getLocale() == 'sw' ? 'Asili na Malengo' : 'Heritage & Vision' }}</span>
             <h2 class="section-title">
                 {{ app()->getLocale() == 'sw' ? 'Kuhusu Ukoo wa Nyahende' : 'About the Nyahende Clan' }}
@@ -865,7 +897,7 @@
 
                 <div class="features-grid">
                     <!-- Feature 1: Family Tree -->
-                    <div class="feature-card" id="featTree">
+                    <div class="feature-card" id="featTree" data-aos="fade-up" data-aos-delay="0">
                         <div class="feature-icon"><i class="fas fa-tree"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Mti wa Ukoo' : 'Family Tree' }}</h3>
                         <p class="feature-desc">
@@ -874,7 +906,7 @@
                     </div>
 
                     <!-- Feature 2: Timeline -->
-                    <div class="feature-card" id="featTimeline">
+                    <div class="feature-card" id="featTimeline" data-aos="fade-up" data-aos-delay="100">
                         <div class="feature-icon"><i class="fas fa-history"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Historia ya Matukio' : 'Family Timeline' }}</h3>
                         <p class="feature-desc">
@@ -883,7 +915,7 @@
                     </div>
 
                     <!-- Feature 3: Contributions -->
-                    <div class="feature-card" id="featContributions">
+                    <div class="feature-card" id="featContributions" data-aos="fade-up" data-aos-delay="200">
                         <div class="feature-icon"><i class="fas fa-hand-holding-heart"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Kampeni na Michango' : 'Michango & Campaigns' }}</h3>
                         <p class="feature-desc">
@@ -892,7 +924,7 @@
                     </div>
 
                     <!-- Feature 4: Calendar -->
-                    <div class="feature-card" id="featCalendar">
+                    <div class="feature-card" id="featCalendar" data-aos="fade-up" data-aos-delay="300">
                         <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Kalenda ya Matukio' : 'Clan Calendar' }}</h3>
                         <p class="feature-desc">
@@ -901,7 +933,7 @@
                     </div>
 
                     <!-- Feature 5: Gallery -->
-                    <div class="feature-card" id="featGallery">
+                    <div class="feature-card" id="featGallery" data-aos="fade-up" data-aos-delay="400">
                         <div class="feature-icon"><i class="fas fa-images"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Picha za Matukio' : 'Shared Photo Galleries' }}</h3>
                         <p class="feature-desc">
@@ -910,7 +942,7 @@
                     </div>
 
                     <!-- Feature 6: Map -->
-                    <div class="feature-card" id="featMap">
+                    <div class="feature-card" id="featMap" data-aos="fade-up" data-aos-delay="500">
                         <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Ramani ya Asili' : 'Ancestral Map' }}</h3>
                         <p class="feature-desc">
@@ -923,7 +955,7 @@
 
         <!-- CTA Section -->
         <section class="cta-section" id="joinSection">
-            <div class="cta-container">
+            <div class="cta-container" data-aos="zoom-in">
                 <h2 class="cta-title">
                     {{ app()->getLocale() == 'sw' ? 'Je, Wewe ni Mwanafamilia wa Nyahende?' : 'Are You a Nyahende Descendant?' }}
                 </h2>
@@ -960,5 +992,17 @@
         </div>
     </footer>
 
+
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50
+        });
+    </script>
 </body>
+
 </html>
