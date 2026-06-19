@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', config('app.name', 'Clan System'))</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     @if(config('services.google.analytics_id'))
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>

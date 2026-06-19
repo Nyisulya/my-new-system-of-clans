@@ -28,6 +28,7 @@
     
     <meta name="keywords" content="Nyahende, Ukoo wa Nyahende, Family Tree, Nyisulya, Mti wa Ukoo, Clan, Tanzania">
     <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <link rel="canonical" href="{{ url('/') }}">
     <link rel="alternate" hreflang="sw" href="{{ url('/') }}" />
     <link rel="alternate" hreflang="en" href="{{ url('/') }}?lang=en" />
