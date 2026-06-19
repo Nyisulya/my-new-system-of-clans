@@ -39,7 +39,7 @@ class CalendarController extends Controller
                 $years = [$today->year, $today->year + 1];
                 foreach ($years as $year) {
                     $eventDate = Carbon::createFromDate($year, $dob->month, $dob->day);
-                    $age = $eventDate->diffInYears($dob);
+                    $age = (int) $eventDate->diffInYears($dob);
                     
                     $events[] = [
                         'title' => "🎂 {$member->first_name}'s " . ($age > 0 ? $age . "th " : "") . "Birthday",
@@ -58,7 +58,7 @@ class CalendarController extends Controller
                         'type' => 'birthday',
                         'member' => $member,
                         'date' => $nextBirthday,
-                        'age' => $nextBirthday->diffInYears($dob),
+                        'age' => (int) $nextBirthday->diffInYears($dob),
                         'days_left' => $today->diffInDays($nextBirthday),
                     ];
                 }
@@ -80,7 +80,7 @@ class CalendarController extends Controller
                 $years = [$today->year, $today->year + 1];
                 foreach ($years as $year) {
                     $eventDate = Carbon::createFromDate($year, $dod->month, $dod->day);
-                    $yearsGone = $eventDate->diffInYears($dod);
+                    $yearsGone = (int) $eventDate->diffInYears($dod);
                     
                     if ($yearsGone > 0) {
                         $events[] = [
@@ -101,7 +101,7 @@ class CalendarController extends Controller
                         'type' => 'death',
                         'member' => $member,
                         'date' => $nextAnniversary,
-                        'years' => $nextAnniversary->diffInYears($dod),
+                        'years' => (int) $nextAnniversary->diffInYears($dod),
                         'days_left' => $today->diffInDays($nextAnniversary),
                     ];
                 }
@@ -129,7 +129,7 @@ class CalendarController extends Controller
             $years = [$today->year, $today->year + 1];
             foreach ($years as $year) {
                 $eventDate = Carbon::createFromDate($year, $dom->month, $dom->day);
-                $yearsMarried = $eventDate->diffInYears($dom);
+                $yearsMarried = (int) $eventDate->diffInYears($dom);
                 
                 if ($yearsMarried > 0) {
                     $events[] = [
@@ -150,7 +150,7 @@ class CalendarController extends Controller
                     'husband' => $marriage->husband,
                     'wife' => $marriage->wife,
                     'date' => $nextAnniversary,
-                    'years' => $nextAnniversary->diffInYears($dom),
+                    'years' => (int) $nextAnniversary->diffInYears($dom),
                     'days_left' => $today->diffInDays($nextAnniversary),
                 ];
             }
