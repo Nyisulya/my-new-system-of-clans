@@ -54,4 +54,8 @@ return [
         'vapid_key' => env('FCM_VAPID_KEY', env('FIREBASE_VAPID_KEY')),
     ],
 
+    'google' => [
+        'analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+    ],
+
 ];
