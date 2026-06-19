@@ -1,13 +1,19 @@
 // FCM Setup & Token Retrieval
 function initFcm() {
-    // 1. Firebase Config - Replace with your Firebase project's web configuration
+    // 1. Check if window.fcmConfig is set and has variables
+    const config = window.fcmConfig;
+    if (!config || !config.apiKey || config.apiKey.trim() === '') {
+        console.warn('FCM configurations not found or empty in window.fcmConfig. Please check your .env configuration.');
+        return;
+    }
+
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: config.apiKey,
+        authDomain: config.authDomain,
+        projectId: config.projectId,
+        storageBucket: config.storageBucket,
+        messagingSenderId: config.messagingSenderId,
+        appId: config.appId
     };
 
     // 2. Initialize Firebase
@@ -22,8 +28,7 @@ function initFcm() {
         if (permission === 'granted') {
             console.log('Notification permission granted.');
 
-            // Get FCM Token. Replace YOUR_VAPID_KEY with the web push certificate key (VAPID Key) from the Firebase Console.
-            messaging.getToken({ vapidKey: 'YOUR_VAPID_KEY' })
+            messaging.getToken({ vapidKey: config.vapidKey })
                 .then((currentToken) => {
                     if (currentToken) {
                         console.log('FCM Token generated: ', currentToken);

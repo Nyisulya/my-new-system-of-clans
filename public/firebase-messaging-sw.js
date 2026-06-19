@@ -2,29 +2,36 @@
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js');
 
-// Initialize the Firebase app in the service worker.
-// Replace placeholders with your Firebase Web App configuration credentials.
-firebase.initializeApp({
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
-});
+// Parse the configuration query parameters sent during service worker registration
+const urlParams = new URLSearchParams(self.location.search);
 
-const messaging = firebase.messaging();
+const firebaseConfig = {
+    apiKey: urlParams.get('apiKey'),
+    authDomain: urlParams.get('authDomain'),
+    projectId: urlParams.get('projectId'),
+    storageBucket: urlParams.get('storageBucket'),
+    messagingSenderId: urlParams.get('messagingSenderId'),
+    appId: urlParams.get('appId')
+};
 
-// Handle background notifications
-messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message: ', payload);
+// Initialize only if configuration is provided
+if (firebaseConfig.apiKey) {
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        icon: payload.notification.icon || '/favicon.ico',
-        data: payload.data
-    };
+    // Handle background notifications
+    messaging.onBackgroundMessage((payload) => {
+        console.log('[firebase-messaging-sw.js] Received background message: ', payload);
 
-    self.registration.showNotification(notificationTitle, notificationOptions);
-});
+        const notificationTitle = payload.notification.title;
+        const notificationOptions = {
+            body: payload.notification.body,
+            icon: payload.notification.icon || '/favicon.ico',
+            data: payload.data
+        };
+
+        self.registration.showNotification(notificationTitle, notificationOptions);
+    });
+} else {
+    console.warn('[firebase-messaging-sw.js] Firebase API key not found in registration query parameters.');
+}

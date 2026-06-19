@@ -390,6 +390,19 @@
 @stack('scripts')
 
 @auth
+    <!-- FCM Config -->
+    <script>
+        window.fcmConfig = {
+            apiKey: "{{ config('services.fcm.api_key') }}",
+            authDomain: "{{ config('services.fcm.auth_domain') }}",
+            projectId: "{{ config('services.fcm.project_id') }}",
+            storageBucket: "{{ config('services.fcm.storage_bucket') }}",
+            messagingSenderId: "{{ config('services.fcm.messaging_sender_id') }}",
+            appId: "{{ config('services.fcm.app_id') }}",
+            vapidKey: "{{ config('services.fcm.vapid_key') }}"
+        };
+    </script>
+
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
@@ -403,13 +416,27 @@
     <!-- Register Service Worker -->
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/firebase-messaging-sw.js')
-                .then((registration) => {
-                    console.log('Firebase Service Worker registered: ', registration.scope);
-                })
-                .catch((err) => {
-                    console.error('Firebase Service Worker registration failed: ', err);
-                });
+            const config = window.fcmConfig;
+            if (config && config.apiKey) {
+                const queryParams = new URLSearchParams({
+                    apiKey: config.apiKey,
+                    authDomain: config.authDomain,
+                    projectId: config.projectId,
+                    storageBucket: config.storageBucket,
+                    messagingSenderId: config.messagingSenderId,
+                    appId: config.appId
+                }).toString();
+
+                navigator.serviceWorker.register('/firebase-messaging-sw.js?' + queryParams)
+                    .then((registration) => {
+                        console.log('Firebase Service Worker registered: ', registration.scope);
+                    })
+                    .catch((err) => {
+                        console.error('Firebase Service Worker registration failed: ', err);
+                    });
+            } else {
+                console.warn('FCM configurations not found in layout window.fcmConfig');
+            }
         }
     </script>
 @endauth
