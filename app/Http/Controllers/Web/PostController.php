@@ -80,8 +80,12 @@ class PostController extends Controller
 
         $likesCount = $post->likes()->count();
 
-        // Broadcast Event
-        broadcast(new PostLiked($post, $likesCount, auth()->id()))->toOthers();
+        // Broadcast Event safely
+        try {
+            broadcast(new PostLiked($post, $likesCount, auth()->id()))->toOthers();
+        } catch (\Exception $e) {
+            \Log::error('Pusher Broadcast Failed: ' . $e->getMessage());
+        }
 
         if ($request->ajax()) {
             return response()->json([
@@ -111,8 +115,12 @@ class PostController extends Controller
         $userName = $comment->user->member ? $comment->user->member->first_name . ' ' . $comment->user->member->last_name : $comment->user->name;
         $commentsCount = $post->comments()->count();
 
-        // Broadcast Event
-        broadcast(new CommentAdded($comment, $post->id, $commentsCount, $userName))->toOthers();
+        // Broadcast Event safely
+        try {
+            broadcast(new CommentAdded($comment, $post->id, $commentsCount, $userName))->toOthers();
+        } catch (\Exception $e) {
+            \Log::error('Pusher Broadcast Failed: ' . $e->getMessage());
+        }
 
         if ($request->ajax()) {
             return response()->json([
