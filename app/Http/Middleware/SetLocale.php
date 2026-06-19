@@ -20,9 +20,9 @@ class SetLocale
         elseif (Session::has('locale')) {
             $locale = Session::get('locale');
         } 
-        // Default to English
+        // Default to Swahili
         else {
-            $locale = config('app.locale', 'en');
+            $locale = config('app.locale', 'sw');
         }
 
         App::setLocale($locale);
