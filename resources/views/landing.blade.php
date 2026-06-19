@@ -37,7 +37,28 @@
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:title" content="Ukoo wa Nyahende">
     <meta property="og:description" content="Ungana na wanafamilia wa Ukoo wa Nyahende, gundua asili yako, na ushiriki katika maendeleo ya ukoo wetu.">
-    <meta property="og:image" content="{{ asset('favicon.ico') }}">
+    <meta property="og:image" content="{{ asset('images/brand-banner.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url('/') }}">
+    <meta property="twitter:title" content="Ukoo wa Nyahende">
+    <meta property="twitter:description" content="Ungana na wanafamilia wa Ukoo wa Nyahende, gundua asili yako, na ushiriki katika maendeleo ya ukoo wetu.">
+    <meta property="twitter:image" content="{{ asset('images/brand-banner.png') }}">
+
+    <!-- Schema.org for Google -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Ukoo wa Nyahende",
+      "url": "{{ url('/') }}",
+      "logo": "{{ asset('images/brand-banner.png') }}",
+      "description": "Ungana na wanafamilia wa Ukoo wa Nyahende, gundua asili yako, na ushiriki katika maendeleo ya ukoo wetu."
+    }
+    </script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
