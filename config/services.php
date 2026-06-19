@@ -45,13 +45,13 @@ return [
     ],
 
     'fcm' => [
-        'api_key' => env('FCM_API_KEY'),
-        'auth_domain' => env('FCM_AUTH_DOMAIN'),
-        'project_id' => env('FCM_PROJECT_ID'),
-        'storage_bucket' => env('FCM_STORAGE_BUCKET'),
-        'messaging_sender_id' => env('FCM_MESSAGING_SENDER_ID'),
-        'app_id' => env('FCM_APP_ID'),
-        'vapid_key' => env('FCM_VAPID_KEY'),
+        'api_key' => env('FCM_API_KEY', env('FIREBASE_API_KEY')),
+        'auth_domain' => env('FCM_AUTH_DOMAIN', env('FIREBASE_AUTH_DOMAIN')),
+        'project_id' => env('FCM_PROJECT_ID', env('FIREBASE_PROJECT_ID')),
+        'storage_bucket' => env('FCM_STORAGE_BUCKET', env('FIREBASE_STORAGE_BUCKET')),
+        'messaging_sender_id' => env('FCM_MESSAGING_SENDER_ID', env('FIREBASE_MESSAGING_SENDER_ID')),
+        'app_id' => env('FCM_APP_ID', env('FIREBASE_APP_ID')),
+        'vapid_key' => env('FCM_VAPID_KEY', env('FIREBASE_VAPID_KEY')),
     ],
 
 ];
