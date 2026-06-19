@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Events\CommentAdded;
+use App\Events\PostLiked;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -78,6 +80,9 @@ class PostController extends Controller
 
         $likesCount = $post->likes()->count();
 
+        // Broadcast Event
+        broadcast(new PostLiked($post, $likesCount, auth()->id()))->toOthers();
+
         if ($request->ajax()) {
             return response()->json([
                 'liked' => $liked,
@@ -102,10 +107,14 @@ class PostController extends Controller
         ]);
 
         $comment->load('user.member');
+        
+        $userName = $comment->user->member ? $comment->user->member->first_name . ' ' . $comment->user->member->last_name : $comment->user->name;
+        $commentsCount = $post->comments()->count();
+
+        // Broadcast Event
+        broadcast(new CommentAdded($comment, $post->id, $commentsCount, $userName))->toOthers();
 
         if ($request->ajax()) {
-            $userName = $comment->user->member ? $comment->user->member->first_name . ' ' . $comment->user->member->last_name : $comment->user->name;
-            
             return response()->json([
                 'success' => true,
                 'comment' => [
@@ -115,7 +124,7 @@ class PostController extends Controller
                     'content' => $comment->content,
                     'time' => $comment->created_at->diffForHumans()
                 ],
-                'comments_count' => $post->comments()->count()
+                'comments_count' => $commentsCount
             ]);
         }
 

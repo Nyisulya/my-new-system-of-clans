@@ -350,6 +350,90 @@ $(document).ready(function() {
 
     // Initial binding
     bindReplyForms();
+
+    // REAL-TIME BROADCASTING WITH LARAVEL ECHO
+    if (typeof window.Echo !== 'undefined') {
+        window.Echo.channel('posts')
+            .listen('PostLiked', (e) => {
+                // Update like count for everyone except the one who liked
+                $('#like-count-' + e.post_id).text(e.likes_count);
+            })
+            .listen('CommentAdded', (e) => {
+                let postId = e.post_id;
+                let c = e.comment;
+
+                // Update comments count
+                $('#comment-count-' + postId).text(e.comments_count);
+
+                // Build HTML
+                let isReply = c.parent_id != null;
+                let html = '';
+
+                if (isReply) {
+                    html = `
+                        <div class="d-flex mb-2">
+                            <div class="mr-2 mt-1">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                    <i class="fas fa-user" style="font-size: 10px;"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                    <strong class="d-block text-sm" style="line-height: 1.2;">${c.user_name}</strong>
+                                    <span class="text-sm" style="line-height: 1.2;">${c.content}</span>
+                                </div>
+                                <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                    Sasa hivi
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    // Prepend/insert before the reply form of that parent comment
+                    $(html).insertBefore('#replyForm-' + c.parent_id);
+                } else {
+                    html = `
+                        <div class="d-flex mb-2">
+                            <div class="mr-2 mt-1">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                    <strong class="d-block text-sm" style="line-height: 1.2;">${c.user_name}</strong>
+                                    <span class="text-sm" style="line-height: 1.2;">${c.content}</span>
+                                </div>
+                                <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                    Sasa hivi &middot; <a href="javascript:void(0);" onclick="$('#replyForm-${c.id}').toggle(); $('#replyInput-${c.id}').focus();" class="text-muted font-weight-bold" style="text-decoration: none;">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-5" id="replies-list-${c.id}">
+                            <!-- Reply Form -->
+                            <form action="/posts/${postId}/comment" method="POST" class="form-reply mt-2 mb-3" data-post-id="${postId}" data-parent-id="${c.id}" id="replyForm-${c.id}" style="display: none;">
+                                <input type="hidden" name="_token" value="${$('input[name="_token"]').val()}">
+                                <input type="hidden" name="parent_id" value="${c.id}">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-2">
+                                        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 24px; height: 24px;">
+                                            <i class="fas fa-user" style="font-size: 10px;"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 position-relative">
+                                        <input type="text" name="content" id="replyInput-${c.id}" class="form-control form-control-sm" placeholder="Jibu hapa..." style="border-radius: 20px; padding-right: 35px;" required>
+                                        <button type="submit" class="btn btn-sm text-primary position-absolute" style="right: 2px; top: 0px; background: transparent; border: none;">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    `;
+                    $('#comments-list-' + postId).append(html);
+                    bindReplyForms();
+                }
+            });
+    }
 });
 </script>
 @stop
