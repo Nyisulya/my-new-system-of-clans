@@ -71,50 +71,65 @@
                 </div>
 
                 <div class="card-footer bg-white">
-                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
-                        <span class="text-muted text-sm"><i class="fas fa-thumbs-up text-primary"></i> {{ $post->likes->count() }} Likes</span>
-                        <span class="text-muted text-sm">{{ $post->comments->count() }} Comments</span>
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                        <span class="text-muted text-sm"><i class="fas fa-thumbs-up text-primary"></i> <span id="like-count-{{ $post->id }}">{{ $post->likes->count() }}</span> Likes</span>
+                        <span class="text-muted text-sm"><span id="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</span> Comments</span>
                     </div>
 
                     <div class="d-flex mb-3">
-                        <form action="{{ route('posts.like', $post) }}" method="POST" class="mr-2">
+                        <form action="{{ route('posts.like', $post) }}" method="POST" class="mr-2 flex-fill text-center form-like" data-post-id="{{ $post->id }}">
                             @csrf
-                            <button type="submit" class="btn btn-sm {{ $post->isLikedBy(auth()->user()) ? 'btn-primary' : 'btn-outline-primary' }}">
-                                <i class="fas fa-thumbs-up"></i> {{ $post->isLikedBy(auth()->user()) ? 'Umelike' : 'Like' }}
+                            <button type="submit" id="btn-like-{{ $post->id }}" class="btn btn-block btn-sm font-weight-bold {{ $post->isLikedBy(auth()->user()) ? 'btn-primary' : 'btn-light text-muted' }}" style="border-radius: 20px;">
+                                <i class="fas fa-thumbs-up"></i> <span class="like-text">{{ $post->isLikedBy(auth()->user()) ? 'Umelike' : 'Like' }}</span>
                             </button>
                         </form>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="$('#commentForm-{{ $post->id }}').toggle(); $('#commentInput-{{ $post->id }}').focus();">
+                        <button type="button" class="btn btn-block btn-light btn-sm text-muted font-weight-bold mt-0" style="border-radius: 20px;" onclick="$('#commentForm-{{ $post->id }}').toggle(); $('#commentInput-{{ $post->id }}').focus();">
                             <i class="fas fa-comment"></i> Comment
                         </button>
                     </div>
 
                     <!-- Comments List -->
-                    @if($post->comments->count() > 0)
-                        <div class="mt-2 pl-3 border-left mb-3">
-                            @foreach($post->comments as $comment)
-                                <div class="mb-2">
-                                    <strong>
-                                        @if($comment->user->member)
-                                            {{ $comment->user->member->first_name }} {{ $comment->user->member->last_name }}
-                                        @else
-                                            {{ $comment->user->name }}
-                                        @endif
-                                    </strong>: 
-                                    <span>{{ $comment->content }}</span>
-                                    <br>
-                                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                    <div id="comments-list-{{ $post->id }}" class="mt-2">
+                        @foreach($post->comments as $comment)
+                            <div class="d-flex mb-2">
+                                <div class="mr-2 mt-1">
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                                        <i class="fas fa-user text-xs"></i>
+                                    </div>
                                 </div>
-                            @endforeach
-                        </div>
-                    @endif
+                                <div>
+                                    <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                        <strong class="d-block text-sm" style="line-height: 1.2;">
+                                            @if($comment->user->member)
+                                                {{ $comment->user->member->first_name }} {{ $comment->user->member->last_name }}
+                                            @else
+                                                {{ $comment->user->name }}
+                                            @endif
+                                        </strong>
+                                        <span class="text-sm" style="line-height: 1.2;">{{ $comment->content }}</span>
+                                    </div>
+                                    <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                        {{ $comment->created_at->diffForHumans() }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
 
                     <!-- Comment Form -->
-                    <form action="{{ route('posts.comment', $post) }}" method="POST" id="commentForm-{{ $post->id }}" style="display: none;">
+                    <form action="{{ route('posts.comment', $post) }}" method="POST" class="form-comment mt-3" data-post-id="{{ $post->id }}" id="commentForm-{{ $post->id }}" style="display: none;">
                         @csrf
-                        <div class="input-group">
-                            <input type="text" name="content" id="commentInput-{{ $post->id }}" class="form-control form-control-sm" placeholder="Andika comment..." required>
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-paper-plane"></i></button>
+                        <div class="d-flex align-items-center">
+                            <div class="mr-2">
+                                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 position-relative">
+                                <input type="text" name="content" id="commentInput-{{ $post->id }}" class="form-control" placeholder="Andika comment..." style="border-radius: 20px; padding-right: 40px;" required>
+                                <button type="submit" class="btn btn-sm text-primary position-absolute" style="right: 5px; top: 3px; background: transparent; border: none;">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -130,4 +145,81 @@
         {{ $posts->links() }}
     </div>
 </div>
+@stop
+
+@section('js')
+<script>
+$(document).ready(function() {
+    // AJAX for Like
+    $('.form-like').on('submit', function(e) {
+        e.preventDefault();
+        let form = $(this);
+        let postId = form.data('post-id');
+        let url = form.attr('action');
+        let btn = $('#btn-like-' + postId);
+        let likeText = btn.find('.like-text');
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            success: function(response) {
+                if(response.liked) {
+                    btn.removeClass('btn-light text-muted').addClass('btn-primary');
+                    likeText.text('Umelike');
+                } else {
+                    btn.removeClass('btn-primary').addClass('btn-light text-muted');
+                    likeText.text('Like');
+                }
+                $('#like-count-' + postId).text(response.likes_count);
+            }
+        });
+    });
+
+    // AJAX for Comment
+    $('.form-comment').on('submit', function(e) {
+        e.preventDefault();
+        let form = $(this);
+        let postId = form.data('post-id');
+        let url = form.attr('action');
+        let input = $('#commentInput-' + postId);
+        
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            success: function(response) {
+                if(response.success) {
+                    // Update count
+                    $('#comment-count-' + postId).text(response.comments_count);
+                    
+                    // Add new comment to top of the list
+                    let newCommentHtml = `
+                        <div class="d-flex mb-2">
+                            <div class="mr-2 mt-1">
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-light p-2" style="border-radius: 18px; display: inline-block;">
+                                    <strong class="d-block text-sm" style="line-height: 1.2;">${response.comment.user_name}</strong>
+                                    <span class="text-sm" style="line-height: 1.2;">${response.comment.content}</span>
+                                </div>
+                                <div class="text-muted ml-2 mt-1" style="font-size: 11px;">
+                                    ${response.comment.time}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#comments-list-' + postId).prepend(newCommentHtml);
+                    
+                    // Clear input
+                    input.val('');
+                }
+            }
+        });
+    });
+});
+</script>
 @stop

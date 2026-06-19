@@ -62,14 +62,26 @@ class PostController extends Controller
         return back()->with('success', 'Post imefutwa.');
     }
 
-    public function toggleLike(Post $post)
+    public function toggleLike(Request $request, Post $post)
     {
         $like = $post->likes()->where('user_id', auth()->id())->first();
         if ($like) {
             $like->delete();
+            $liked = false;
         } else {
             $post->likes()->create(['user_id' => auth()->id()]);
+            $liked = true;
         }
+
+        $likesCount = $post->likes()->count();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'liked' => $liked,
+                'likes_count' => $likesCount
+            ]);
+        }
+
         return back();
     }
 
@@ -79,10 +91,27 @@ class PostController extends Controller
             'content' => 'required|string|max:1000',
         ]);
 
-        $post->comments()->create([
+        $comment = $post->comments()->create([
             'user_id' => auth()->id(),
             'content' => $request->content,
         ]);
+
+        $comment->load('user.member');
+
+        if ($request->ajax()) {
+            $userName = $comment->user->member ? $comment->user->member->first_name . ' ' . $comment->user->member->last_name : $comment->user->name;
+            
+            return response()->json([
+                'success' => true,
+                'comment' => [
+                    'id' => $comment->id,
+                    'user_name' => $userName,
+                    'content' => $comment->content,
+                    'time' => $comment->created_at->diffForHumans()
+                ],
+                'comments_count' => $post->comments()->count()
+            ]);
+        }
 
         return back()->with('success', 'Comment imetumwa.');
     }
