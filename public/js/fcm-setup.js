@@ -28,7 +28,7 @@ function initFcm() {
         if (permission === 'granted') {
             console.log('Notification permission granted.');
 
-            messaging.getToken({ vapidKey: config.vapidKey })
+            messaging.getToken({ vapidKey: config.vapidKey || 'BGa8aqwWAGOk2meXwB66DZK5xpn-2yfId4P8hbj0j5Dlmqjv4G4xQR0GwDlrtVZzet312i-5VWjUlB3aA2WbS-s' })
                 .then((currentToken) => {
                     if (currentToken) {
                         console.log('FCM Token generated: ', currentToken);
