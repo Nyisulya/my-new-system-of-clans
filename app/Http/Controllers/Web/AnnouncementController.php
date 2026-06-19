@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Announcement;
+use App\Models\User;
+use App\Notifications\NewAnnouncementNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,7 +41,7 @@ class AnnouncementController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
-        Announcement::create([
+        $announcement = Announcement::create([
             'title' => $request->title,
             'content' => $request->content,
             'type' => $request->type,
@@ -48,7 +50,13 @@ class AnnouncementController extends Controller
             'created_by' => Auth::id(),
         ]);
 
-        return redirect()->route('announcements.index')->with('success', 'Announcement created successfully.');
+        // Send notifications to all active users
+        $users = User::where('is_active', true)->get();
+        foreach ($users as $user) {
+            $user->notify(new NewAnnouncementNotification($announcement));
+        }
+
+        return redirect()->route('announcements.index')->with('success', 'Announcement created successfully and notifications sent.');
     }
 
     public function edit(Announcement $announcement)

@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+use App\Channels\FcmChannel;
+
 class UpcomingAnniversaryNotification extends Notification
 {
     use Queueable;
@@ -21,7 +23,11 @@ class UpcomingAnniversaryNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        $channels = ['mail', 'database'];
+        if ($notifiable->fcm_token) {
+            $channels[] = FcmChannel::class;
+        }
+        return $channels;
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -45,6 +51,22 @@ class UpcomingAnniversaryNotification extends Notification
             'couple' => $this->marriage->husband->full_name . ' & ' . $this->marriage->wife->full_name,
             'type' => 'anniversary',
             'date' => $this->marriage->marriage_date->format('F j'),
+        ];
+    }
+
+    public function toFcm(object $notifiable): array
+    {
+        $daysUntil = now()->diffInDays($this->marriage->marriage_date->setYear(now()->year), false);
+        $daysText = $daysUntil == 0 ? 'leo!' : "baada ya siku {$daysUntil}!";
+        $couple = $this->marriage->husband->full_name . ' & ' . $this->marriage->wife->full_name;
+
+        return [
+            'title' => 'Kumbukumbu ya Ndoa Inakaribia! 💍',
+            'body' => "Kumbukumbu ya ndoa ya " . $couple . " ni " . $daysText . " (" . $this->marriage->marriage_date->format('F d') . ").",
+            'data' => [
+                'click_action' => route('members.show', $this->marriage->husband_id),
+                'marriage_id' => (string) $this->marriage->id,
+            ]
         ];
     }
 }

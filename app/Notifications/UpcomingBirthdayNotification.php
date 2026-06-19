@@ -8,6 +8,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+use App\Channels\FcmChannel;
+
 class UpcomingBirthdayNotification extends Notification
 {
     use Queueable;
@@ -21,7 +23,11 @@ class UpcomingBirthdayNotification extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        $channels = ['mail', 'database'];
+        if ($notifiable->fcm_token) {
+            $channels[] = FcmChannel::class;
+        }
+        return $channels;
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -44,6 +50,21 @@ class UpcomingBirthdayNotification extends Notification
             'member_name' => $this->member->full_name,
             'type' => 'birthday',
             'date' => $this->member->date_of_birth->format('F j'),
+        ];
+    }
+
+    public function toFcm(object $notifiable): array
+    {
+        $daysUntil = now()->diffInDays($this->member->date_of_birth->setYear(now()->year), false);
+        $daysText = $daysUntil == 0 ? 'leo!' : "baada ya siku {$daysUntil}!";
+
+        return [
+            'title' => 'Siku ya Kuzaliwa Inakaribia! 🎉',
+            'body' => "Usisahau! Siku ya kuzaliwa ya " . $this->member->full_name . " ni " . $daysText . " (" . $this->member->date_of_birth->format('F d') . ").",
+            'data' => [
+                'click_action' => route('members.show', $this->member->id),
+                'member_id' => (string) $this->member->id,
+            ]
         ];
     }
 }
