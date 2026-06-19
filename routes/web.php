@@ -6,10 +6,19 @@ use App\Http\Controllers\Web\MemberController;
 use App\Http\Controllers\Web\ClanController;
 use App\Http\Controllers\Web\LandingController;
 use App\Http\Controllers\Web\ProfileClaimController;
-
+use Kreait\Firebase\Factory;
 // Root landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+Route::get('/test-firebase', function () {
+    try {
+        $factory = (new Factory)->withServiceAccount(env('FIREBASE_CREDENTIALS'));
+        $messaging = $factory->createMessaging();
+        return "Hongera! Firebase imeunganishwa vizuri na Laravel.";
+    } catch (\Exception $e) {
+        return "Kuna tatizo: " . $e->getMessage();
+    }
+});
 // Language switcher (public so guests can switch languages on the landing page)
 Route::get('language/{locale}', [\App\Http\Controllers\Web\LanguageController::class, 'switch'])->name('language.switch');
 
