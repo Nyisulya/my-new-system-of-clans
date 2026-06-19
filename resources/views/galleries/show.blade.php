@@ -3,9 +3,9 @@
 @section('title', $gallery->title)
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <h1>{{ $gallery->title }}</h1>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center flex-wrap gap-2">
             <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#uploadModal">
                 <i class="fas fa-upload"></i> Upload
             </button>

@@ -16,8 +16,9 @@
                         <h3 class="card-title"><i class="fas fa-list"></i> {{ __('common.system_users') }}</h3>
                     </div>
                     <div class="card-body p-0">
-                        <table class="table table-striped table-hover">
-                            <thead>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>{{ __('common.username') }}</th>
@@ -74,6 +75,7 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        </div>
                     </div>
                     @if($users->hasPages())
                         <div class="card-footer d-flex justify-content-center">
