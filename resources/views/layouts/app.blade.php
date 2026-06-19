@@ -389,5 +389,30 @@
 @yield('js')
 @stack('scripts')
 
+@auth
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <!-- Firebase SDK Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+
+    <!-- FCM Setup Script -->
+    <script src="{{ asset('js/fcm-setup.js') }}"></script>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                .then((registration) => {
+                    console.log('Firebase Service Worker registered: ', registration.scope);
+                })
+                .catch((err) => {
+                    console.error('Firebase Service Worker registration failed: ', err);
+                });
+        }
+    </script>
+@endauth
+
 </body>
 </html>
