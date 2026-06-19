@@ -19,11 +19,11 @@
 
     <!-- SEO Meta Tags -->
     @if(app()->getLocale() == 'sw')
-        <title>Ukoo wa Nyahende - Karibu Kwenye Mfumo wa Ukoo</title>
-        <meta name="description" content="Karibu kwenye tovuti rasmi ya Ukoo wa Nyahende. Gundua asili yetu, mti wa familia (family tree), michango, matukio, na taarifa zote muhimu za ukoo wetu. Jiunge sasa kuungana na ndugu zako.">
+        <title>Ukoo wa Nyahende - Karibu kwenye Mfumo wa Ukoo</title>
+        <meta name="description" content="Karibu kwenye tovuti rasmi ya Ukoo wa Nyahende. Gundua asili yetu, mti wa familia (family tree) na matukio muhimu. Jiunge sasa kuungana na ndugu zako.">
     @else
         <title>Nyahende Clan - Welcome to the Clan System</title>
-        <meta name="description" content="Welcome to the official portal of the Nyahende Clan. Discover our ancestry, family tree, contributions, events, and essential clan updates. Join now to connect with your relatives.">
+        <meta name="description" content="Welcome to the official Nyahende Clan portal. Discover our ancestry, family tree, and essential clan updates. Join now to connect with your relatives.">
     @endif
     
     <meta name="keywords" content="Nyahende, Ukoo wa Nyahende, Family Tree, Nyisulya, Mti wa Ukoo, Clan, Tanzania">
