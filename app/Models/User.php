@@ -32,6 +32,7 @@ class User extends Authenticatable
         'anniversary_reminders',
         'death_anniversary_reminders',
         'member_id',
+        'fcm_token',
     ];
 
     /**

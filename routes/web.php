@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\MemberController;
 use App\Http\Controllers\Web\ClanController;
 use App\Http\Controllers\Web\LandingController;
 use App\Http\Controllers\Web\ProfileClaimController;
+use App\Http\Controllers\Web\FirebaseController;
 use Kreait\Firebase\Factory;
 // Root landing page
 Route::get('/', [LandingController::class, 'index'])->name('landing');
@@ -77,6 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('contributions', \App\Http\Controllers\Web\ContributionController::class)->only(['create', 'store']);
 
     // Notifications
+    Route::post('fcm-token', [FirebaseController::class, 'updateFcmToken'])->name('fcm.token');
     Route::get('notifications', [\App\Http\Controllers\Web\NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/{id}/mark-read', [\App\Http\Controllers\Web\NotificationController::class, 'markAsRead'])->name('notifications.mark-read');
     Route::get('notifications/mark-all-read', [\App\Http\Controllers\Web\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
