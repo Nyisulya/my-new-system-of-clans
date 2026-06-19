@@ -28,10 +28,20 @@
                         <p class="card-text text-muted">{{ Str::limit($gallery->description, 100) }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="badge badge-info">{{ $gallery->photos_count }} picha</span>
-                            <a href="{{ route('galleries.show', $gallery) }}" class="btn btn-sm btn-primary">
-                                Angalia Albamu <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{{ route('galleries.show', $gallery) }}" class="btn btn-sm btn-primary mr-2">
+                                    Angalia <i class="fas fa-arrow-right"></i>
+                                </a>
+                                @if(auth()->id() === $gallery->created_by || auth()->user()->isAdmin())
+                                <form action="{{ route('galleries.destroy', $gallery) }}" method="POST" onsubmit="return confirm('Futa album hii pamoja na picha zake zote?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                @endif
+                            </div>
                     </div>
                 </div>
             </div>

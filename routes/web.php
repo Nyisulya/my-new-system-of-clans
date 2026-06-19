@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notifications/mark-all-read', [\App\Http\Controllers\Web\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
     // Galleries
-    Route::resource('galleries', \App\Http\Controllers\Web\GalleryController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('galleries', \App\Http\Controllers\Web\GalleryController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
     Route::post('galleries/{gallery}/upload-photos', [\App\Http\Controllers\Web\GalleryController::class, 'uploadPhotos'])->name('galleries.upload-photos');
     Route::delete('galleries/photos/{id}', [\App\Http\Controllers\Web\GalleryController::class, 'deletePhoto'])->name('galleries.delete-photo');
 
@@ -96,5 +96,6 @@ Route::middleware(['auth'])->group(function () {
     // Admin only routes
     Route::middleware(['can:admin-only'])->group(function () {
         Route::get('users', [\App\Http\Controllers\Web\UserController::class, 'index'])->name('admin.users');
+        Route::delete('users/{user}', [\App\Http\Controllers\Web\UserController::class, 'destroy'])->name('admin.users.destroy');
     });
 });

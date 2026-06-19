@@ -14,4 +14,16 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+
+    public function destroy(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Huwezi kujifuta wewe mwenyewe.');
+        }
+
+        // We only delete the user account (login credentials), not the actual member profile.
+        $user->delete();
+
+        return back()->with('success', 'Akaunti ya mtumiaji imefutwa kikamilifu.');
+    }
 }

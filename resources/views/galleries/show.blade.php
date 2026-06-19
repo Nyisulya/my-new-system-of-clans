@@ -5,10 +5,19 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>{{ $gallery->title }}</h1>
-        <div>
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal">
-                <i class="fas fa-upload"></i> Upload Photos
+        <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#uploadModal">
+                <i class="fas fa-upload"></i> Upload
             </button>
+            @if(auth()->id() === $gallery->created_by || auth()->user()->isAdmin())
+            <form action="{{ route('galleries.destroy', $gallery) }}" method="POST" class="d-inline mr-2" onsubmit="return confirm('Una uhakika unataka kufuta album hii yote na picha zake zote?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Futa Album
+                </button>
+            </form>
+            @endif
             <a href="{{ route('galleries.index') }}" class="btn btn-default">Back</a>
         </div>
     </div>

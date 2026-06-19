@@ -24,6 +24,7 @@
                                     <th>{{ __('common.role') }}</th>
                                     <th>{{ __('common.linked_member') }}</th>
                                     <th>{{ __('common.registration_date') }}</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,10 +55,21 @@
                                             @endif
                                         </td>
                                         <td>{{ $user->created_at->format('d M Y, H:i') }}</td>
+                                        <td>
+                                            @if($user->id !== auth()->id())
+                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="d-inline" onsubmit="return confirm('Una uhakika unataka kufuta akaunti ya huyu mtumiaji? (Hii haitafuta taarifa zake kwenye mti wa ukoo)');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i> Futa
+                                                </button>
+                                            </form>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">{{ __('common.no_users_found') }}</td>
+                                        <td colspan="6" class="text-center">{{ __('common.no_users_found') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>

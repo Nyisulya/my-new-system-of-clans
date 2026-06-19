@@ -83,4 +83,19 @@ class GalleryController extends Controller
 
         return back()->with('success', 'Photo deleted successfully.');
     }
+
+    public function destroy(Gallery $gallery)
+    {
+        // First delete all physical photos
+        $photos = $gallery->photos;
+        foreach ($photos as $photo) {
+            $this->imageService->deleteImage($photo->photo_path);
+        }
+        
+        // Then delete the gallery (database cascading should handle the gallery_photos rows, but let's be safe)
+        $gallery->photos()->delete();
+        $gallery->delete();
+
+        return redirect()->route('galleries.index')->with('success', 'Album imefutwa kikamilifu.');
+    }
 }
