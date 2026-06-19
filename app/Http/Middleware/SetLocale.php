@@ -22,7 +22,7 @@ class SetLocale
         } 
         // Default to Swahili
         else {
-            $locale = config('app.locale', 'sw');
+            $locale = 'sw';
         }
 
         App::setLocale($locale);
