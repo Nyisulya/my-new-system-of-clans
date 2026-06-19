@@ -63,7 +63,12 @@
                 </div>
 
                 <div class="card-body">
-                    <p class="card-text" style="white-space: pre-wrap;">{{ $post->content }}</p>
+                    @if(strlen($post->content) > 200)
+                        <p class="card-text post-text-short" id="post-text-short-{{ $post->id }}" style="white-space: pre-wrap;">{{ Str::limit($post->content, 200) }} <a href="javascript:void(0);" onclick="$('#post-text-short-{{ $post->id }}').hide(); $('#post-text-full-{{ $post->id }}').fadeIn();" class="text-primary font-weight-bold" style="text-decoration: none;">Soma zaidi...</a></p>
+                        <p class="card-text post-text-full" id="post-text-full-{{ $post->id }}" style="white-space: pre-wrap; display: none;">{{ $post->content }} <a href="javascript:void(0);" onclick="$('#post-text-full-{{ $post->id }}').hide(); $('#post-text-short-{{ $post->id }}').fadeIn();" class="text-muted font-weight-bold" style="text-decoration: none;">Ficha</a></p>
+                    @else
+                        <p class="card-text" style="white-space: pre-wrap;">{{ $post->content }}</p>
+                    @endif
                     
                     @if($post->image_path)
                         <img src="{{ asset('storage/' . $post->image_path) }}" class="img-fluid rounded mb-3" alt="Post Image">
@@ -83,13 +88,14 @@
                                 <i class="fas fa-thumbs-up"></i> <span class="like-text">{{ $post->isLikedBy(auth()->user()) ? 'Umelike' : 'Like' }}</span>
                             </button>
                         </form>
-                        <button type="button" class="btn btn-block btn-light btn-sm text-muted font-weight-bold mt-0" style="border-radius: 20px;" onclick="$('#commentForm-{{ $post->id }}').toggle(); $('#commentInput-{{ $post->id }}').focus();">
+                        <button type="button" class="btn btn-block btn-light btn-sm text-muted font-weight-bold mt-0" style="border-radius: 20px;" onclick="$('#comments-section-{{ $post->id }}').toggle(); $('#commentInput-{{ $post->id }}').focus();">
                             <i class="fas fa-comment"></i> Comment
                         </button>
                     </div>
 
-                    <!-- Comments List -->
-                    <div id="comments-list-{{ $post->id }}" class="mt-2">
+                    <div id="comments-section-{{ $post->id }}" style="display: none;">
+                        <!-- Comments List -->
+                        <div id="comments-list-{{ $post->id }}" class="mt-2">
                         @foreach($post->comments as $comment)
                             <div class="d-flex mb-2">
                                 <div class="mr-2 mt-1">
@@ -133,6 +139,7 @@
                             </div>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         @empty
@@ -212,7 +219,7 @@ $(document).ready(function() {
                             </div>
                         </div>
                     `;
-                    $('#comments-list-' + postId).prepend(newCommentHtml);
+                    $('#comments-list-' + postId).append(newCommentHtml);
                     
                     // Clear input
                     input.val('');
