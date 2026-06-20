@@ -163,8 +163,7 @@
                                 <dt class="col-sm-4">Familia</dt>
                                 <dd class="col-sm-8">{{ $member->family->name ?? 'N/A' }}</dd>
 
-                                <dt class="col-sm-4">Tawi</dt>
-                                <dd class="col-sm-8">{{ $member->branch->name ?? 'N/A' }}</dd>
+
 
                                 <dt class="col-sm-4">Kizazi</dt>
                                 <dd class="col-sm-8"><span class="badge badge-info">{{ $member->generation_number }}</span></dd>

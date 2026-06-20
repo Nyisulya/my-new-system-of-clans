@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\Clan;
 use App\Models\Family;
-use App\Models\Branch;
 use App\Http\Requests\StoreMemberRequest;
 use App\Http\Requests\UpdateMemberRequest;
 use App\Services\ImageService;
@@ -32,7 +31,7 @@ class MemberController extends Controller
         // Check if user can view members
         $this->authorize('viewAny', Member::class);
         
-        $query = Member::with(['clan', 'family', 'branch', 'father', 'mother', 'marriagesAsHusband.wife', 'marriagesAsWife.husband']);
+        $query = Member::with(['clan', 'family', 'father', 'mother', 'marriagesAsHusband.wife', 'marriagesAsWife.husband']);
 
         // Search
         if ($request->filled('search')) {
@@ -266,7 +265,7 @@ class MemberController extends Controller
             $data['family_id'] = $family->id;
         }
 
-        // Handle parent names and branch name for spouses (manual text input)
+        // Handle parent names for spouses (manual text input)
         $additionalNotes = [];
         
         if ($request->filled('father_name')) {
@@ -275,20 +274,6 @@ class MemberController extends Controller
         
         if ($request->filled('mother_name')) {
             $additionalNotes[] = "Mother: " . $request->mother_name;
-        }
-        
-        if ($request->filled('branch_name')) {
-            // Find or create branch
-            $branch = Branch::firstOrCreate(
-                [
-                    'name' => $request->branch_name,
-                    'family_id' => $data['family_id']
-                ],
-                [
-                    'description' => 'Auto-created from spouse entry'
-                ]
-            );
-            $data['branch_id'] = $branch->id;
         }
         
         // Append additional notes if any
@@ -404,7 +389,6 @@ class MemberController extends Controller
 
         $clans = Clan::with('families')->get();
         $families = Family::where('clan_id', $member->clan_id)->get();
-        $branches = Branch::where('family_id', $member->family_id)->get();
         
         $potentialFathers = Member::where('gender', 'male')
             ->where('id', '!=', $member->id)
@@ -424,7 +408,6 @@ class MemberController extends Controller
             'member',
             'clans',
             'families',
-            'branches',
             'potentialFathers',
             'potentialMothers',
             'potentialSpouses'

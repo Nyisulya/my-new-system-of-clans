@@ -35,13 +35,7 @@ class Family extends Model
         return $this->belongsTo(Clan::class);
     }
 
-    /**
-     * Get all branches in this family
-     */
-    public function branches(): HasMany
-    {
-        return $this->hasMany(Branch::class);
-    }
+
 
     /**
      * Get all members in this family

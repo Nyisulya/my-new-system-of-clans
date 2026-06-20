@@ -128,11 +128,6 @@
             {{ __('common.families') }}
         </a>
 
-        <a href="{{ route('branches.index') }}" class="sidebar-item {{ request()->routeIs('branches.*') ? 'active' : '' }}">
-            <i class="fas fa-code-branch"></i>
-            {{ __('common.branches') }}
-        </a>
-
         {{-- Community --}}
         <div class="sidebar-section-title">{{ __('common.community') }}</div>
 

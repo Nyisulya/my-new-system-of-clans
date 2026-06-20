@@ -54,8 +54,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('families', \App\Http\Controllers\Web\FamilyController::class);
 
     
-    // Branch Management
-    Route::resource('branches', \App\Http\Controllers\Web\BranchController::class);
 
     // Timeline
     Route::get('timeline', [\App\Http\Controllers\Web\TimelineController::class, 'index'])->name('timeline.index');

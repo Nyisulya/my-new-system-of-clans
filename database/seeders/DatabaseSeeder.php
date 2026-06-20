@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Clan;
 use App\Models\Family;
-use App\Models\Branch;
 use App\Models\Member;
 use Illuminate\Support\Facades\Hash;
 
@@ -86,24 +85,6 @@ class DatabaseSeeder extends Seeder
 
         echo "✓ Created 2 families\n";
 
-        // Create Branches
-        $bostonBranch = Branch::create([
-            'family_id' => $doeMainFamily->id,
-            'name' => 'Boston Branch',
-            'description' => 'Doe family members in the Boston area',
-            'location' => 'Boston, MA',
-            'is_active' => true,
-        ]);
-
-        $nycBranch = Branch::create([
-            'family_id' => $doeMainFamily->id,
-            'name' => 'New York Branch',
-            'description' => 'Doe family members in New York City',
-            'location' => 'New York, NY',
-            'is_active' => true,
-        ]);
-
-        echo "✓ Created 2 branches\n";
 
         // Create Multi-Generation Family Tree
         
@@ -155,7 +136,7 @@ class DatabaseSeeder extends Seeder
         $robertGen2 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Robert',
             'middle_name' => 'James',
             'last_name' => 'Doe',
@@ -197,7 +178,7 @@ class DatabaseSeeder extends Seeder
         $thomasGen2 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $bostonBranch->id,
+
             'first_name' => 'Thomas',
             'middle_name' => 'William',
             'last_name' => 'Doe',
@@ -217,7 +198,7 @@ class DatabaseSeeder extends Seeder
         $johnGen3 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'John',
             'middle_name' => 'Robert',
             'last_name' => 'Doe',
@@ -235,7 +216,7 @@ class DatabaseSeeder extends Seeder
         $margaretGen3 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Margaret',
             'middle_name' => 'Anne',
             'last_name' => 'Doe',
@@ -259,7 +240,7 @@ class DatabaseSeeder extends Seeder
         $michaelGen4 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Michael',
             'middle_name' => 'John',
             'last_name' => 'Doe',
@@ -281,7 +262,7 @@ class DatabaseSeeder extends Seeder
         $susanGen4 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Susan',
             'middle_name' => 'Marie',
             'last_name' => 'Doe',
@@ -307,7 +288,7 @@ class DatabaseSeeder extends Seeder
         $davidGen5 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'David',
             'middle_name' => 'Michael',
             'last_name' => 'Doe',
@@ -330,7 +311,7 @@ class DatabaseSeeder extends Seeder
         $sarahGen5 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Sarah',
             'middle_name' => 'Elizabeth',
             'last_name' => 'Doe',
@@ -355,7 +336,7 @@ class DatabaseSeeder extends Seeder
         $jenniferGen5 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Jennifer',
             'middle_name' => 'Lynn',
             'last_name' => 'Doe',
@@ -375,7 +356,7 @@ class DatabaseSeeder extends Seeder
         $emilyGen6 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'Emily',
             'middle_name' => 'Grace',
             'last_name' => 'Doe',
@@ -394,7 +375,7 @@ class DatabaseSeeder extends Seeder
         $jamesGen6 = Member::create([
             'clan_id' => $doeClan->id,
             'family_id' => $doeMainFamily->id,
-            'branch_id' => $nycBranch->id,
+
             'first_name' => 'James',
             'middle_name' => 'Alexander',
             'last_name' => 'Doe',
@@ -423,7 +404,7 @@ class DatabaseSeeder extends Seeder
         echo "  - 3 users (admin, editor, viewer)\n";
         echo "  - 2 clans\n";
         echo "  - 2 families\n";
-        echo "  - 2 branches\n";
+
         echo "  - 16 members (6 generations)\n\n";
         
         echo "Family Tree Structure:\n";

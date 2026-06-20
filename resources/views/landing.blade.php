@@ -772,7 +772,7 @@
                         @if(app()->getLocale() == 'sw')
                             Kuunganisha familia zetu, kuhifadhi mti wetu wa ukoo, kushirikiana katika matukio, kampeni, na kuendeleza historia na urithi wetu kwa vizazi vya sasa na vijavyo.
                         @else
-                            Connecting our family branches, preserving our lineage, sharing events and campaigns, and passing down our rich heritage to current and future generations.
+                            Connecting our families, preserving our lineage, sharing events and campaigns, and passing down our rich heritage to current and future generations.
                         @endif
                     </p>
                     
@@ -865,10 +865,6 @@
                     <div class="stat-num">{{ $stats['clans'] }}</div>
                     <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Koo' : 'Clans' }}</div>
                 </div>
-                <div class="stat-card" id="statBranches" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-num">{{ $stats['branches'] }}</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Matawi' : 'Branches' }}</div>
-                </div>
             </div>
         </section>
 
@@ -946,7 +942,7 @@
                         <div class="feature-icon"><i class="fas fa-map-marked-alt"></i></div>
                         <h3 class="feature-name">{{ app()->getLocale() == 'sw' ? 'Ramani ya Asili' : 'Ancestral Map' }}</h3>
                         <p class="feature-desc">
-                            {{ app()->getLocale() == 'sw' ? 'Tazama na ugundue maeneo wanamoishi wanafamilia wa ukoo wetu au asili ya chimbuko letu.' : 'Identify geographic origins and current settlements of different branches of the Nyahende clan.' }}
+                            {{ app()->getLocale() == 'sw' ? 'Tazama na ugundue maeneo wanamoishi wanafamilia wa ukoo wetu au asili ya chimbuko letu.' : 'Identify geographic origins and current settlements of the clan.' }}
                         </p>
                     </div>
                 </div>

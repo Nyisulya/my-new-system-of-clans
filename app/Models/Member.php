@@ -17,7 +17,6 @@ class Member extends Model
     protected $fillable = [
         'clan_id',
         'family_id',
-        'branch_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -89,10 +88,7 @@ class Member extends Model
         return $this->belongsTo(Family::class);
     }
 
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
+
 
     public function father(): BelongsTo
     {

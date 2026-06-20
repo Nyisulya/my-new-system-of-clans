@@ -286,18 +286,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Tawi</label>
-                                    @if(isset($selectedSpouse))
-                                        <input type="text" name="branch_name" class="form-control" value="{{ old('branch_name') }}" placeholder="Tawi (Hiari)">
-                                    @else
-                                        <select name="branch_id" class="form-control select2">
-                                            <option value="">Hakuna</option>
-                                        </select>
-                                    @endif
-                                </div>
-                            </div>
+
                         </div>
 
                         <hr>

@@ -215,22 +215,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Branch <small class="text-muted">(Optional)</small></label>
-                            <select name="branch_id" class="form-control @error('branch_id') is-invalid @enderror">
-                                <option value="">None</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{ $branch->id }}" {{ old('branch_id', $member->branch_id) == $branch->id ? 'selected' : '' }}>
-                                        {{ $branch->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('branch_id')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
+
                 </div>
 
                 {{-- Family Relationships --}}

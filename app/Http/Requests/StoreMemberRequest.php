@@ -48,7 +48,7 @@ class StoreMemberRequest extends FormRequest
             'clan_name' => ['nullable', 'required_without:clan_id', 'string', 'max:255'],
             'family_id' => ['nullable', 'required_without:family_name', 'exists:families,id'],
             'family_name' => ['nullable', 'required_without:family_id', 'string', 'max:255'],
-            'branch_id' => ['nullable', 'exists:branches,id'],
+
             
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
@@ -87,7 +87,7 @@ class StoreMemberRequest extends FormRequest
             ],
             'mother_name' => ['nullable', 'string', 'max:255'],
             
-            'branch_name' => ['nullable', 'string', 'max:255'],
+
             
             
             'spouse_name' => ['nullable', 'string', 'max:255'],

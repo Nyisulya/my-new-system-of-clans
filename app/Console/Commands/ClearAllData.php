@@ -44,7 +44,7 @@ class ClearAllData extends Command
             // Clear data in specific order to respect relationships
             $this->clearTable('marriages', '💑 Marriages');
             $this->clearTable('members', '👤 Members');
-            $this->clearTable('branches', '🌿 Branches');
+
             $this->clearTable('families', '🏠 Families');
             $this->clearTable('clans', '🌳 Clans');
 

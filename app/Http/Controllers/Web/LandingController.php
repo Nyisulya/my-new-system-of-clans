@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\Family;
 use App\Models\Clan;
-use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -28,7 +27,6 @@ class LandingController extends Controller
             'members'  => Member::count(),
             'families' => Family::count(),
             'clans'    => Clan::count(),
-            'branches' => Branch::count(),
         ];
 
         return view('landing', compact('stats'));

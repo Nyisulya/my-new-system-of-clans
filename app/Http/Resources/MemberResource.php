@@ -49,12 +49,7 @@ class MemberResource extends JsonResource
                 ];
             }),
             
-            'branch' => $this->whenLoaded('branch', function () {
-                return $this->branch ? [
-                    'id' => $this->branch->id,
-                    'name' => $this->branch->name,
-                ] : null;
-            }),
+
             
             'father' => $this->whenLoaded('father', function () {
                 return $this->father ? [
