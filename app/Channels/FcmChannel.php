@@ -57,8 +57,7 @@ class FcmChannel
             $messaging = $factory->createMessaging();
 
             // Build the FCM CloudMessage
-            $message = CloudMessage::new()
-                ->withToken($token)
+            $message = CloudMessage::withTarget('token', $token)
                 ->withNotification(FirebaseNotification::create(
                     $fcmData['title'],
                     $fcmData['body']
