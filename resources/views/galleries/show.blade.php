@@ -126,9 +126,9 @@
         lightbox.option({ resizeDuration: 200, wrapAround: true, albumLabel: 'Picha %1 kati ya %2' });
 
         // ─── Settings ──────────────────────────────────────────────────────
-        const MAX_W  = 1200;
-        const MAX_H  = 1200;
-        const QUALITY = 0.75;
+        const MAX_W  = 1920;
+        const MAX_H  = 1920;
+        const QUALITY = 0.92;
         const UPLOAD_URL = '{{ route('galleries.upload-photos', $gallery) }}';
         const CSRF_TOKEN = '{{ csrf_token() }}';
 

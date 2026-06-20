@@ -819,8 +819,8 @@
                     img.onload = function() {
                         let canvas = document.createElement('canvas');
                         let ctx = canvas.getContext('2d');
-                        let maxWidth = 800;
-                        let maxHeight = 800;
+                        let maxWidth = 1920;
+                        let maxHeight = 1920;
                         let width = img.width;
                         let height = img.height;
 
@@ -850,7 +850,7 @@
                                 
                                 $('#profilePreview').attr('src', URL.createObjectURL(blob));
                             }
-                        }, 'image/jpeg', 0.7);
+                        }, 'image/jpeg', 0.92);
                     };
                     img.src = readerEvent.target.result;
                 }

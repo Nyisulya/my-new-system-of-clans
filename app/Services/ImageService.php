@@ -9,10 +9,9 @@ use Illuminate\Support\Str;
 class ImageService
 {
     // Max dimensions for profile photos
-    protected int $maxWidth     = 600;
-    protected int $maxHeight    = 600;
-    // JPEG quality (0-100). 75 gives great quality at ~50-100KB
-    protected int $jpegQuality  = 75;
+    protected int $maxWidth     = 1920;
+    protected int $maxHeight    = 1920;
+    protected int $jpegQuality  = 92;
 
     /**
      * Upload a profile photo — compresses first, then uploads to Cloudinary

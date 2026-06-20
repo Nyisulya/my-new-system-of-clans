@@ -455,8 +455,8 @@
                     img.onload = function() {
                         let canvas = document.createElement('canvas');
                         let ctx = canvas.getContext('2d');
-                        let maxWidth = 800;
-                        let maxHeight = 800;
+                        let maxWidth = 1920;
+                        let maxHeight = 1920;
                         let width = img.width;
                         let height = img.height;
 
@@ -492,7 +492,7 @@
                                     $(fileInput).closest('.form-group').append('<div class="mt-2"><img src="'+URL.createObjectURL(blob)+'" alt="Preview" class="img-thumbnail" style="height: 100px"></div>');
                                 }
                             }
-                        }, 'image/jpeg', 0.7);
+                        }, 'image/jpeg', 0.92);
                     };
                     img.src = readerEvent.target.result;
                 }
