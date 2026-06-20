@@ -71,7 +71,27 @@
                     @endif
                     
                     @if($post->image_path)
-                        <img src="{{ asset('storage/' . $post->image_path) }}" class="img-fluid rounded mb-3" alt="Post Image">
+                        @php
+                            $cloudName = config('cloudinary.cloud.cloud_name');
+                            // If it starts with 'posts/' or has no extension, it's likely Cloudinary
+                            if ($cloudName && (str_starts_with($post->image_path, 'posts/') || !str_contains($post->image_path, '.'))) {
+                                $postImgUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/q_auto,f_auto/{$post->image_path}";
+                            } else {
+                                $postImgUrl = asset('storage/' . $post->image_path);
+                            }
+                        @endphp
+                        <div class="text-center mb-3">
+                            <img src="{{ $postImgUrl }}" 
+                                 class="img-fluid rounded" 
+                                 alt="Post Image"
+                                 data-full="{{ $postImgUrl }}"
+                                 data-title="Picha ya Simulizi"
+                                 style="cursor:zoom-in; max-height: 500px; object-fit: contain; width: 100%; background: #f8f9fa;"
+                                 onclick="openPhotoModal(this.dataset.full, this.dataset.title)">
+                            <small class="d-block text-muted mt-1" style="font-size:10px;">
+                                <i class="fas fa-search-plus"></i> Bonyeza kuona picha kubwa
+                            </small>
+                        </div>
                     @endif
                 </div>
 
@@ -200,10 +220,38 @@
         {{ $posts->links() }}
     </div>
 </div>
+
+{{-- Full-screen photo modal --}}
+<div class="modal fade" id="photoModal" tabindex="-1" role="dialog" style="z-index:99999;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:90vw;">
+        <div class="modal-content" style="background:transparent;border:none;box-shadow:none;">
+            <div class="modal-body p-0 text-center">
+                <button type="button" onclick="$('#photoModal').modal('hide')" style="position:absolute;top:-15px;right:-15px;z-index:10;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;line-height:34px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&times;</button>
+                <img id="photoModalImg" src="" alt="" style="max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+                <p id="photoModalTitle" class="text-white mt-2 mb-0" style="font-size:16px;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+@stop
+
+@section('css')
+<style>
+    /* Photo Modal */
+    #photoModal {
+        background: rgba(0,0,0,0.85);
+    }
+</style>
 @stop
 
 @section('js')
 <script>
+function openPhotoModal(url, title) {
+    document.getElementById('photoModalImg').src = url;
+    document.getElementById('photoModalTitle').textContent = title;
+    $('#photoModal').modal('show');
+}
+
 $(document).ready(function() {
     // AJAX for Like
     $('.form-like').on('submit', function(e) {
