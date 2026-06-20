@@ -137,7 +137,7 @@ class ImageService
      */
     public function deleteImage(string $path): bool
     {
-        if ($this->isCloudinaryConfigured() && str_starts_with($path, 'clan-profiles/')) {
+        if ($this->isCloudinaryConfigured() && $this->isCloudinaryPublicId($path)) {
             try {
                 $cloudinary = new \Cloudinary\Cloudinary([
                     'cloud' => [
@@ -159,6 +159,17 @@ class ImageService
         $thumbnailPath = dirname($path) . '/thumbnails/thumb_' . basename($path);
         Storage::disk('public')->delete($thumbnailPath);
         return $deleted;
+    }
+
+    /**
+     * Detect if a stored path is a Cloudinary public_id.
+     * Cloudinary IDs have no file extension and use our folder prefixes.
+     */
+    protected function isCloudinaryPublicId(string $path): bool
+    {
+        return str_starts_with($path, 'clan-profiles/')
+            || str_starts_with($path, 'galleries/')
+            || (!str_contains($path, '.') && str_contains($path, '/'));
     }
 
     /**

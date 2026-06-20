@@ -17,7 +17,14 @@
             <div class="col-md-4">
                 <div class="card">
                     @if($gallery->photos->first())
-                        <img src="{{ asset('storage/' . $gallery->photos->first()->photo_path) }}" class="card-img-top" alt="{{ $gallery->title }}" style="height: 200px; object-fit: cover;">
+                        @php
+                            $coverPath  = $gallery->photos->first()->photo_path;
+                            $cloudName  = config('cloudinary.cloud.cloud_name');
+                            $coverUrl   = ($cloudName && !str_contains($coverPath, '.'))
+                                ? "https://res.cloudinary.com/{$cloudName}/image/upload/w_600,h_200,c_fill,q_auto,f_auto/{$coverPath}"
+                                : asset('storage/' . $coverPath);
+                        @endphp
+                        <img src="{{ $coverUrl }}" class="card-img-top" alt="{{ $gallery->title }}" style="height: 200px; object-fit: cover;">
                     @else
                         <div class="card-img-top bg-secondary" style="height: 200px; display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-images fa-5x text-white-50"></i>

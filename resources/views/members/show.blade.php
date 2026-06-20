@@ -22,10 +22,22 @@
             <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                     <div class="text-center">
-                        <img class="profile-user-img img-fluid img-circle" 
-                             src="{{ $member->profile_photo_url }}" 
-                             alt="{{ $member->full_name }}"
-                             style="width: 150px; height: 150px; object-fit: cover;">
+                        @php
+                            $cloudName = config('cloudinary.cloud.cloud_name');
+                            if ($cloudName && str_starts_with($member->profile_photo ?? '', 'clan-profiles/')) {
+                                $fullPhotoUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/q_auto,f_auto/{$member->profile_photo}";
+                            } else {
+                                $fullPhotoUrl = $member->profile_photo_url;
+                            }
+                        @endphp
+                        <a href="{{ $fullPhotoUrl }}" data-lightbox="profile-{{ $member->id }}" data-title="{{ $member->full_name }}">
+                            <img class="profile-user-img img-fluid img-circle"
+                                 src="{{ $member->profile_photo_url }}"
+                                 alt="{{ $member->full_name }}"
+                                 style="width: 150px; height: 150px; object-fit: cover; cursor: zoom-in;"
+                                 title="Bonyeza kuona picha kubwa">
+                        </a>
+                        <small class="d-block text-muted mt-1" style="font-size:10px;"><i class="fas fa-search-plus"></i> Bonyeza kuona</small>
                     </div>
 
                     <h3 class="profile-username text-center">{{ $member->full_name }}</h3>
@@ -416,8 +428,7 @@
 @section('css')
     {{-- Mobile Responsive Styles --}}
     <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
-    
-    {{-- Leaflet CSS --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
           crossorigin="anonymous"/>
@@ -487,6 +498,8 @@
 @stop
 
 @section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+    <script>lightbox.option({ resizeDuration: 200, wrapAround: false });</script>
     {{-- Leaflet JavaScript --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
