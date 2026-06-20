@@ -45,18 +45,7 @@
                         </small>
                     </div>
 
-                    {{-- Full-screen photo modal --}}
-                    <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" style="z-index:99999;">
-                        <div class="modal-dialog modal-dialog-centered" style="max-width:90vw;">
-                            <div class="modal-content" style="background:transparent;border:none;">
-                                <div class="modal-body p-0 text-center">
-                                    <button type="button" onclick="$('#photoModal').modal('hide')" style="position:absolute;top:-15px;right:-15px;z-index:10;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;line-height:34px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&times;</button>
-                                    <img id="photoModalImg" src="" alt="" style="max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
-                                    <p id="photoModalTitle" class="text-white mt-2 mb-0" style="font-size:16px;"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <h3 class="profile-username text-center">{{ $member->full_name }}</h3>
 
@@ -437,6 +426,19 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Full-screen photo modal --}}
+    <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" style="z-index:99999;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width:90vw;">
+            <div class="modal-content" style="background:transparent;border:none;box-shadow:none;">
+                <div class="modal-body p-0 text-center">
+                    <button type="button" onclick="$('#photoModal').modal('hide')" style="position:absolute;top:-15px;right:-15px;z-index:10;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;line-height:34px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&times;</button>
+                    <img id="photoModalImg" src="" alt="" style="max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+                    <p id="photoModalTitle" class="text-white mt-2 mb-0" style="font-size:16px;"></p>
                 </div>
             </div>
         </div>
