@@ -30,14 +30,32 @@
                                 $fullPhotoUrl = $member->profile_photo_url;
                             }
                         @endphp
-                        <a href="{{ $fullPhotoUrl }}" data-lightbox="profile-{{ $member->id }}" data-title="{{ $member->full_name }}">
-                            <img class="profile-user-img img-fluid img-circle"
-                                 src="{{ $member->profile_photo_url }}"
-                                 alt="{{ $member->full_name }}"
-                                 style="width: 150px; height: 150px; object-fit: cover; cursor: zoom-in;"
-                                 title="Bonyeza kuona picha kubwa">
-                        </a>
-                        <small class="d-block text-muted mt-1" style="font-size:10px;"><i class="fas fa-search-plus"></i> Bonyeza kuona</small>
+                        <img class="profile-user-img img-fluid img-circle"
+                             src="{{ $member->profile_photo_url }}"
+                             alt="{{ $member->full_name }}"
+                             id="profileThumb"
+                             data-full="{{ $fullPhotoUrl }}"
+                             data-title="{{ $member->full_name }}"
+                             style="width:150px;height:150px;object-fit:cover;cursor:zoom-in;"
+                             title="Bonyeza kuona picha kubwa"
+                             onclick="openPhotoModal(this.dataset.full, this.dataset.title)"
+                        >
+                        <small class="d-block text-muted mt-1" style="font-size:10px;">
+                            <i class="fas fa-search-plus"></i> Bonyeza kuona
+                        </small>
+                    </div>
+
+                    {{-- Full-screen photo modal --}}
+                    <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" style="z-index:99999;">
+                        <div class="modal-dialog modal-dialog-centered" style="max-width:90vw;">
+                            <div class="modal-content" style="background:transparent;border:none;">
+                                <div class="modal-body p-0 text-center">
+                                    <button type="button" onclick="$('#photoModal').modal('hide')" style="position:absolute;top:-15px;right:-15px;z-index:10;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;line-height:34px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&times;</button>
+                                    <img id="photoModalImg" src="" alt="" style="max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+                                    <p id="photoModalTitle" class="text-white mt-2 mb-0" style="font-size:16px;"></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <h3 class="profile-username text-center">{{ $member->full_name }}</h3>
@@ -426,9 +444,7 @@
 @stop
 
 @section('css')
-    {{-- Mobile Responsive Styles --}}
     <link rel="stylesheet" href="{{ asset('css/mobile-responsive.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
           crossorigin="anonymous"/>
@@ -438,6 +454,10 @@
         .timeline {
             position: relative;
             padding-left: 50px;
+        }
+        /* Photo Modal */
+        #photoModal {
+            background: rgba(0,0,0,0.85);
         }
         .timeline::before {
             content: '';
@@ -498,8 +518,13 @@
 @stop
 
 @section('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-    <script>lightbox.option({ resizeDuration: 200, wrapAround: false });</script>
+    <script>
+        function openPhotoModal(url, title) {
+            document.getElementById('photoModalImg').src = url;
+            document.getElementById('photoModalTitle').textContent = title;
+            $('#photoModal').modal('show');
+        }
+    </script>
     {{-- Leaflet JavaScript --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
