@@ -30,6 +30,14 @@ class Clan extends Model
     /**
      * Get all families belonging to this clan
      */
+    public function scopeCore($query)
+    {
+        return $query->where(function($q) {
+            $q->where('description', '!=', 'Auto-created from spouse entry')
+              ->orWhereNull('description');
+        });
+    }
+
     public function families(): HasMany
     {
         return $this->hasMany(Family::class);

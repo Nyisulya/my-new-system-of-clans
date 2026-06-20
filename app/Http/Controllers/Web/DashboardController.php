@@ -127,7 +127,7 @@ class DashboardController extends Controller
         $user = $request->user();
 
         // Get first clan for dashboard (or user's default clan)
-        $clan = Clan::with('families')->first();
+        $clan = Clan::core()->with('families')->first();
 
         // Get statistics (direct calculation to ensure freshness) globally
         $stats = $this->treeBuilder->getTreeStatistics();
@@ -139,7 +139,7 @@ class DashboardController extends Controller
             ->get();
 
         // Get all clans for selector
-        $clans = Clan::withCount('members')->get();
+        $clans = Clan::core()->withCount('members')->get();
 
         // Get families
         $families = Family::withCount('members')->get();

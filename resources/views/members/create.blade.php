@@ -431,7 +431,7 @@
                                     </select>
                                 </div>
 
-                                <button type="button" id="resetLocation" class="btn btn-xs btn-outline-danger mt-2">
+                                <button type="button" id="resetLocation" class="btn btn-sm btn-outline-danger mt-2">
                                     <i class="fas fa-undo"></i> Futa Mahali
                                 </button>
                             </div>

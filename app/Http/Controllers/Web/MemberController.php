@@ -126,7 +126,7 @@ class MemberController extends Controller
         $members = $query->paginate(20)->appends($request->query());
 
         // Get filter options
-        $clans = Clan::all();
+        $clans = Clan::core()->get();
         $families = Family::all();
 
         return view('members.index', compact('members', 'clans', 'families'));
@@ -170,7 +170,7 @@ class MemberController extends Controller
             }
         }
 
-        $clans = Clan::with('families')->get();
+        $clans = Clan::core()->with('families')->get();
         $potentialFathers = Member::where('gender', 'male')->orderBy('first_name')->get();
         $potentialMothers = Member::where('gender', 'female')->orderBy('first_name')->get();
         $potentialSpouses = Member::orderBy('first_name')->get();
@@ -387,7 +387,7 @@ class MemberController extends Controller
     {
         $this->authorize('update', $member);
 
-        $clans = Clan::with('families')->get();
+        $clans = Clan::core()->with('families')->get();
         $families = Family::where('clan_id', $member->clan_id)->get();
         
         $potentialFathers = Member::where('gender', 'male')

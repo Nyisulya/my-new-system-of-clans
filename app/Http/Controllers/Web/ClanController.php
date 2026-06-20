@@ -10,7 +10,7 @@ class ClanController extends Controller
 {
     public function index()
     {
-        $clans = Clan::withCount(['members', 'families'])->paginate(20);
+        $clans = Clan::core()->withCount(['members', 'families'])->paginate(20);
         return view('clans.index', compact('clans'));
     }
 

@@ -26,7 +26,7 @@ class LandingController extends Controller
         $stats = [
             'members'  => Member::count(),
             'families' => Family::count(),
-            'clans'    => Clan::count(),
+            'clans'    => Clan::core()->count(),
         ];
 
         return view('landing', compact('stats'));
