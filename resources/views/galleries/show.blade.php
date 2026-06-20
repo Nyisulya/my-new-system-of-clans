@@ -91,6 +91,7 @@
                             <input type="file" name="photos[]" class="form-control" multiple accept="image/*" required id="galleryFileInput">
                             <small class="text-muted">Picha zitapunguzwa kiotomatiki kabla ya kupakiwa.</small>
                         </div>
+                        <div id="compressionStatus" class="mt-1"></div>
                         <div id="photoPreviewContainer" class="row mt-2"></div>
                     </div>
                     <div class="modal-footer">
@@ -118,20 +119,91 @@
     <script>
         lightbox.option({ resizeDuration: 200, wrapAround: true, albumLabel: 'Picha %1 kati ya %2' });
 
-        // Preview selected photos before upload
-        document.getElementById('galleryFileInput').addEventListener('change', function(e) {
-            const container = document.getElementById('photoPreviewContainer');
-            container.innerHTML = '';
-            Array.from(e.target.files).forEach(file => {
+        // ─── Client-side compression for gallery uploads ───────────────────
+        const MAX_WIDTH    = 1200;   // px
+        const MAX_HEIGHT   = 1200;   // px
+        const JPEG_QUALITY = 0.75;   // 75% quality
+
+        let compressedFiles = []; // holds the DataTransfer-ready compressed files
+
+        /**
+         * Compress a single File (image) and return a Promise<File>
+         */
+        function compressImage(file) {
+            return new Promise((resolve) => {
                 const reader = new FileReader();
-                reader.onload = ev => {
-                    const col = document.createElement('div');
-                    col.className = 'col-4 mb-2';
-                    col.innerHTML = `<img src="${ev.target.result}" class="img-fluid rounded" style="height:100px;object-fit:cover;">`;
-                    container.appendChild(col);
+                reader.onload = (ev) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        let w = img.width, h = img.height;
+                        const ratio = Math.min(MAX_WIDTH / w, MAX_HEIGHT / h, 1.0);
+                        w = Math.round(w * ratio);
+                        h = Math.round(h * ratio);
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width  = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+
+                        canvas.toBlob((blob) => {
+                            const newName = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
+                            resolve(new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() }));
+                        }, 'image/jpeg', JPEG_QUALITY);
+                    };
+                    img.src = ev.target.result;
                 };
                 reader.readAsDataURL(file);
             });
+        }
+
+        document.getElementById('galleryFileInput').addEventListener('change', async function(e) {
+            const container  = document.getElementById('photoPreviewContainer');
+            const statusEl   = document.getElementById('compressionStatus');
+            container.innerHTML = '';
+            compressedFiles     = [];
+
+            if (!e.target.files.length) return;
+
+            statusEl.innerHTML = '<div class="alert alert-info py-1"><i class="fas fa-spinner fa-spin"></i> Inapunguza picha... tafadhali subiri.</div>';
+
+            const origFiles = Array.from(e.target.files);
+            let totalOrig = 0, totalComp = 0;
+
+            for (const file of origFiles) {
+                totalOrig += file.size;
+                const compressed = await compressImage(file);
+                totalComp += compressed.size;
+                compressedFiles.push(compressed);
+
+                // Show preview
+                const col = document.createElement('div');
+                col.className = 'col-4 mb-2';
+                const previewUrl = URL.createObjectURL(compressed);
+                col.innerHTML = `
+                    <div class="position-relative">
+                        <img src="${previewUrl}" class="img-fluid rounded" style="height:100px;object-fit:cover;">
+                        <small class="d-block text-muted text-center" style="font-size:10px;">
+                            ${(file.size/1024).toFixed(0)}KB → ${(compressed.size/1024).toFixed(0)}KB
+                        </small>
+                    </div>`;
+                container.appendChild(col);
+            }
+
+            const saved = Math.round((1 - totalComp/totalOrig) * 100);
+            statusEl.innerHTML = `<div class="alert alert-success py-1">
+                <i class="fas fa-check"></i> Picha ${compressedFiles.length} zimepunguzwa.
+                Ukubwa: ${(totalOrig/1024/1024).toFixed(1)}MB → ${(totalComp/1024/1024).toFixed(1)}MB
+                (imepungua ${saved}%)
+            </div>`;
+
+            // Replace file input files with compressed versions
+            const dt = new DataTransfer();
+            compressedFiles.forEach(f => dt.items.add(f));
+            e.target.files = dt.files;
         });
     </script>
 @stop
+
