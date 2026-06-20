@@ -131,7 +131,7 @@
         {{-- Community --}}
         <div class="sidebar-section-title">{{ __('common.community') }}</div>
 
-        <a href="{{ route('announcements.index') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
+        <a href="{{ route('announcements.feed') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
             <i class="fas fa-bullhorn"></i>
             {{ __('common.announcements') }}
         </a>

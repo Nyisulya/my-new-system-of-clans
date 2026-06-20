@@ -3,7 +3,14 @@
 @section('title', 'News & Updates')
 
 @section('content_header')
-    <h1><i class="fas fa-newspaper"></i> News & Updates</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1><i class="fas fa-bullhorn"></i> Matangazo (Announcements)</h1>
+        @if(auth()->user()->isAdmin())
+            <a href="{{ route('announcements.index') }}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-cog"></i> Utawala (Manage)
+            </a>
+        @endif
+    </div>
 @stop
 
 @section('content')
@@ -17,7 +24,17 @@
                             <span class="description">Posted by {{ $announcement->creator->name ?? 'Admin' }} - {{ $announcement->start_date->format('F j, Y') }}</span>
                         </div>
                         <div class="card-tools">
-                            <span class="badge badge-{{ $announcement->type }}">{{ ucfirst($announcement->type) }}</span>
+                            @if($announcement->type == 'info')
+                                <span class="badge badge-info"><i class="fas fa-info-circle"></i> Taarifa</span>
+                            @elseif($announcement->type == 'success')
+                                <span class="badge badge-success"><i class="fas fa-check-circle"></i> Mafanikio</span>
+                            @elseif($announcement->type == 'warning')
+                                <span class="badge badge-warning"><i class="fas fa-exclamation-triangle"></i> Onyo</span>
+                            @elseif($announcement->type == 'danger')
+                                <span class="badge badge-danger"><i class="fas fa-exclamation-circle"></i> Muhimu/Dharura</span>
+                            @else
+                                <span class="badge badge-{{ $announcement->type }}">{{ ucfirst($announcement->type) }}</span>
+                            @endif
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
