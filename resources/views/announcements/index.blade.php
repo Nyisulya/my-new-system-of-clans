@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th>Kichwa</th>
+                        <th>Maelezo</th>
                         <th>Aina</th>
                         <th>Tarehe ya Kuanza</th>
                         <th>Tarehe ya Kumalizika</th>
@@ -28,7 +29,13 @@
                 <tbody>
                     @forelse($announcements as $announcement)
                         <tr>
-                            <td>{{ $announcement->title }}</td>
+                            <td><strong>{{ $announcement->title }}</strong></td>
+                            <td style="white-space: normal; min-width: 200px; max-width: 400px;">
+                                {{ Str::limit($announcement->content, 100) }}
+                                @if(strlen($announcement->content) > 100)
+                                    <button type="button" class="btn btn-xs btn-link p-0 text-primary" data-toggle="modal" data-content="{{ htmlspecialchars($announcement->content) }}" data-title="{{ htmlspecialchars($announcement->title) }}" onclick="showAnnouncementContent(this)">Soma zaidi</button>
+                                @endif
+                            </td>
                             <td>
                                 <span class="badge badge-{{ $announcement->type }}">
                                     {{ ucfirst($announcement->type) }}
@@ -69,7 +76,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center">Hakuna matangazo yaliyopatikana.</td>
+                            <td colspan="7" class="text-center">Hakuna matangazo yaliyopatikana.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -83,4 +90,36 @@
             </div>
         @endif
     </div>
+
+    <!-- Modal for Announcement Content -->
+    <div class="modal fade" id="announcementModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="announcementModalTitle">Kichwa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="announcementModalContent" style="white-space: pre-wrap;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Funga</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('js')
+<script>
+    function showAnnouncementContent(button) {
+        let content = $(button).data('content');
+        let title = $(button).data('title');
+        $('#announcementModalTitle').text(title);
+        $('#announcementModalContent').text(content);
+        $('#announcementModal').modal('show');
+    }
+</script>
 @stop
