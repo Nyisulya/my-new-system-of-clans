@@ -66,6 +66,7 @@ class FcmChannel
 
             // Send the notification via Firebase Messaging
             $messaging->send($message);
+            Log::info('FCM message successfully sent to token: ' . substr($token, 0, 20) . '...');
         } catch (\Exception $e) {
             Log::error('FCM dispatch failed: ' . $e->getMessage());
         }

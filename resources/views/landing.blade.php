@@ -977,8 +977,7 @@
             </a>
 
             <div class="footer-info">
-                <span><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> +255 756 670 798</span>
-                <span><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@nyahende.nyisu.com</span>
+                <span><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> kwa msaada zaidi au mawasiliano 0787661560</span>
             </div>
         </div>
 
