@@ -336,10 +336,19 @@ class Member extends Model
     public function getProfilePhotoUrlAttribute(): ?string
     {
         if ($this->profile_photo) {
+            // If stored value is a Cloudinary public_id (starts with our folder prefix)
+            if (str_starts_with($this->profile_photo, 'clan-profiles/')) {
+                $cloudName = config('cloudinary.cloud.cloud_name');
+                if ($cloudName) {
+                    return "https://res.cloudinary.com/{$cloudName}/image/upload/w_400,h_400,c_fill,g_face,q_auto,f_auto/{$this->profile_photo}";
+                }
+            }
+
+            // Legacy: local storage path
             return asset('storage/' . $this->profile_photo);
         }
         
-        // Generate default avatar using UI Avatars service
+        // Default avatar
         $name = urlencode($this->first_name . ' ' . $this->last_name);
         $background = $this->gender === 'male' ? '3B82F6' : ($this->gender === 'female' ? 'EC4899' : '8B5CF6');
         

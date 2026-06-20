@@ -5,218 +5,169 @@ namespace App\Services;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 
 class ImageService
 {
-    protected int $maxWidth = 800;
-    protected int $maxHeight = 800;
-    protected int $thumbnailSize = 150;
+    // Max dimensions for profile photos
+    protected int $maxWidth     = 600;
+    protected int $maxHeight    = 600;
+    // JPEG quality (0-100). 75 gives great quality at ~50-100KB
+    protected int $jpegQuality  = 75;
 
     /**
-     * Upload and process a profile photo
-     * 
-     * @param UploadedFile $file
-     * @param string $directory
-     * @return array ['path' => string, 'thumbnail' => string]
+     * Upload a profile photo — compresses first, then uploads to Cloudinary
+     * or falls back to local storage.
      */
-    public function uploadProfilePhoto(UploadedFile $file, string $directory = 'profiles'): array
+    public function uploadProfilePhoto(UploadedFile $file, string $folder = 'clan-profiles'): array
     {
-        // Validate image
-        $this->validateImage($file);
+        // 1. Compress image in memory to small JPEG
+        $compressedData = $this->compressImage($file);
 
-        // Generate unique filename
-        $filename = $this->generateFilename($file);
-        $thumbnailFilename = 'thumb_' . $filename;
-
-        // Create directories if they don't exist
-        $fullPath = $directory . '/' . $filename;
-        $thumbnailPath = $directory . '/thumbnails/' . $thumbnailFilename;
-
-        // Resize and save main image
-        $image = getimagesize($file->getRealPath());
-        
-        if ($image[0] > $this->maxWidth || $image[1] > $this->maxHeight) {
-            $this->resizeAndSave($file, $fullPath, $this->maxWidth, $this->maxHeight);
-        } else {
-            Storage::disk('public')->put($fullPath, file_get_contents($file->getRealPath()));
+        // 2. Upload compressed data
+        if ($this->isCloudinaryConfigured()) {
+            return $this->uploadCompressedToCloudinary($compressedData, $folder);
         }
 
-        // Create thumbnail
-        $this->createThumbnail($file, $thumbnailPath, $this->thumbnailSize);
+        return $this->uploadCompressedToLocal($compressedData, 'profiles');
+    }
+
+    /**
+     * Compress image: resize to max 600x600, convert to JPEG at 75% quality.
+     * Returns raw JPEG binary string.
+     */
+    protected function compressImage(UploadedFile $file): string
+    {
+        $imageData = file_get_contents($file->getRealPath());
+        $src = @imagecreatefromstring($imageData);
+
+        if ($src === false) {
+            throw new \Exception('Picha hii haiwezi kusomwa. Tafadhali jaribu picha nyingine.');
+        }
+
+        $originalWidth  = imagesx($src);
+        $originalHeight = imagesy($src);
+
+        // Calculate new dimensions keeping aspect ratio
+        $ratio     = min($this->maxWidth / $originalWidth, $this->maxHeight / $originalHeight, 1.0);
+        $newWidth  = (int) round($originalWidth * $ratio);
+        $newHeight = (int) round($originalHeight * $ratio);
+
+        // Create resized canvas
+        $dst = imagecreatetruecolor($newWidth, $newHeight);
+
+        // White background (for transparency in PNG/GIF)
+        $white = imagecolorallocate($dst, 255, 255, 255);
+        imagefilledrectangle($dst, 0, 0, $newWidth, $newHeight, $white);
+
+        // Resample (high quality)
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+
+        // Capture as JPEG
+        ob_start();
+        imagejpeg($dst, null, $this->jpegQuality);
+        $compressed = ob_get_clean();
+
+        imagedestroy($src);
+        imagedestroy($dst);
+
+        \Log::info('ImageService: compressed photo', [
+            'original_size' => strlen($imageData),
+            'compressed_size' => strlen($compressed),
+            'original_dims' => "{$originalWidth}x{$originalHeight}",
+            'new_dims' => "{$newWidth}x{$newHeight}",
+        ]);
+
+        return $compressed;
+    }
+
+    /**
+     * Upload compressed JPEG binary to Cloudinary
+     */
+    protected function uploadCompressedToCloudinary(string $jpegData, string $folder): array
+    {
+        // Write to a temp file so Cloudinary SDK can read it
+        $tempPath = sys_get_temp_dir() . '/' . Str::uuid() . '.jpg';
+        file_put_contents($tempPath, $jpegData);
+
+        try {
+            $cloudinary = new \Cloudinary\Cloudinary([
+                'cloud' => [
+                    'cloud_name' => config('cloudinary.cloud.cloud_name'),
+                    'api_key'    => config('cloudinary.cloud.api_key'),
+                    'api_secret' => config('cloudinary.cloud.api_secret'),
+                ],
+            ]);
+
+            $result = $cloudinary->uploadApi()->upload($tempPath, [
+                'folder'        => $folder,
+                'resource_type' => 'image',
+                // Cloudinary will also optimize on delivery via f_auto, q_auto in URL
+            ]);
+
+            return [
+                'path' => $result['public_id'],
+                'url'  => $result['secure_url'],
+            ];
+        } finally {
+            // Always clean up temp file
+            if (file_exists($tempPath)) {
+                unlink($tempPath);
+            }
+        }
+    }
+
+    /**
+     * Upload compressed JPEG binary to local storage (fallback)
+     */
+    protected function uploadCompressedToLocal(string $jpegData, string $directory): array
+    {
+        $filename = Str::uuid() . '.jpg';
+        $fullPath = $directory . '/' . $filename;
+
+        Storage::disk('public')->put($fullPath, $jpegData);
 
         return [
             'path' => $fullPath,
-            'thumbnail' => $thumbnailPath,
-            'url' => Storage::disk('public')->url($fullPath),
-            'thumbnail_url' => Storage::disk('public')->url($thumbnailPath),
+            'url'  => Storage::disk('public')->url($fullPath),
         ];
     }
 
     /**
-     * Resize and save image
-     */
-    protected function resizeAndSave(UploadedFile $file, string $path, int $maxWidth, int $maxHeight): void
-    {
-        $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
-        
-        if ($image === false) {
-            throw new \Exception('Failed to create image from file');
-        }
-
-        $originalWidth = imagesx($image);
-        $originalHeight = imagesy($image);
-
-        // Calculate new dimensions maintaining aspect ratio
-        $ratio = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
-        $newWidth = (int) ($originalWidth * $ratio);
-        $newHeight = (int) ($originalHeight * $ratio);
-
-        // Create new image
-        $resized = imagecreatetruecolor($newWidth, $newHeight);
-        
-        // Preserve transparency for PNG
-        if ($file->getClientOriginalExtension() === 'png') {
-            imagealphablending($resized, false);
-            imagesavealpha($resized, true);
-        }
-
-        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
-
-        // Save to storage
-        ob_start();
-        
-        switch ($file->getClientOriginalExtension()) {
-            case 'png':
-                imagepng($resized, null, 9);
-                break;
-            case 'gif':
-                imagegif($resized);
-                break;
-            default:
-                imagejpeg($resized, null, 90);
-        }
-        
-        $imageData = ob_get_clean();
-        
-        Storage::disk('public')->put($path, $imageData);
-
-        imagedestroy($image);
-        imagedestroy($resized);
-    }
-
-    /**
-     * Create thumbnail
-     */
-    protected function createThumbnail(UploadedFile $file, string $path, int $size): void
-    {
-        $image = imagecreatefromstring(file_get_contents($file->getRealPath()));
-        
-        if ($image === false) {
-            return;
-        }
-
-        $originalWidth = imagesx($image);
-        $originalHeight = imagesy($image);
-
-        // Calculate crop dimensions (square crop from center)
-        $cropSize = min($originalWidth, $originalHeight);
-        $cropX = ($originalWidth - $cropSize) / 2;
-        $cropY = ($originalHeight - $cropSize) / 2;
-
-        // Create thumbnail
-        $thumbnail = imagecreatetruecolor($size, $size);
-        
-        if ($file->getClientOriginalExtension() === 'png') {
-            imagealphablending($thumbnail, false);
-            imagesavealpha($thumbnail, true);
-        }
-
-        $cropped = imagecrop($image, ['x' => $cropX, 'y' => $cropY, 'width' => $cropSize, 'height' => $cropSize]);
-        
-        if ($cropped !== false) {
-            imagecopyresampled($thumbnail, $cropped, 0, 0, 0, 0, $size, $size, $cropSize, $cropSize);
-            imagedestroy($cropped);
-        }
-
-        // Save thumbnail
-        ob_start();
-        imagejpeg($thumbnail, null, 85);
-        $thumbnailData = ob_get_clean();
-        
-        Storage::disk('public')->put($path, $thumbnailData);
-
-        imagedestroy($image);
-        imagedestroy($thumbnail);
-    }
-
-    /**
-     * Validate uploaded image
-     */
-    protected function validateImage(UploadedFile $file): void
-    {
-        $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $maxSize = 2 * 1024 * 1024; // 2MB
-
-        if (!in_array($file->getMimeType(), $allowedMimes)) {
-            throw new \Exception('Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.');
-        }
-
-        if ($file->getSize() > $maxSize) {
-            throw new \Exception('File size exceeds 2MB limit.');
-        }
-    }
-
-    /**
-     * Generate unique filename
-     */
-    protected function generateFilename(UploadedFile $file): string
-    {
-        $extension = $file->getClientOriginalExtension();
-        return Str::uuid() . '.' . $extension;
-    }
-
-    /**
-     * Delete image and its thumbnail
-     * 
-     * @param string $path
-     * @return bool
+     * Delete image from Cloudinary or local storage
      */
     public function deleteImage(string $path): bool
     {
-        $deleted = Storage::disk('public')->delete($path);
+        if ($this->isCloudinaryConfigured() && str_starts_with($path, 'clan-profiles/')) {
+            try {
+                $cloudinary = new \Cloudinary\Cloudinary([
+                    'cloud' => [
+                        'cloud_name' => config('cloudinary.cloud.cloud_name'),
+                        'api_key'    => config('cloudinary.cloud.api_key'),
+                        'api_secret' => config('cloudinary.cloud.api_secret'),
+                    ],
+                ]);
+                $cloudinary->adminApi()->deleteAssets([$path]);
+                return true;
+            } catch (\Exception $e) {
+                \Log::warning("Cloudinary delete failed for {$path}: " . $e->getMessage());
+                return false;
+            }
+        }
 
-        // Try to delete thumbnail
+        // Local storage fallback
+        $deleted       = Storage::disk('public')->delete($path);
         $thumbnailPath = dirname($path) . '/thumbnails/thumb_' . basename($path);
         Storage::disk('public')->delete($thumbnailPath);
-
         return $deleted;
     }
 
     /**
-     * Get image dimensions
-     * 
-     * @param string $path
-     * @return array|null
+     * Check if Cloudinary is configured via .env
      */
-    public function getImageDimensions(string $path): ?array
+    protected function isCloudinaryConfigured(): bool
     {
-        $fullPath = Storage::disk('public')->path($path);
-        
-        if (!file_exists($fullPath)) {
-            return null;
-        }
-
-        $dimensions = getimagesize($fullPath);
-        
-        if (!$dimensions) {
-            return null;
-        }
-
-        return [
-            'width' => $dimensions[0],
-            'height' => $dimensions[1],
-            'mime' => $dimensions['mime'],
-        ];
+        return !empty(config('cloudinary.cloud.cloud_name'))
+            && !empty(config('cloudinary.cloud.api_key'))
+            && !empty(config('cloudinary.cloud.api_secret'));
     }
 }

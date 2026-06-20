@@ -91,7 +91,7 @@ class UpdateMemberRequest extends FormRequest
             'district' => ['nullable', 'string', 'max:255'],
             'country' => ['nullable', 'string', 'max:255'],
             
-            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
             
             'biography' => ['nullable', 'string', 'max:5000'],
             'occupation' => ['nullable', 'string', 'max:255'],

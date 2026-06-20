@@ -118,7 +118,7 @@ class StoreMemberRequest extends FormRequest
             'district' => ['nullable', 'string', 'max:255'],
             'country' => ['nullable', 'string', 'max:255'],
             
-            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
             
             'biography' => ['nullable', 'string', 'max:5000'],
             'occupation' => ['nullable', 'string', 'max:255'],
@@ -136,7 +136,7 @@ class StoreMemberRequest extends FormRequest
             'family_id.required' => 'Please select a family.',
             'date_of_birth.before' => 'Date of birth must be in the past.',
             'date_of_death.after' => 'Date of death must be after date of birth.',
-            'profile_photo.max' => 'Profile photo must not exceed 2MB.',
+            'profile_photo.max' => 'Profile photo must not exceed 5MB.',
         ];
     }
 }
