@@ -75,30 +75,36 @@
         @endforelse
     </div>
 
-    <!-- Upload Modal -->
+    <!-- Upload Modal — AJAX one-by-one uploader -->
     <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <form action="{{ route('galleries.upload-photos', $gallery) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title"><i class="fas fa-upload"></i> Pakia Picha</h5>
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-upload"></i> Pakia Picha</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Chagua Picha (unaweza chagua nyingi)</label>
+                        <input type="file" name="photos[]" class="form-control" multiple accept="image/*" id="galleryFileInput">
+                        <small class="text-muted">Kila picha itapunguzwa na kupakiwa moja moja — hakuna tatizo la ukubwa.</small>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Chagua Picha (unaweza chagua nyingi)</label>
-                            <input type="file" name="photos[]" class="form-control" multiple accept="image/*" required id="galleryFileInput">
-                            <small class="text-muted">Picha zitapunguzwa kiotomatiki kabla ya kupakiwa.</small>
+                    <div id="compressionStatus" class="mt-1"></div>
+                    <div id="photoPreviewContainer" class="row mt-2"></div>
+                    <div id="uploadProgressContainer" class="mt-2" style="display:none;">
+                        <div class="progress">
+                            <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                 role="progressbar" style="width:0%">0%</div>
                         </div>
-                        <div id="compressionStatus" class="mt-1"></div>
-                        <div id="photoPreviewContainer" class="row mt-2"></div>
+                        <small id="uploadProgressText" class="text-muted"></small>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Ghairi</button>
-                        <button type="submit" class="btn btn-success"><i class="fas fa-cloud-upload-alt"></i> Pakia</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="cancelUploadBtn">Ghairi</button>
+                    <button type="button" class="btn btn-success" id="startUploadBtn" disabled>
+                        <i class="fas fa-cloud-upload-alt"></i> Pakia
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -119,39 +125,36 @@
     <script>
         lightbox.option({ resizeDuration: 200, wrapAround: true, albumLabel: 'Picha %1 kati ya %2' });
 
-        // ─── Client-side compression for gallery uploads ───────────────────
-        const MAX_WIDTH    = 1200;   // px
-        const MAX_HEIGHT   = 1200;   // px
-        const JPEG_QUALITY = 0.75;   // 75% quality
+        // ─── Settings ──────────────────────────────────────────────────────
+        const MAX_W  = 1200;
+        const MAX_H  = 1200;
+        const QUALITY = 0.75;
+        const UPLOAD_URL = '{{ route('galleries.upload-photos', $gallery) }}';
+        const CSRF_TOKEN = '{{ csrf_token() }}';
 
-        let compressedFiles = []; // holds the DataTransfer-ready compressed files
+        let compressedFiles = [];
 
-        /**
-         * Compress a single File (image) and return a Promise<File>
-         */
+        // ─── Compress one image → returns Promise<File> ────────────────────
         function compressImage(file) {
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
                 const reader = new FileReader();
-                reader.onload = (ev) => {
+                reader.onload = ev => {
                     const img = new Image();
                     img.onload = () => {
                         let w = img.width, h = img.height;
-                        const ratio = Math.min(MAX_WIDTH / w, MAX_HEIGHT / h, 1.0);
+                        const ratio = Math.min(MAX_W / w, MAX_H / h, 1.0);
                         w = Math.round(w * ratio);
                         h = Math.round(h * ratio);
-
                         const canvas = document.createElement('canvas');
-                        canvas.width  = w;
-                        canvas.height = h;
+                        canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
-                        ctx.fillStyle = '#ffffff';
+                        ctx.fillStyle = '#fff';
                         ctx.fillRect(0, 0, w, h);
                         ctx.drawImage(img, 0, 0, w, h);
-
-                        canvas.toBlob((blob) => {
-                            const newName = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
-                            resolve(new File([blob], newName, { type: 'image/jpeg', lastModified: Date.now() }));
-                        }, 'image/jpeg', JPEG_QUALITY);
+                        canvas.toBlob(blob => {
+                            const name = file.name.replace(/\.[^/.]+$/, '') + '.jpg';
+                            resolve(new File([blob], name, { type: 'image/jpeg' }));
+                        }, 'image/jpeg', QUALITY);
                     };
                     img.src = ev.target.result;
                 };
@@ -159,51 +162,94 @@
             });
         }
 
+        // ─── On file selection: compress & preview ─────────────────────────
         document.getElementById('galleryFileInput').addEventListener('change', async function(e) {
-            const container  = document.getElementById('photoPreviewContainer');
-            const statusEl   = document.getElementById('compressionStatus');
+            const container = document.getElementById('photoPreviewContainer');
+            const statusEl  = document.getElementById('compressionStatus');
+            const uploadBtn = document.getElementById('startUploadBtn');
             container.innerHTML = '';
-            compressedFiles     = [];
+            compressedFiles = [];
+            uploadBtn.disabled = true;
 
             if (!e.target.files.length) return;
 
-            statusEl.innerHTML = '<div class="alert alert-info py-1"><i class="fas fa-spinner fa-spin"></i> Inapunguza picha... tafadhali subiri.</div>';
+            statusEl.innerHTML = '<div class="alert alert-info py-1"><i class="fas fa-spinner fa-spin"></i> Inapunguza picha...</div>';
 
-            const origFiles = Array.from(e.target.files);
             let totalOrig = 0, totalComp = 0;
-
-            for (const file of origFiles) {
+            for (const file of Array.from(e.target.files)) {
                 totalOrig += file.size;
                 const compressed = await compressImage(file);
                 totalComp += compressed.size;
                 compressedFiles.push(compressed);
 
-                // Show preview
+                // preview card
                 const col = document.createElement('div');
                 col.className = 'col-4 mb-2';
-                const previewUrl = URL.createObjectURL(compressed);
                 col.innerHTML = `
-                    <div class="position-relative">
-                        <img src="${previewUrl}" class="img-fluid rounded" style="height:100px;object-fit:cover;">
-                        <small class="d-block text-muted text-center" style="font-size:10px;">
-                            ${(file.size/1024).toFixed(0)}KB → ${(compressed.size/1024).toFixed(0)}KB
-                        </small>
-                    </div>`;
+                    <img src="${URL.createObjectURL(compressed)}" class="img-fluid rounded" style="height:90px;object-fit:cover;">
+                    <small class="d-block text-center text-muted" style="font-size:10px;">
+                        ${(file.size/1024).toFixed(0)}KB → ${(compressed.size/1024).toFixed(0)}KB
+                    </small>`;
                 container.appendChild(col);
             }
 
-            const saved = Math.round((1 - totalComp/totalOrig) * 100);
+            const saved = Math.round((1 - totalComp / totalOrig) * 100);
             statusEl.innerHTML = `<div class="alert alert-success py-1">
-                <i class="fas fa-check"></i> Picha ${compressedFiles.length} zimepunguzwa.
-                Ukubwa: ${(totalOrig/1024/1024).toFixed(1)}MB → ${(totalComp/1024/1024).toFixed(1)}MB
+                <i class="fas fa-check-circle"></i>
+                Picha <strong>${compressedFiles.length}</strong> tayari.
+                ${(totalOrig/1024/1024).toFixed(1)}MB → ${(totalComp/1024/1024).toFixed(1)}MB
                 (imepungua ${saved}%)
             </div>`;
+            uploadBtn.disabled = false;
+        });
 
-            // Replace file input files with compressed versions
-            const dt = new DataTransfer();
-            compressedFiles.forEach(f => dt.items.add(f));
-            e.target.files = dt.files;
+        // ─── Upload one-by-one via AJAX ────────────────────────────────────
+        document.getElementById('startUploadBtn').addEventListener('click', async function() {
+            if (!compressedFiles.length) return;
+
+            const progressContainer = document.getElementById('uploadProgressContainer');
+            const progressBar       = document.getElementById('uploadProgressBar');
+            const progressText      = document.getElementById('uploadProgressText');
+            const statusEl          = document.getElementById('compressionStatus');
+            const uploadBtn         = document.getElementById('startUploadBtn');
+            const cancelBtn         = document.getElementById('cancelUploadBtn');
+
+            progressContainer.style.display = 'block';
+            uploadBtn.disabled  = true;
+            cancelBtn.disabled  = true;
+
+            let done = 0;
+            let failed = 0;
+
+            for (const file of compressedFiles) {
+                progressText.textContent = `Inapakia ${done + 1} kati ya ${compressedFiles.length}: ${file.name}`;
+
+                const formData = new FormData();
+                formData.append('_token', CSRF_TOKEN);
+                formData.append('photos[]', file);
+
+                try {
+                    const resp = await fetch(UPLOAD_URL, { method: 'POST', body: formData });
+                    if (!resp.ok) throw new Error('Upload failed');
+                } catch (err) {
+                    failed++;
+                }
+
+                done++;
+                const pct = Math.round((done / compressedFiles.length) * 100);
+                progressBar.style.width = pct + '%';
+                progressBar.textContent = pct + '%';
+            }
+
+            // Done — reload page to show new photos
+            if (failed === 0) {
+                statusEl.innerHTML = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Picha zote zimepakiwa! Ukurasa unafunguka upya...</div>';
+            } else {
+                statusEl.innerHTML = `<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> ${failed} picha hazikupakiwa. Nyingine zimefanikiwa.</div>`;
+            }
+            setTimeout(() => location.reload(), 1500);
         });
     </script>
 @stop
+
 
