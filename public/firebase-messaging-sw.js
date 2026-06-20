@@ -42,9 +42,7 @@ if (firebaseConfig.apiKey) {
         }
 
         const notificationOptions = {
-            body: body,
-            icon: icon,
-            data: data
+            body: body
         };
 
         return self.registration.showNotification(title, notificationOptions);
