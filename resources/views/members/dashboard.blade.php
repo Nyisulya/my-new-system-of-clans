@@ -16,9 +16,27 @@
         <div class="card card-primary card-outline">
             <div class="card-body box-profile">
                 <div class="text-center">
+                    @php
+                        $cloudName = config('cloudinary.cloud.cloud_name');
+                        if ($cloudName && str_starts_with($member->profile_photo ?? '', 'clan-profiles/')) {
+                            $fullPhotoUrl = "https://res.cloudinary.com/{$cloudName}/image/upload/q_auto,f_auto/{$member->profile_photo}";
+                        } else {
+                            $fullPhotoUrl = $member->profile_photo_url;
+                        }
+                    @endphp
                     <img class="profile-user-img img-fluid img-circle"
                          src="{{ $member->profile_photo_url }}"
-                         alt="Picha ya mwanachama">
+                         alt="{{ $member->full_name }}"
+                         id="profileThumb"
+                         data-full="{{ $fullPhotoUrl }}"
+                         data-title="{{ $member->full_name }}"
+                         style="width:150px;height:150px;object-fit:cover;cursor:zoom-in;"
+                         title="Bonyeza kuona picha kubwa"
+                         onclick="openPhotoModal(this.dataset.full, this.dataset.title)"
+                    >
+                    <small class="d-block text-muted mt-1" style="font-size:10px;">
+                        <i class="fas fa-search-plus"></i> Bonyeza kuona
+                    </small>
                 </div>
                 <h3 class="profile-username text-center">{{ $member->full_name }}</h3>
                 <p class="text-muted text-center">{{ $member->occupation ?? 'Mwanachama' }}</p>
@@ -415,6 +433,19 @@
         </div>
     </div>
 </div>
+
+{{-- Full-screen photo modal --}}
+<div class="modal fade" id="photoModal" tabindex="-1" role="dialog" style="z-index:99999;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:90vw;">
+        <div class="modal-content" style="background:transparent;border:none;box-shadow:none;">
+            <div class="modal-body p-0 text-center">
+                <button type="button" onclick="$('#photoModal').modal('hide')" style="position:absolute;top:-15px;right:-15px;z-index:10;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;line-height:34px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.4);">&times;</button>
+                <img id="photoModalImg" src="" alt="" style="max-width:100%;max-height:85vh;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+                <p id="photoModalTitle" class="text-white mt-2 mb-0" style="font-size:16px;"></p>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('css')
@@ -424,6 +455,10 @@
           crossorigin="anonymous"/>
     
     <style>
+        /* Photo Modal */
+        #photoModal {
+            background: rgba(0,0,0,0.85);
+        }
         /* Timeline Styles */
         .timeline {
             position: relative;
@@ -493,6 +528,12 @@
             crossorigin="anonymous"></script>
     
     <script>
+        function openPhotoModal(url, title) {
+            document.getElementById('photoModalImg').src = url;
+            document.getElementById('photoModalTitle').textContent = title;
+            $('#photoModal').modal('show');
+        }
+
         $(document).ready(function() {
             // Check if member has coordinates
             @if($member->current_lat && $member->current_lng)
