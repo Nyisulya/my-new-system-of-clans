@@ -9,6 +9,10 @@
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v={{ time() }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}?v={{ time() }}">
     <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0d1b2a">
     @if(config('services.google.analytics_id'))
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>
@@ -448,6 +452,65 @@
         }
     </script>
 @endauth
+
+<!-- PWA Install Banner -->
+<div id="pwa-install-banner" class="alert alert-info shadow-lg" role="alert" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 400px; width: 90%; border-radius: 12px;">
+    <div class="d-flex align-items-center">
+        <img src="{{ asset('favicon.png') }}" width="45" height="45" class="rounded mr-3" alt="Logo">
+        <div style="flex-grow: 1;">
+            <strong style="font-size: 1.1rem; color: #0d1b2a;">Nyahende App</strong><br>
+            <span style="font-size: 0.85rem; color: #1a202c;">Sakinisha mfumo kwenye simu yako kwa uzoefu bora na haraka!</span>
+        </div>
+    </div>
+    <div class="mt-3 text-right">
+        <button type="button" class="btn btn-sm btn-outline-secondary" id="pwa-dismiss-btn" style="border-radius: 20px; padding: 4px 15px;">Baadaye</button>
+        <button type="button" class="btn btn-sm btn-primary ml-2" id="pwa-install-btn" style="border-radius: 20px; padding: 4px 15px;">Sakinisha Sasa</button>
+    </div>
+</div>
+
+<script>
+    let deferredPrompt;
+    const installBanner = document.getElementById('pwa-install-banner');
+    const installBtn = document.getElementById('pwa-install-btn');
+    const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+    // Mteja akiingia na inaruhusiwa ku-install
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Zuia default mini-infobar ya Chrome
+        e.preventDefault();
+        // Hifadhi event kwa matumizi ya baadae
+        deferredPrompt = e;
+        
+        // Angalia kama alishakataa ndani ya masaa 24
+        if(!localStorage.getItem('pwa_dismissed')) {
+            installBanner.style.display = 'block';
+        }
+    });
+
+    installBtn.addEventListener('click', async () => {
+        installBanner.style.display = 'none';
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`Matokeo ya usakinishaji: ${outcome}`);
+            deferredPrompt = null;
+        }
+    });
+
+    dismissBtn.addEventListener('click', () => {
+        installBanner.style.display = 'none';
+        // Hifadhi uamuzi wa mteja ili asisumbuliwe kila sekunde (Saa 24)
+        localStorage.setItem('pwa_dismissed', 'true');
+        setTimeout(() => {
+            localStorage.removeItem('pwa_dismissed');
+        }, 86400000); // 24 hours
+    });
+
+    window.addEventListener('appinstalled', () => {
+        installBanner.style.display = 'none';
+        deferredPrompt = null;
+    });
+</script>
 
 </body>
 </html>

@@ -67,3 +67,14 @@ if (firebaseConfig.apiKey) {
 } else {
     console.warn('[firebase-messaging-sw.js] Firebase API key not found in registration query parameters.');
 }
+
+// ==========================================
+// PWA Requirements
+// ==========================================
+// A fetch event listener is required for Chrome to recognize this as a valid PWA.
+self.addEventListener('fetch', function(event) {
+    // We don't need to cache anything manually for now, just let the request go to the network
+    event.respondWith(fetch(event.request).catch(function() {
+        return new Response('Network error occurred.');
+    }));
+});
