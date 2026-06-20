@@ -216,19 +216,18 @@ class TreeBuilderService
      * @param int $clanId
      * @return array
      */
-    public function getTreeStatistics(int $clanId): array
+    public function getTreeStatistics(?int $clanId = null): array
     {
-        $totalMembers = Member::where('clan_id', $clanId)->count();
-        $aliveMembers = Member::where('clan_id', $clanId)->where('status', 'alive')->count();
-        $deceasedMembers = Member::where('clan_id', $clanId)->where('status', 'deceased')->count();
+        $totalMembers = Member::count();
+        $aliveMembers = Member::where('status', 'alive')->count();
+        $deceasedMembers = Member::where('status', 'deceased')->count();
         
-        $maleCount = Member::where('clan_id', $clanId)->where('gender', 'male')->count();
-        $femaleCount = Member::where('clan_id', $clanId)->where('gender', 'female')->count();
+        $maleCount = Member::where('gender', 'male')->count();
+        $femaleCount = Member::where('gender', 'female')->count();
         
-        $maxGeneration = Member::where('clan_id', $clanId)->max('generation_number') ?? 0;
+        $maxGeneration = Member::max('generation_number') ?? 0;
         
-        $ageDistribution = Member::where('clan_id', $clanId)
-                                ->where('status', 'alive')
+        $ageDistribution = Member::where('status', 'alive')
                                 ->get()
                                 ->groupBy(function($member) {
                                     $age = $member->age ?? 0;

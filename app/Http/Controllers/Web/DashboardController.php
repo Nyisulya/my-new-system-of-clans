@@ -21,13 +21,8 @@ class DashboardController extends Controller
     public function getCategoryMembers(Request $request)
     {
         $category = $request->query('category');
-        $clan = Clan::first(); // Should match the logic in index()
         
-        if (!$clan) {
-            return response()->json(['html' => '<p>No clan found.</p>']);
-        }
-
-        $query = Member::where('clan_id', $clan->id);
+        $query = Member::query();
 
         if ($category && str_starts_with($category, 'generation_')) {
             $genNum = (int) str_replace('generation_', '', $category);
@@ -134,24 +129,11 @@ class DashboardController extends Controller
         // Get first clan for dashboard (or user's default clan)
         $clan = Clan::with('families')->first();
 
-        if (!$clan) {
-            return view('dashboard.index', [
-                'stats' => $this->getEmptyStats(),
-                'recentMembers' => collect(),
-                'clans' => collect(),
-                'families' => collect(),
-                'clan' => null,
-                'user' => $user,
-                'generationCounts' => [],
-            ]);
-        }
+        // Get statistics (direct calculation to ensure freshness) globally
+        $stats = $this->treeBuilder->getTreeStatistics();
 
-        // Get statistics (direct calculation to ensure freshness)
-        $stats = $this->treeBuilder->getTreeStatistics($clan->id);
-
-        // Get recent members
+        // Get recent members globally
         $recentMembers = Member::with(['father', 'mother', 'family'])
-            ->where('clan_id', $clan->id)
             ->latest()
             ->limit(10)
             ->get();
@@ -159,21 +141,18 @@ class DashboardController extends Controller
         // Get all clans for selector
         $clans = Clan::withCount('members')->get();
 
-        // Get families in clan
-        $families = Family::where('clan_id', $clan->id)
-            ->withCount('members')
-            ->get();
+        // Get families
+        $families = Family::withCount('members')->get();
 
-        // Get dynamic generations with member counts
-        $maxGen = Member::where('clan_id', $clan->id)->max('generation_number') ?? 0;
+        // Get dynamic generations with member counts globally
+        $maxGen = Member::max('generation_number') ?? 0;
         
         $generationCounts = [];
         for ($i = 1; $i <= $maxGen; $i++) {
             $generationCounts[$i] = 0;
         }
 
-        $rawCounts = Member::where('clan_id', $clan->id)
-            ->select('generation_number', \DB::raw('count(*) as total'))
+        $rawCounts = Member::select('generation_number', \DB::raw('count(*) as total'))
             ->groupBy('generation_number')
             ->get();
 
