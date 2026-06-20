@@ -440,10 +440,63 @@
     <script src="{{ asset('js/location-data.js') }}"></script>
     <script>
         $(document).ready(function() {
-            // Custom file input label update
-            $(".custom-file-input").on("change", function() {
+            // Custom file input label update & Image Compression
+            $(".custom-file-input").on("change", function(e) {
                 var fileName = $(this).val().split("\\").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                
+                let file = e.target.files[0];
+                if (!file || !file.type.startsWith('image/')) return;
+                
+                let fileInput = e.target;
+                let reader = new FileReader();
+                reader.onload = (readerEvent) => { 
+                    let img = new Image();
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        let maxWidth = 800;
+                        let maxHeight = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Compress to 70% quality JPEG
+                        canvas.toBlob(function(blob) {
+                            if(blob) {
+                                let newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg", lastModified: Date.now() });
+                                let dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(newFile);
+                                fileInput.files = dataTransfer.files;
+                                
+                                // Preview update if img element exists
+                                let previewImg = $(fileInput).closest('.form-group').find('img.img-thumbnail');
+                                if(previewImg.length) {
+                                    previewImg.attr('src', URL.createObjectURL(blob));
+                                } else {
+                                    $(fileInput).closest('.form-group').append('<div class="mt-2"><img src="'+URL.createObjectURL(blob)+'" alt="Preview" class="img-thumbnail" style="height: 100px"></div>');
+                                }
+                            }
+                        }, 'image/jpeg', 0.7);
+                    };
+                    img.src = readerEvent.target.result;
+                }
+                reader.readAsDataURL(file);
             });
 
             // --- 1. Initialize Select2 ---

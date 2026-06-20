@@ -806,15 +806,55 @@
                 $('#address, #street, #city, #district, #region, #country, #current_lat, #current_lng').val('');
             });
 
-            // Image Preview
-            $('#profilePhoto').change(function(){
+            // Image Preview & Compression
+            $('#profilePhoto').change(function(e){
+                let file = e.target.files[0];
+                if (!file) return;
+                
+                $(this).next('.custom-file-label').addClass("selected").html(file.name);
+                
                 let reader = new FileReader();
-                reader.onload = (e) => { 
-                    $('#profilePreview').attr('src', e.target.result); 
+                reader.onload = (readerEvent) => { 
+                    let img = new Image();
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        let maxWidth = 800;
+                        let maxHeight = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > maxWidth) {
+                                height *= maxWidth / width;
+                                width = maxWidth;
+                            }
+                        } else {
+                            if (height > maxHeight) {
+                                width *= maxHeight / height;
+                                height = maxHeight;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Compress to 70% quality JPEG
+                        canvas.toBlob(function(blob) {
+                            if(blob) {
+                                let newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", { type: "image/jpeg", lastModified: Date.now() });
+                                let dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(newFile);
+                                document.getElementById('profilePhoto').files = dataTransfer.files;
+                                
+                                $('#profilePreview').attr('src', URL.createObjectURL(blob));
+                            }
+                        }, 'image/jpeg', 0.7);
+                    };
+                    img.src = readerEvent.target.result;
                 }
-                reader.readAsDataURL(this.files[0]);
-                var fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+                reader.readAsDataURL(file);
             });
 
             // Toggle Deceased Fields
