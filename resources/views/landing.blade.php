@@ -977,7 +977,10 @@
             </a>
 
             <div class="footer-info">
-                <span><i class="fas fa-phone-alt" style="margin-right: 8px;"></i> kwa msaada zaidi au mawasiliano 0787661560</span>
+                <span style="color: #94a3b8; font-size: 14px; margin-bottom: 4px;">{{ app()->getLocale() == 'sw' ? 'Kwa msaada zaidi au mawasiliano:' : 'For more support or contact:' }}</span>
+                <a href="tel:0787661560" style="color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-phone-alt" style="color: #38bdf8;"></i> 0787 661 560
+                </a>
             </div>
         </div>
 
