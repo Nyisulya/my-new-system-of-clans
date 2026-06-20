@@ -19,10 +19,37 @@ if (firebaseConfig.apiKey) {
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
     
-    // We intentionally DO NOT use messaging.onBackgroundMessage() for notification payloads.
-    // The Firebase SDK will automatically display the notification when it detects a `notification` payload.
-    // This prevents the "This site has been updated in the background" Chrome error.
-    
+    // Handle background notifications
+    messaging.onBackgroundMessage(function(payload) {
+        console.log('[firebase-messaging-sw.js] Received background message: ', payload);
+
+        let title = 'Arifa Mpya';
+        let body = 'Una ujumbe mpya kutoka kwenye mfumo.';
+        let icon = '/favicon.png'; // Make sure this icon exists
+        let data = {};
+
+        if (payload && payload.notification) {
+            if (payload.notification.title) title = payload.notification.title;
+            if (payload.notification.body) body = payload.notification.body;
+            if (payload.notification.icon) icon = payload.notification.icon;
+        } else if (payload && payload.data) {
+            if (payload.data.title) title = payload.data.title;
+            if (payload.data.body) body = payload.data.body;
+        }
+
+        if (payload && payload.data) {
+            data = payload.data;
+        }
+
+        const notificationOptions = {
+            body: body,
+            icon: icon,
+            data: data
+        };
+
+        return self.registration.showNotification(title, notificationOptions);
+    });
+        
     // Handle clicking on the notification in the background
     self.addEventListener('notificationclick', function(event) {
         event.notification.close();
