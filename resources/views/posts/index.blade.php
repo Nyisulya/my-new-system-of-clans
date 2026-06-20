@@ -13,16 +13,22 @@
         <!-- Create Post -->
         <div class="card card-outline card-primary mb-4">
             <div class="card-body">
-                <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" id="postForm">
                     @csrf
                     <div class="form-group">
-                        <textarea name="content" class="form-control" rows="3" placeholder="Andika historia, tangazo, au jambo lolote hapa..." required></textarea>
+                        <textarea name="content" id="postContent" class="form-control" rows="3" placeholder="Andika historia, tangazo, au jambo lolote hapa..." required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="image"><i class="fas fa-image"></i> Weka Picha (Si lazima)</label>
                         <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Tuma Post</button>
+                    <div id="uploadProgressContainer" style="display: none;" class="mb-3">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="uploadProgressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted" id="uploadStatusText">Inachakata picha...</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btnSubmitPost"><i class="fas fa-paper-plane"></i> Tuma Post</button>
                 </form>
             </div>
         </div>
@@ -253,6 +259,105 @@ function openPhotoModal(url, title) {
 }
 
 $(document).ready(function() {
+    // Client-side image compression for Posts to avoid 413 Request Entity Too Large
+    $('#postForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        let fileInput = document.getElementById('image');
+        let file = fileInput.files[0];
+        let content = $('#postContent').val();
+        let formUrl = $(this).attr('action');
+        let btnSubmit = $('#btnSubmitPost');
+        
+        btnSubmit.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Inatuma...');
+        
+        if (!file) {
+            // Submit normally via AJAX if no file
+            submitPostAjax(content, null, formUrl, btnSubmit);
+            return;
+        }
+
+        // Compress image using Canvas
+        $('#uploadProgressContainer').show();
+        $('#uploadStatusText').text('Inapunguza ukubwa wa picha...');
+        $('#uploadProgressBar').css('width', '30%');
+
+        let reader = new FileReader();
+        reader.onload = function(readerEvent) {
+            let img = new Image();
+            img.onload = function() {
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+                let maxWidth = 1920;
+                let maxHeight = 1920;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                $('#uploadProgressBar').css('width', '60%');
+                $('#uploadStatusText').text('Inatuma picha serverni...');
+
+                canvas.toBlob(function(blob) {
+                    submitPostAjax(content, blob, formUrl, btnSubmit);
+                }, 'image/jpeg', 0.92);
+            };
+            img.src = readerEvent.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function submitPostAjax(content, blob, url, btn) {
+        let formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('content', content);
+        if (blob) {
+            formData.append('image', blob, 'post-image.jpg');
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 40) + 60; // 60% to 100%
+                        $('#uploadProgressBar').css('width', percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            success: function(response) {
+                $('#uploadProgressBar').css('width', '100%').removeClass('progress-bar-animated').addClass('bg-success');
+                $('#uploadStatusText').text('Imetumwa kikamilifu!');
+                window.location.reload(); // Reload to see the new post
+            },
+            error: function(xhr) {
+                alert('Kuna tatizo limetokea: ' + (xhr.responseJSON?.message || xhr.statusText));
+                btn.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> Tuma Post');
+                $('#uploadProgressContainer').hide();
+            }
+        });
+    }
     // AJAX for Like
     $('.form-like').on('submit', function(e) {
         e.preventDefault();
