@@ -26,11 +26,19 @@
                             </h5>
                             <p>
                                 @if($notification->data['type'] == 'birthday')
-                                    <strong>{{ $notification->data['member_name'] }}</strong> ana siku ya kuzaliwa tarehe {{ $notification->data['date'] }}!
+                                    <strong>{{ $notification->data['member_name'] ?? 'Mwanachama' }}</strong> ana siku ya kuzaliwa tarehe {{ $notification->data['date'] ?? '' }}!
                                 @elseif($notification->data['type'] == 'anniversary')
-                                    <strong>{{ $notification->data['couple'] }}</strong> wana miaka ya ndoa tarehe {{ $notification->data['date'] }}!
+                                    <strong>{{ $notification->data['couple'] ?? 'Wanandoa' }}</strong> wana miaka ya ndoa tarehe {{ $notification->data['date'] ?? '' }}!
                                 @elseif($notification->data['type'] == 'death_anniversary')
-                                    Kukumbuka <strong>{{ $notification->data['member_name'] }}</strong> - {{ $notification->data['date'] }}
+                                    Kukumbuka <strong>{{ $notification->data['member_name'] ?? '' }}</strong> - {{ $notification->data['date'] ?? '' }}
+                                @elseif($notification->data['type'] == 'announcement')
+                                    <strong>{{ $notification->data['title'] ?? 'Tangazo Jipya' }}</strong>
+                                    <br>
+                                    <a href="{{ route('announcements.feed') }}" class="btn btn-xs btn-outline-info mt-2">
+                                        <i class="fas fa-bullhorn"></i> Soma zaidi
+                                    </a>
+                                @else
+                                    Una ujumbe mpya.
                                 @endif
                             </p>
                             <small class="text-muted">
