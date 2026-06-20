@@ -326,7 +326,7 @@
     {{-- Footer --}}
     <footer class="app-footer">
         <span>&copy; {{ date('Y') }} <strong>Felician Joseph Nyisulya</strong>. {{ __('common.all_rights_reserved') }}</span>
-        <span><i class="fas fa-phone-alt mr-1"></i> +255 756 670 798</span>
+        <span>Kwa msaada zaidi <i class="fas fa-phone-alt mx-1"></i> 0787661560</span>
     </footer>
 </div>
 
