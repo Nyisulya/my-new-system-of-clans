@@ -927,13 +927,6 @@
                     </div>
                     @endforeach
                 </div>
-
-                <div style="text-align: center; margin-top: 40px;">
-                    <a href="{{ route('announcements.index') }}" class="btn btn-outline" style="border-color: #4f46e5; color: #4f46e5;">
-                        <i class="fas fa-arrow-right"></i>
-                        <span>{{ app()->getLocale() == 'sw' ? 'Soma Matangazo Yote' : 'View All Announcements' }}</span>
-                    </a>
-                </div>
             </div>
         </section>
         @endif
@@ -1041,6 +1034,9 @@
 
         <div class="footer-copyright">
             <span>&copy; {{ date('Y') }} <strong>Felician Joseph Nyisulya</strong>. {{ app()->getLocale() == 'sw' ? 'Haki zote zimehifadhiwa.' : 'All rights reserved.' }}</span>
+            <span style="margin: 0 10px;">|</span>
+            <a href="{{ route('announcements.index') }}" style="color: inherit; text-decoration: none; opacity: 0.8; font-size: 13px;">{{ app()->getLocale() == 'sw' ? 'Matangazo Yote' : 'All Announcements' }}</a>
+            <span style="margin: 0 10px;">|</span>
             <span>Made with <i class="fas fa-heart" style="color: #ef4444;"></i> for Ukoo wa Nyahende</span>
         </div>
     </footer>
