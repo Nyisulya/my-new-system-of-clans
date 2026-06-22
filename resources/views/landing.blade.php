@@ -869,18 +869,37 @@
         </section>
 
         <!-- Intro Section -->
-        <section class="intro-section" id="aboutSection" data-aos="fade-up">
+        <section class="intro-section" id="aboutSection" data-aos="fade-up" style="max-width: 1200px; padding-bottom: 40px;">
             <span class="section-badge">{{ app()->getLocale() == 'sw' ? 'Asili na Malengo' : 'Heritage & Vision' }}</span>
             <h2 class="section-title">
                 {{ app()->getLocale() == 'sw' ? 'Kuhusu Ukoo wa Nyahende' : 'About the Nyahende Clan' }}
             </h2>
-            <p class="intro-text">
-                @if(app()->getLocale() == 'sw')
-                    Ukoo wa Nyahende una historia ndefu na tajiri ya umoja, upendo na mshikamano. Mfumo huu wa kidijitali umelenga kuwaunganisha wanafamilia wote walioko maeneo mbalimbali duniani ili kudumisha asili yetu, kushirikiana katika shughuli mbalimbali za maendeleo, na kurithisha historia hii ya thamani kwa watoto na vizazi vyetu vyote.
-                @else
-                    The Nyahende Clan shares a deep-rooted history built on unity, affection, and collaboration. This digital portal is designed to bridge wanafamilia globally, celebrate our rich genealogy, coordinate local development projects, and secure our values and traditions for generations to come.
-                @endif
-            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-top: 30px; text-align: left;">
+                <div style="background: var(--glass-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow);">
+                    <h3 style="color: #764ba2; font-size: 22px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-book-open" style="margin-right: 10px;"></i>{{ app()->getLocale() == 'sw' ? 'Historia Yetu' : 'Our History' }}</h3>
+                    <p style="color: #475569; line-height: 1.8;">
+                        @if(app()->getLocale() == 'sw')
+                            Ukoo wa Nyahende una historia ndefu na tajiri ya umoja, upendo na mshikamano kuanzia kwa waasisi wetu. Mfumo huu wa kidijitali umelenga kuwaunganisha wanafamilia wote walioko maeneo mbalimbali duniani ili kudumisha asili yetu na kurithisha historia hii ya thamani kwa vizazi vyetu vyote. Tunajivunia asili yetu na mchango wa kila mwanafamilia.
+                        @else
+                            The Nyahende Clan shares a deep-rooted history built on unity, affection, and collaboration since our founders. This digital portal is designed to bridge wanafamilia globally, celebrate our rich genealogy, and secure our values and traditions for generations to come. We are proud of our roots and every member's contribution.
+                        @endif
+                    </p>
+                </div>
+
+                <div style="background: var(--glass-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow);">
+                    <h3 style="color: #f59e0b; font-size: 22px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-eye" style="margin-right: 10px;"></i>{{ app()->getLocale() == 'sw' ? 'Dira na Dhima' : 'Vision & Mission' }}</h3>
+                    <p style="color: #475569; line-height: 1.8;">
+                        @if(app()->getLocale() == 'sw')
+                            <strong>Dira Yetu:</strong> Kuwa ukoo imara unaosimama kwenye misingi ya upendo, ushirikiano, na kusaidiana kiuchumi na kijamii.<br><br>
+                            <strong>Dhima Yetu:</strong> Kujenga jukwaa madhubuti la mawasiliano litakalowezesha kila mwanafamilia kutambulika, kushiriki katika shughuli za maendeleo za ukoo (kama michango na kampeni), na kuhifadhi kumbukumbu zetu (Family Tree) kwa usalama na uwazi.
+                        @else
+                            <strong>Our Vision:</strong> To be a strong clan standing on the foundations of love, cooperation, and mutual socio-economic support.<br><br>
+                            <strong>Our Mission:</strong> To build a robust communication platform enabling every family member to be recognized, participate in clan development (like campaigns and welfare), and safely preserve our Family Tree with transparency.
+                        @endif
+                    </p>
+                </div>
+            </div>
         </section>
 
         <!-- Announcements Section -->
