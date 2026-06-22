@@ -4,7 +4,14 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-bullhorn"></i> Matangazo</h1>
+        <div class="d-flex align-items-center">
+            @guest
+            <a href="{{ url('/') }}" class="btn btn-outline-secondary btn-sm mr-3" title="Rudi Mwanzo">
+                <i class="fas fa-arrow-left"></i> Rudi
+            </a>
+            @endguest
+            <h1 class="m-0"><i class="fas fa-bullhorn"></i> Matangazo</h1>
+        </div>
         @auth
         <a href="{{ route('announcements.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Tangazo Jipya

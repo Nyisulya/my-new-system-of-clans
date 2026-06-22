@@ -402,11 +402,19 @@ html, body {
 
 .app-content {
   flex: 1;
-  margin-left: var(--sidebar-width);
-  padding-top: var(--topbar-height);
   min-height: 100vh;
   background: var(--content-bg);
   transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.logged-in .app-content {
+  margin-left: var(--sidebar-width);
+  padding-top: var(--topbar-height);
+}
+
+body:not(.logged-in) .app-content {
+  margin-left: 0;
+  padding-top: 24px;
 }
 
 .app-content-inner {
