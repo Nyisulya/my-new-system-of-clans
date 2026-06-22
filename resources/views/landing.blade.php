@@ -904,13 +904,13 @@
                     <h3 style="color: #10b981; font-size: 22px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-trophy" style="margin-right: 10px;"></i>{{ app()->getLocale() == 'sw' ? 'Mafanikio Yetu' : 'Our Achievements' }}</h3>
                     <p style="color: #475569; line-height: 1.8;">
                         @if(app()->getLocale() == 'sw')
-                            <strong>Kusomesha Vijana:</strong> Tumefanikiwa kusomesha vijana kadhaa kupitia mfuko wa elimu wa ukoo.<br><br>
-                            <strong>Kusaidiana Kijamii:</strong> Tumesimama pamoja kwenye nyakati za shida na raha, tukiwa na mfumo imara wa michango ya dharura.<br><br>
-                            <strong>Utunzaji wa Historia:</strong> Mfumo huu ni dhihirisho la mafanikio yetu katika kuhifadhi mti wa ukoo na kumbukumbu muhimu kidijitali.
+                            <strong>Mabalozi wa Ukoo:</strong> Tunajivunia sana baraka ya kupata watumishi wa Mungu waaminifu, na kuzalisha vijana wenye ujuzi, maarifa ya hali ya juu, na weledi wanaoliletea heshima jina letu.<br><br>
+                            <strong>Mshikamano Imara:</strong> Tumefanikiwa kujenga ukuta usiobomoka wa upendo. Tunasimama bega kwa bega kwenye shida na raha, tukiinuana na kushikana mikono kama familia moja.<br><br>
+                            <strong>Urithi wa Kidijitali:</strong> Mfumo huu ni ushindi mkubwa wa kuhakikisha vizazi vijavyo havipotezi asili. Tumefanikiwa kuunganisha Mti wa Ukoo na kulinda historia yetu kisasa.
                         @else
-                            <strong>Youth Education:</strong> We have successfully supported several youths through our clan education fund.<br><br>
-                            <strong>Social Support:</strong> We stand together in times of need and joy, with a strong emergency welfare system.<br><br>
-                            <strong>Preserving History:</strong> This digital platform is a testament to our success in securely documenting our family tree.
+                            <strong>Clan Ambassadors:</strong> We are blessed and deeply proud to have raised faithful ministers of God and brilliant youths equipped with top-tier skills and knowledge who bring honor to our name.<br><br>
+                            <strong>Unbreakable Solidarity:</strong> We have successfully built a fortress of love. We stand shoulder to shoulder in times of need and joy, uplifting each other as one united family.<br><br>
+                            <strong>Digital Heritage:</strong> This platform is a monumental triumph in ensuring future generations never lose their roots. We have successfully secured our family legacy using modern technology.
                         @endif
                     </p>
                 </div>
