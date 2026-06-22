@@ -901,6 +901,48 @@
                 </div>
             </div>
         </section>
+        <!-- Teasers Section -->
+        <section class="teasers-section" data-aos="fade-up" style="max-width: 1200px; margin: 0 auto; padding: 40px 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                <!-- Family Tree Teaser -->
+                <div style="background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08)); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(99,102,241,0.15); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(99,102,241,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <div style="position: absolute; top: -30px; right: -30px; opacity: 0.05; font-size: 180px; color: #6366f1;">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div style="background: #fff; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(99,102,241,0.2); color: #6366f1; font-size: 26px; z-index: 1;">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h3 style="color: #1e293b; font-size: 22px; font-weight: 700; margin-bottom: 12px; z-index: 1; font-family: 'Playfair Display', serif;">
+                        {{ app()->getLocale() == 'sw' ? 'Mti wa Ukoo' : 'The Family Tree' }}
+                    </h3>
+                    <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 25px; z-index: 1;">
+                        {{ app()->getLocale() == 'sw' ? 'Je, wewe upo tawi gani katika Ukoo wetu? Tayari tuna wanafamilia ' . $stats['members'] . ' kwenye mti. Gundua asili yako na uwajue ndugu zako.' : 'Which branch do you belong to? We already have ' . $stats['members'] . ' members on the tree. Discover your roots today.' }}
+                    </p>
+                    <a href="{{ route('register') }}" class="btn btn-primary" style="border-radius: 30px; padding: 10px 28px; font-weight: 600; z-index: 1; font-size: 14px; box-shadow: 0 4px 15px rgba(99,102,241,0.3);">
+                        <i class="fas fa-user-plus mr-2"></i> {{ app()->getLocale() == 'sw' ? 'Jiunge na Mti' : 'Join the Tree' }}
+                    </a>
+                </div>
+
+                <!-- Gallery Teaser -->
+                <div style="background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.08)); padding: 40px 30px; border-radius: 24px; border: 1px solid rgba(245,158,11,0.15); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(245,158,11,0.15)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                    <div style="position: absolute; top: -30px; left: -30px; opacity: 0.05; font-size: 180px; color: #f59e0b;">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <div style="background: #fff; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(245,158,11,0.2); color: #f59e0b; font-size: 26px; z-index: 1;">
+                        <i class="fas fa-camera-retro"></i>
+                    </div>
+                    <h3 style="color: #1e293b; font-size: 22px; font-weight: 700; margin-bottom: 12px; z-index: 1; font-family: 'Playfair Display', serif;">
+                        {{ app()->getLocale() == 'sw' ? 'Kumbukumbu Zetu' : 'Our Memories' }}
+                    </h3>
+                    <p style="color: #475569; font-size: 15px; line-height: 1.6; margin-bottom: 25px; z-index: 1;">
+                        {{ app()->getLocale() == 'sw' ? 'Tazama picha na kumbukumbu za matukio yetu mbalimbali. Ingia ndani ili kuona albamu nzima ya ukoo na kupakia zako.' : 'View beautiful moments and memories from our clan events. Log in to explore the full gallery.' }}
+                    </p>
+                    <a href="{{ route('login') }}" class="btn" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #fff; border-radius: 30px; padding: 10px 28px; font-weight: 600; z-index: 1; border: none; font-size: 14px; box-shadow: 0 4px 15px rgba(245,158,11,0.3);">
+                        <i class="fas fa-sign-in-alt mr-2"></i> {{ app()->getLocale() == 'sw' ? 'Ingia Ndani' : 'Log In to View' }}
+                    </a>
+                </div>
+            </div>
+        </section>
 
         <!-- Announcements Section -->
         @if(isset($announcements) && $announcements->count() > 0)
