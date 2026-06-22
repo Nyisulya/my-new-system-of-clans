@@ -899,6 +899,21 @@
                         @endif
                     </p>
                 </div>
+
+                <div style="background: var(--glass-bg); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: var(--card-shadow);">
+                    <h3 style="color: #10b981; font-size: 22px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-trophy" style="margin-right: 10px;"></i>{{ app()->getLocale() == 'sw' ? 'Mafanikio Yetu' : 'Our Achievements' }}</h3>
+                    <p style="color: #475569; line-height: 1.8;">
+                        @if(app()->getLocale() == 'sw')
+                            <strong>Kusomesha Vijana:</strong> Tumefanikiwa kusomesha vijana kadhaa kupitia mfuko wa elimu wa ukoo.<br><br>
+                            <strong>Kusaidiana Kijamii:</strong> Tumesimama pamoja kwenye nyakati za shida na raha, tukiwa na mfumo imara wa michango ya dharura.<br><br>
+                            <strong>Utunzaji wa Historia:</strong> Mfumo huu ni dhihirisho la mafanikio yetu katika kuhifadhi mti wa ukoo na kumbukumbu muhimu kidijitali.
+                        @else
+                            <strong>Youth Education:</strong> We have successfully supported several youths through our clan education fund.<br><br>
+                            <strong>Social Support:</strong> We stand together in times of need and joy, with a strong emergency welfare system.<br><br>
+                            <strong>Preserving History:</strong> This digital platform is a testament to our success in securely documenting our family tree.
+                        @endif
+                    </p>
+                </div>
             </div>
         </section>
         <!-- Teasers Section -->
