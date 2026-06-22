@@ -29,6 +29,12 @@ class LandingController extends Controller
             'clans'    => Clan::core()->count(),
         ];
 
-        return view('landing', compact('stats'));
+        // Get latest announcements for public SEO visibility
+        $announcements = \App\Models\Announcement::active()
+            ->orderBy('start_date', 'desc')
+            ->take(3)
+            ->get();
+
+        return view('landing', compact('stats', 'announcements'));
     }
 }

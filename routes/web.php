@@ -26,6 +26,9 @@ Route::get('language/{locale}', [\App\Http\Controllers\Web\LanguageController::c
 // Authentication routes
 Auth::routes();
 
+// Public Routes for SEO
+Route::get('announcements', [\App\Http\Controllers\Web\AnnouncementController::class, 'index'])->name('announcements.index');
+
 // Protected routes (require authentication)
 Route::middleware(['auth'])->group(function () {
     // Dashboard
@@ -68,7 +71,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Announcements & Posts
     Route::get('announcements/feed', [\App\Http\Controllers\Web\AnnouncementController::class, 'feed'])->name('announcements.feed');
-    Route::resource('announcements', \App\Http\Controllers\Web\AnnouncementController::class);
+    Route::resource('announcements', \App\Http\Controllers\Web\AnnouncementController::class)->except(['index']);
 
     // Posts (Timeline)
     Route::get('posts', [\App\Http\Controllers\Web\PostController::class, 'index'])->name('posts.index');

@@ -5,9 +5,11 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1><i class="fas fa-bullhorn"></i> Matangazo</h1>
+        @auth
         <a href="{{ route('announcements.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Tangazo Jipya
         </a>
+        @endauth
     </div>
 @stop
 
@@ -23,7 +25,9 @@
                         <th>Tarehe ya Kuanza</th>
                         <th>Tarehe ya Kumalizika</th>
                         <th>Hali</th>
+                        @auth
                         <th>Vitendo</th>
+                        @endauth
                     </tr>
                 </thead>
                 <tbody>
@@ -59,6 +63,7 @@
                                     <span class="badge badge-secondary">Imeisha</span>
                                 @endif
                             </td>
+                            @auth
                             <td>
                                 <div class="action-buttons">
                                     <a href="{{ route('announcements.edit', $announcement) }}" class="btn btn-xs btn-info" title="Hariri">
@@ -73,6 +78,7 @@
                                     </form>
                                 </div>
                             </td>
+                            @endauth
                         </tr>
                     @empty
                         <tr>

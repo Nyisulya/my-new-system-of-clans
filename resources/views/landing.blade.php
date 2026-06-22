@@ -883,6 +883,42 @@
             </p>
         </section>
 
+        <!-- Announcements Section -->
+        @if(isset($announcements) && $announcements->count() > 0)
+        <section class="features-section" style="background: #f8fafc; padding: 60px 24px;">
+            <div class="features-container">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <span class="section-badge" style="background: rgba(79, 70, 229, 0.15); color: #4f46e5;">{{ app()->getLocale() == 'sw' ? 'Habari na Matangazo' : 'Latest Announcements' }}</span>
+                    <h2 class="section-title">{{ app()->getLocale() == 'sw' ? 'Matangazo ya Hivi Karibuni' : 'Recent Clan News' }}</h2>
+                </div>
+
+                <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    @foreach($announcements as $announcement)
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                        <div class="feature-icon" style="background: rgba(79, 70, 229, 0.1); color: #4f46e5;">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h3 class="feature-name">{{ $announcement->title }}</h3>
+                        <p class="feature-desc" style="font-size: 14px; margin-bottom: 12px; color: #64748b;">
+                            <i class="far fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($announcement->start_date)->format('d M Y') }}
+                        </p>
+                        <p class="feature-desc">
+                            {{ Str::limit(strip_tags($announcement->content), 120) }}
+                        </p>
+                    </div>
+                    @endforeach
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="{{ route('announcements.index') }}" class="btn btn-outline" style="border-color: #4f46e5; color: #4f46e5;">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>{{ app()->getLocale() == 'sw' ? 'Soma Matangazo Yote' : 'View All Announcements' }}</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+        @endif
+
         <!-- Features Section -->
         <section class="features-section" id="featuresSection">
             <div class="features-container">
