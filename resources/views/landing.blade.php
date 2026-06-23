@@ -704,12 +704,12 @@
             .brand-link span {
                 display: none; /* Hide brand text, only show icon */
             }
-            .btn span {
-                display: none; /* Hide button text, only show icons */
-            }
             .btn {
-                padding: 8px 12px;
+                padding: 6px 8px;
                 border-radius: 6px;
+            }
+            .nav-actions {
+                gap: 4px;
             }
         }
     </style>
