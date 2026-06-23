@@ -27,12 +27,20 @@
         body {
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        /* Add padding so it doesn't stick to top/bottom on small screens */
+        .login-wrapper {
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
+            padding: 40px 0;
+            min-height: 100vh;
         }
 
         .particles {
@@ -359,99 +367,101 @@
         <div class="particle" style="width: 70px; height: 70px; left: 70%; top: 80%; animation-delay: 3s;"></div>
     </div>
 
-    <div class="login-container">
-        <div class="login-card">
-            <div class="logo-section">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8M6 13C4.9 13 4 13.9 4 15C4 16.1 4.9 17 6 17C7.1 17 8 16.1 8 15C8 13.9 7.1 13 6 13M18 13C16.9 13 16 13.9 16 15C16 16.1 16.9 17 18 17C19.1 17 20 16.1 20 15C20 13.9 19.1 13 18 13M6 18C4.3 18 3 19.3 3 21H9C9 19.3 7.7 18 6 18M18 18C16.3 18 15 19.3 15 21H21C21 19.3 19.7 18 18 18Z"/>
-                    </svg>
-                </div>
-                <h1>Karibu</h1>
-                <p class="subtitle">Ingia ili kufikia mti wa ukoo wako</p>
-            </div>
-
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> Tafadhali weka taarifa sahihi.
-                </div>
-            @endif
-
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <div class="form-group">
-                    <label for="name">Jina la Mtumiaji (Jina kamili)</label>
-                    <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8Z"/>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8M6 13C4.9 13 4 13.9 4 15C4 16.1 4.9 17 6 17C7.1 17 8 16.1 8 15C8 13.9 7.1 13 6 13M18 13C16.9 13 16 13.9 16 15C16 16.1 16.9 17 18 17C19.1 17 20 16.1 20 15C20 13.9 19.1 13 18 13M6 18C4.3 18 3 19.3 3 21H9C9 19.3 7.7 18 6 18M18 18C16.3 18 15 19.3 15 21H21C21 19.3 19.7 18 18 18Z"/>
                         </svg>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            value="{{ old('name') }}" 
-                            required 
-                            autofocus
-                            placeholder="ingiza jina kamili"
-                        >
                     </div>
-                    @error('name')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
+                    <h1>Karibu</h1>
+                    <p class="subtitle">Ingia ili kufikia mti wa ukoo wako</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Nenosiri (Password)</label>
-                    <div class="input-wrapper">
-                        <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17M18 8C19.1 8 20 8.9 20 10V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V10C4 8.9 4.9 8 6 8H7V6C7 3.2 9.2 1 12 1C14.8 1 17 3.2 17 6V8H18M12 3C10.3 3 9 4.3 9 6V8H15V6C15 4.3 13.7 3 12 3Z"/>
-                        </svg>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            required
-                            placeholder="Ingiza nenosiri lako"
-                        >
-                        <button type="button" class="password-toggle" data-target="password" aria-label="Onyesha nenosiri">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zm0 12c-2.48 0-4.5-2.02-4.5-4.5S9.52 7.5 12 7.5s4.5 2.02 4.5 4.5S14.48 16.5 12 16.5z"/>
-                                <path d="M12 9.75A2.25 2.25 0 109 12a2.25 2.25 0 003-2.25z"/>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> Tafadhali weka taarifa sahihi.
+                    </div>
+                @endif
+
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <div class="form-group">
+                        <label for="name">Jina la Mtumiaji (Jina kamili)</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2M12 8C9.8 8 8 9.8 8 12C8 14.2 9.8 16 12 16C14.2 16 16 14.2 16 12C16 9.8 14.2 8 12 8Z"/>
                             </svg>
-                        </button>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                value="{{ old('name') }}" 
+                                required 
+                                autofocus
+                                placeholder="ingiza jina kamili"
+                            >
+                        </div>
+                        @error('name')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                     </div>
-                    @error('password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
 
-                <div class="remember-forgot">
-                    <div class="remember-me">
-                        <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        <label for="remember">Nikumbuke</label>
+                    <div class="form-group">
+                        <label for="password">Nenosiri (Password)</label>
+                        <div class="input-wrapper">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 17C10.9 17 10 16.1 10 15C10 13.9 10.9 13 12 13C13.1 13 14 13.9 14 15C14 16.1 13.1 17 12 17M18 8C19.1 8 20 8.9 20 10V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V10C4 8.9 4.9 8 6 8H7V6C7 3.2 9.2 1 12 1C14.8 1 17 3.2 17 6V8H18M12 3C10.3 3 9 4.3 9 6V8H15V6C15 4.3 13.7 3 12 3Z"/>
+                            </svg>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                required
+                                placeholder="Ingiza nenosiri lako"
+                            >
+                            <button type="button" class="password-toggle" data-target="password" aria-label="Onyesha nenosiri">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zm0 12c-2.48 0-4.5-2.02-4.5-4.5S9.52 7.5 12 7.5s4.5 2.02 4.5 4.5S14.48 16.5 12 16.5z"/>
+                                    <path d="M12 9.75A2.25 2.25 0 109 12a2.25 2.25 0 003-2.25z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        @error('password')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                     </div>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="forgot-link">Umesahau nenosiri?</a>
-                    @endif
+
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                            <label for="remember">Nikumbuke</label>
+                        </div>
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="forgot-link">Umesahau nenosiri?</a>
+                        @endif
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        Ingia
+                    </button>
+                </form>
+
+                <div class="register-section">
+                    <p>Huna account?</p>
+                    <a href="{{ route('register') }}" class="btn-register">
+                        Fungua Account mpya
+                    </a>
                 </div>
-
-                <button type="submit" class="btn-login">
-                    Ingia
-                </button>
-            </form>
-
-            <div class="register-section">
-                <p>Huna account?</p>
-                <a href="{{ route('register') }}" class="btn-register">
-                    Fungua Account mpya
-                </a>
             </div>
         </div>
     </div>
