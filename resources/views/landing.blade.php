@@ -335,8 +335,8 @@
         .stats-container {
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            justify-content: center;
             gap: 24px;
         }
 
@@ -350,6 +350,7 @@
             box-shadow: var(--card-shadow);
             border: 1px solid var(--glass-border);
             transition: var(--transition-smooth);
+            min-width: 280px;
         }
 
         .stat-card:hover {
@@ -855,15 +856,7 @@
             <div class="stats-container">
                 <div class="stat-card" id="statMembers" data-aos="fade-up" data-aos-delay="0">
                     <div class="stat-num">{{ $stats['members'] }}</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Wanafamilia' : 'Family Members' }}</div>
-                </div>
-                <div class="stat-card" id="statFamilies" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-num">{{ $stats['families'] }}</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Familia' : 'Families' }}</div>
-                </div>
-                <div class="stat-card" id="statClans" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-num">{{ $stats['clans'] }}</div>
-                    <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Koo' : 'Clans' }}</div>
+                    <div class="stat-label">{{ app()->getLocale() == 'sw' ? 'Wanachama' : 'Family Members' }}</div>
                 </div>
             </div>
         </section>
