@@ -19,10 +19,10 @@
 
     <!-- SEO Meta Tags -->
     @if(app()->getLocale() == 'sw')
-        <title>Ukoo wa Nyahende - Karibu kwenye Mfumo wa Ukoo</title>
+        <title>Ukoo wa Nyahende</title>
         <meta name="description" content="Karibu kwenye tovuti rasmi ya Ukoo wa Nyahende. Gundua asili yetu, mti wa familia (family tree) na matukio muhimu. Jiunge sasa kuungana na ndugu zako.">
     @else
-        <title>Nyahende Clan - Welcome to the Clan System</title>
+        <title>Nyahende Clan</title>
         <meta name="description" content="Welcome to the official Nyahende Clan portal. Discover our ancestry, family tree, and essential clan updates. Join now to connect with your relatives.">
     @endif
     

@@ -179,8 +179,7 @@
                                 <dt class="col-sm-4">Ukoo</dt>
                                 <dd class="col-sm-8">{{ $member->clan->name ?? 'N/A' }}</dd>
 
-                                <dt class="col-sm-4">Familia</dt>
-                                <dd class="col-sm-8">{{ $member->family->name ?? 'N/A' }}</dd>
+
 
 
 

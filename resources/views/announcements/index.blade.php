@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Matangazo')
+@section('title', 'Matangazo na Taarifa za Ukoo')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">

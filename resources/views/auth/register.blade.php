@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sajili - Ukoo wa Nyahende</title>
+    <title>Sajili Akaunti Mpya - Ukoo wa Nyahende</title>
     @if(config('services.google.analytics_id'))
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>

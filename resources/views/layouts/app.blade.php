@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', config('app.name', 'Clan System'))</title>
+    <title>@hasSection('title') @yield('title') | @endif{{ config('app.name', 'Nyahende') }} - Mfumo wa Ukoo</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v={{ time() }}">
     <link rel="shortcut icon" type="image/png" href="{{ asset('favicon.png') }}?v={{ time() }}">
     <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}?v={{ time() }}">
@@ -129,10 +129,6 @@
             {{ __('common.clans') }}
         </a>
 
-        <a href="{{ route('families.index') }}" class="sidebar-item {{ request()->routeIs('families.*') ? 'active' : '' }}">
-            <i class="fas fa-home"></i>
-            {{ __('common.families') }}
-        </a>
 
         {{-- Community --}}
         <div class="sidebar-section-title">{{ __('common.community') }}</div>

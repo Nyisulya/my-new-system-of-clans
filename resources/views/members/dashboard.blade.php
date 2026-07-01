@@ -42,7 +42,6 @@
                 <p class="text-muted text-center">{{ $member->occupation ?? 'Mwanachama' }}</p>
                 <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item"><b>Ukoo</b> <a class="float-right">{{ $member->clan->name ?? 'N/A' }}</a></li>
-                    <li class="list-group-item"><b>Familia</b> <a class="float-right">{{ $member->family->name ?? 'N/A' }}</a></li>
                     <li class="list-group-item"><b>Kizazi</b> <a class="float-right">{{ $member->generation_number }}</a></li>
                     
                     @php 

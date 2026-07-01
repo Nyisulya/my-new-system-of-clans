@@ -26,7 +26,7 @@ class UpdateMemberRequest extends FormRequest
     {
         return [
             'clan_id' => ['sometimes', 'exists:clans,id'],
-            'family_id' => ['sometimes', 'exists:families,id'],
+            'family_id' => ['nullable', 'exists:families,id'],
 
             
             'first_name' => ['sometimes', 'string', 'max:255'],

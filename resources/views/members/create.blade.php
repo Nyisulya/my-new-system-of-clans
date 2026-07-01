@@ -267,25 +267,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Familia <span class="text-danger">*</span></label>
-                                    @if(isset($selectedSpouse))
-                                        <input type="text" name="family_name" class="form-control" value="{{ old('family_name') }}" placeholder="Familia ya Mwenzi" required>
-                                    @else
-                                        <select name="family_id" class="form-control select2" required>
-                                            <option value="">Chagua Familia...</option>
-                                            @foreach($clans as $clan)
-                                                @foreach($clan->families as $family)
-                                                    <option value="{{ $family->id }}" {{ old('family_id', $selectedFamilyId ?? '') == $family->id ? 'selected' : '' }}>
-                                                        {{ $family->name }} ({{ $clan->name }})
-                                                    </option>
-                                                @endforeach
-                                            @endforeach
-                                        </select>
-                                    @endif
-                                </div>
-                            </div>
+
 
                         </div>
 

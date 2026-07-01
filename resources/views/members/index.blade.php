@@ -53,16 +53,7 @@
                             <option value="deceased" {{ request('status') == 'deceased' ? 'selected' : '' }}>Marehemu</option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 mb-2">
-                        <select name="family_id" class="form-control" onchange="this.form.submit()">
-                            <option value="">Familia Zote</option>
-                            @foreach($families as $family)
-                                <option value="{{ $family->id }}" {{ request('family_id') == $family->id ? 'selected' : '' }}>
-                                    {{ $family->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
                     <div class="col-12 col-md-2 mb-2">
                         <button type="submit" class="btn btn-primary btn-block w-100">
                             <i class="fas fa-search"></i> Chuja
@@ -82,7 +73,7 @@
                             <th class="d-none d-md-table-cell">Tarehe ya Kuzaliwa</th>
                             <th class="d-none d-lg-table-cell">Umri</th>
                             <th>Kizazi</th>
-                            <th class="d-none d-md-table-cell">Familia</th>
+
                             <th>Hali</th>
                             <th>Vitendo</th>
                         </tr>
@@ -109,7 +100,7 @@
                                 <td class="d-none d-md-table-cell">{{ $member->date_of_birth?->format('M d, Y') }}</td>
                                 <td class="d-none d-lg-table-cell">{{ $member->age }} miaka</td>
                                 <td><span class="badge badge-info">Gen {{ $member->generation_number }}</span></td>
-                                <td class="d-none d-md-table-cell">{{ $member->family->name ?? 'N/A' }}</td>
+
                                 <td>
                                     @if($member->status == 'alive')
                                         <span class="badge badge-success">Hai</span>

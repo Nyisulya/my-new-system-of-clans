@@ -46,8 +46,8 @@ class StoreMemberRequest extends FormRequest
         return [
             'clan_id' => ['nullable', 'required_without:clan_name', 'exists:clans,id'],
             'clan_name' => ['nullable', 'required_without:clan_id', 'string', 'max:255'],
-            'family_id' => ['nullable', 'required_without:family_name', 'exists:families,id'],
-            'family_name' => ['nullable', 'required_without:family_id', 'string', 'max:255'],
+            'family_id' => ['nullable', 'exists:families,id'],
+            'family_name' => ['nullable', 'string', 'max:255'],
 
             
             'first_name' => ['required', 'string', 'max:255'],
