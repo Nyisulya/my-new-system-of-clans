@@ -21,7 +21,7 @@ class DuplicateDetectionService
      */
     public function findDuplicates(
         string $firstName,
-        string $lastName,
+        ?string $lastName = null,
         ?string $dateOfBirth = null,
         ?int $fatherId = null,
         ?int $motherId = null,
@@ -72,7 +72,7 @@ class DuplicateDetectionService
     /**
      * Find exact matches on name and date of birth
      */
-    protected function findExactMatches(string $firstName, string $lastName, string $dateOfBirth, ?int $excludeId): Collection
+    protected function findExactMatches(string $firstName, ?string $lastName, string $dateOfBirth, ?int $excludeId): Collection
     {
         $query = Member::where('first_name', $firstName)
                       ->where('last_name', $lastName)
@@ -88,11 +88,15 @@ class DuplicateDetectionService
     /**
      * Find members with same or similar name and same parents
      */
-    protected function findByParents(string $firstName, string $lastName, ?int $fatherId, ?int $motherId, ?int $excludeId): Collection
+    protected function findByParents(string $firstName, ?string $lastName, ?int $fatherId, ?int $motherId, ?int $excludeId): Collection
     {
         $query = Member::where(function($q) use ($firstName, $lastName) {
-            $q->where('first_name', 'LIKE', "%{$firstName}%")
-              ->where('last_name', 'LIKE', "%{$lastName}%");
+            $q->where('first_name', 'LIKE', "%{$firstName}%");
+            if ($lastName !== null && $lastName !== '') {
+                $q->where('last_name', 'LIKE', "%{$lastName}%");
+            } else {
+                $q->whereNull('last_name');
+            }
         });
 
         if ($fatherId && $motherId) {
@@ -114,12 +118,16 @@ class DuplicateDetectionService
     /**
      * Find fuzzy matches using Levenshtein distance
      */
-    protected function findFuzzyMatches(string $firstName, string $lastName, ?string $dateOfBirth, ?int $excludeId): Collection
+    protected function findFuzzyMatches(string $firstName, ?string $lastName, ?string $dateOfBirth, ?int $excludeId): Collection
     {
         $matches = collect();
         
-        // Get candidates with similar last name
-        $query = Member::where('last_name', 'LIKE', $lastName[0] . '%');
+        $lastNameVal = $lastName ?? '';
+        if ($lastNameVal === '') {
+            $query = Member::where('first_name', 'LIKE', $firstName[0] . '%');
+        } else {
+            $query = Member::where('last_name', 'LIKE', $lastNameVal[0] . '%');
+        }
         
         if ($excludeId) {
             $query->where('id', '!=', $excludeId);
@@ -129,8 +137,8 @@ class DuplicateDetectionService
 
         foreach ($candidates as $candidate) {
             $similarity = $this->calculateSimilarity(
-                $firstName . ' ' . $lastName,
-                $candidate->first_name . ' ' . $candidate->last_name
+                $firstName . ' ' . $lastNameVal,
+                $candidate->first_name . ' ' . ($candidate->last_name ?? '')
             );
 
             if ($similarity >= 70) {
@@ -186,7 +194,7 @@ class DuplicateDetectionService
      */
     public function isDuplicate(
         string $firstName,
-        string $lastName,
+        ?string $lastName = null,
         ?string $dateOfBirth = null,
         int $threshold = 80
     ): bool {
@@ -249,7 +257,7 @@ class DuplicateDetectionService
      * Check for exact match (Name + DOB + Parent)
      * Returns the matching member if found, null otherwise.
      */
-    public function checkExactMatch(string $firstName, string $lastName, ?string $dateOfBirth, ?int $fatherId, ?int $motherId, ?int $excludeId = null): ?Member
+    public function checkExactMatch(string $firstName, ?string $lastName, ?string $dateOfBirth, ?int $fatherId, ?int $motherId, ?int $excludeId = null): ?Member
     {
         if (!$dateOfBirth) {
             return null;
@@ -279,7 +287,7 @@ class DuplicateDetectionService
      * Check for partial match (Same Name, Different DOB)
      * Returns a collection of potential matches.
      */
-    public function checkPartialMatch(string $firstName, string $lastName, ?string $dateOfBirth, ?int $excludeId = null): Collection
+    public function checkPartialMatch(string $firstName, ?string $lastName, ?string $dateOfBirth, ?int $excludeId = null): Collection
     {
         $query = Member::where('first_name', $firstName)
             ->where('last_name', $lastName);

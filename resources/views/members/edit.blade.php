@@ -53,9 +53,9 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Last Name <span class="text-danger">*</span></label>
+                            <label>Last Name <small class="text-muted">(Optional)</small></label>
                             <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
-                                   value="{{ old('last_name', $member->last_name) }}" required>
+                                   value="{{ old('last_name', $member->last_name) }}">
                             @error('last_name')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror

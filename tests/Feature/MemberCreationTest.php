@@ -248,5 +248,26 @@ class MemberCreationTest extends TestCase
             'date_of_death' => null,
         ]);
     }
+
+    public function test_can_create_member_without_last_name(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'member_id' => null]);
+        
+        $response = $this->actingAs($admin)
+            ->post(route('members.store'), [
+                'first_name' => 'LegacyNameOnly',
+                'last_name' => null,
+                'gender' => 'male',
+                'clan_id' => $this->clan->id,
+                'family_id' => $this->family->id,
+                'status' => 'alive',
+            ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('members', [
+            'first_name' => 'LegacyNameOnly',
+            'last_name' => null,
+        ]);
+    }
 }
 

@@ -118,9 +118,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Jina la Mwisho / Ukoo <span class="text-danger">*</span></label>
+                                    <label>Jina la Mwisho / Ukoo <small class="text-muted">(Hiari)</small></label>
                                     <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
-                                           value="{{ old('last_name') }}" placeholder="Jina la Mwisho" required>
+                                           value="{{ old('last_name') }}" placeholder="Jina la Mwisho">
                                     @error('last_name') <span class="text-danger small">{{ $message }}</span> @enderror
                                 </div>
                             </div>

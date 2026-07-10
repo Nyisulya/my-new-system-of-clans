@@ -52,7 +52,7 @@ class StoreMemberRequest extends FormRequest
             
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
             'maiden_name' => ['nullable', 'string', 'max:255'],
             
             'gender' => ['required', Rule::in(['male', 'female', 'other'])],

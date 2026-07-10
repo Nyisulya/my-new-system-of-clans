@@ -31,7 +31,7 @@ class UpdateMemberRequest extends FormRequest
             
             'first_name' => ['sometimes', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
-            'last_name' => ['sometimes', 'string', 'max:255'],
+            'last_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'maiden_name' => ['nullable', 'string', 'max:255'],
             
             'gender' => ['sometimes', Rule::in(['male', 'female', 'other'])],
