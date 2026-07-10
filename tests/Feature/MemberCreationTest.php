@@ -224,4 +224,29 @@ class MemberCreationTest extends TestCase
             'father_id' => $otherMember->id,
         ]);
     }
+
+    public function test_can_create_deceased_member_without_date_of_death(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'member_id' => null]);
+        
+        $response = $this->actingAs($admin)
+            ->post(route('members.store'), [
+                'first_name' => 'Deceased',
+                'last_name' => 'Ancestor',
+                'gender' => 'male',
+                'clan_id' => $this->clan->id,
+                'family_id' => $this->family->id,
+                'status' => 'deceased',
+                'date_of_death' => null,
+            ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('members', [
+            'first_name' => 'Deceased',
+            'last_name' => 'Ancestor',
+            'status' => 'deceased',
+            'date_of_death' => null,
+        ]);
+    }
 }
+

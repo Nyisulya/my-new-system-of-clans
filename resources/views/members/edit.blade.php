@@ -199,8 +199,8 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Family <span class="text-danger">*</span></label>
-                            <select name="family_id" class="form-control @error('family_id') is-invalid @enderror" required>
+                            <label>Family <small class="text-muted">(Optional)</small></label>
+                            <select name="family_id" class="form-control @error('family_id') is-invalid @enderror">
                                 <option value="">Select Family...</option>
                                 @foreach($clans as $clan)
                                     @foreach($clan->families as $family)

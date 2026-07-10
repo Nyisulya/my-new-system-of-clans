@@ -96,7 +96,6 @@ class StoreMemberRequest extends FormRequest
             'date_of_death' => [
                 'nullable',
                 'date',
-                'required_if:status,deceased',
                 function ($attribute, $value, $fail) {
                     if ($value && $this->input('date_of_birth')) {
                         $dob = \Carbon\Carbon::parse($this->input('date_of_birth'));
