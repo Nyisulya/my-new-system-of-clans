@@ -116,11 +116,14 @@
             </a>
         @endif
 
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
             <i class="fas fa-user-friends"></i>
             {{ __('common.parents') }}
         </a>
+        @endif
 
+        @if(auth()->user()->isAdmin())
         {{-- Clans & Families --}}
         <div class="sidebar-section-title">{{ __('common.structure') }}</div>
 
@@ -128,6 +131,7 @@
             <i class="fas fa-shield-alt"></i>
             {{ __('common.clans') }}
         </a>
+        @endif
 
 
         {{-- Community --}}
@@ -143,10 +147,12 @@
             {{ __('common.campaigns') }}
         </a>
 
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
             <i class="fas fa-calendar-alt"></i>
             {{ __('common.calendar') }}
         </a>
+        @endif
 
         {{-- Media & Records --}}
         <div class="sidebar-section-title">{{ __('common.records') }}</div>

@@ -223,6 +223,20 @@ class DashboardController extends Controller
             $generationCounts[$rc->generation_number] = $rc->total;
         }
 
+        // Get recent posts (Simulizi)
+        $recentPosts = \App\Models\Post::with('user')
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        // Get recent gallery photos
+        $recentGalleries = \App\Models\Gallery::with(['photos' => function($q) {
+            $q->latest()->limit(4);
+        }])
+            ->latest()
+            ->limit(4)
+            ->get();
+
         return view('dashboard.index', compact(
             'stats',
             'recentMembers',
@@ -230,7 +244,9 @@ class DashboardController extends Controller
             'families',
             'clan',
             'user',
-            'generationCounts'
+            'generationCounts',
+            'recentPosts',
+            'recentGalleries'
         ));
     }
 

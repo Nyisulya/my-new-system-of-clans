@@ -127,6 +127,124 @@
         @endforelse
     </div>
 
+    {{-- Simulizi / Feed Section (visible to all users) --}}
+    <div class="row mt-4">
+        <div class="col-md-7 col-12">
+            <div class="card card-outline card-primary shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-rss mr-1 text-primary"></i>
+                        Simulizi ya Hivi Karibuni
+                    </h3>
+                    <div class="card-tools">
+                        <a href="{{ route('posts.index') }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-external-link-alt mr-1"></i> Angalia Zote
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @forelse($recentPosts as $post)
+                        <div class="d-flex align-items-start p-3 border-bottom">
+                            @if($post->user && $post->user->member)
+                                <img src="{{ $post->user->member->profile_photo_url }}"
+                                     class="img-circle mr-3 flex-shrink-0"
+                                     style="width: 42px; height: 42px; object-fit: cover;">
+                            @else
+                                <div class="img-circle mr-3 flex-shrink-0 bg-secondary d-flex align-items-center justify-content-center"
+                                     style="width: 42px; height: 42px; font-size: 18px; color: #fff;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
+                            <div class="flex-grow-1">
+                                <strong class="d-block">{{ $post->user->name ?? 'Mtumiaji' }}</strong>
+                                <p class="mb-1 text-muted" style="font-size: 0.9rem; line-height: 1.4;">
+                                    {{ Str::limit($post->content, 150) }}
+                                </p>
+                                @if($post->image_path)
+                                    <img src="{{ asset('storage/' . $post->image_path) }}"
+                                         class="img-fluid rounded mt-1" style="max-height: 180px; object-fit: cover;">
+                                @endif
+                                <small class="text-muted d-block mt-1">
+                                    <i class="fas fa-clock mr-1"></i>{{ $post->created_at->diffForHumans() }}
+                                </small>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="p-4 text-center text-muted">
+                            <i class="fas fa-rss fa-2x mb-2 d-block"></i>
+                            Hakuna simulizi bado. Kuwa wa kwanza kuandika!
+                        </div>
+                    @endforelse
+                </div>
+                @if($recentPosts->count() > 0)
+                <div class="card-footer text-center py-2">
+                    <a href="{{ route('posts.index') }}" class="text-primary">
+                        <i class="fas fa-angle-double-down mr-1"></i> Tazama simulizi zaidi
+                    </a>
+                </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- Picha za Ukoo --}}
+        <div class="col-md-5 col-12">
+            <div class="card card-outline card-info shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-images mr-1 text-info"></i>
+                        Picha za Ukoo
+                    </h3>
+                    <div class="card-tools">
+                        <a href="{{ route('galleries.index') }}" class="btn btn-sm btn-outline-info">
+                            <i class="fas fa-external-link-alt mr-1"></i> Angalia Zote
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @forelse($recentGalleries as $gallery)
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong class="text-dark">
+                                    <i class="fas fa-folder-open mr-1 text-info"></i>
+                                    {{ $gallery->title }}
+                                </strong>
+                                <a href="{{ route('galleries.show', $gallery) }}" class="btn btn-xs btn-outline-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                            <div class="row no-gutters" style="gap: 4px;">
+                                @forelse($gallery->photos->take(4) as $photo)
+                                    <div class="col" style="flex: 0 0 calc(25% - 3px);">
+                                        <a href="{{ route('galleries.show', $gallery) }}">
+                                            <img src="{{ asset('storage/' . $photo->photo_path) }}"
+                                                 class="img-fluid rounded"
+                                                 style="width: 100%; height: 70px; object-fit: cover;"
+                                                 alt="{{ $gallery->title }}">
+                                        </a>
+                                    </div>
+                                @empty
+                                    <div class="col-12 text-muted small">Hakuna picha bado.</div>
+                                @endforelse
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center text-muted py-3">
+                            <i class="fas fa-images fa-2x mb-2 d-block"></i>
+                            Hakuna picha za ukoo bado.
+                        </div>
+                    @endforelse
+                </div>
+                @if($recentGalleries->count() > 0)
+                <div class="card-footer text-center py-2">
+                    <a href="{{ route('galleries.index') }}" class="text-info">
+                        <i class="fas fa-angle-double-down mr-1"></i> Tazama maktaba zaidi
+                    </a>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
     @can('admin-only')
     <div class="row">
         {{-- Gender Distribution --}}
