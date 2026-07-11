@@ -87,7 +87,7 @@
 
         <div class="row">
             {{-- Left Column: Main Information --}}
-            <div class="col-lg-12" id="leftColumnMain">
+            <div class="col-lg-8">
                 {{-- Personal Details Card --}}
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -110,7 +110,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Jina la Kati</label>
+                                    <label>Jina la Kati <small class="text-muted">(Hiari)</small></label>
                                     <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
                                            value="{{ old('middle_name') }}" placeholder="Jina la Kati">
                                     @error('middle_name') <span class="text-danger small">{{ $message }}</span> @enderror
@@ -146,7 +146,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Tarehe ya Kuzaliwa</label>
+                                    <label>Tarehe ya Kuzaliwa <small class="text-muted">(Hiari)</small></label>
                                     <input type="hidden" name="date_of_birth" id="dob_hidden" value="{{ old('date_of_birth') }}">
                                     <div class="row">
                                         <div class="col-4 pr-1">
@@ -196,10 +196,10 @@
                             </div>
                         </div>
 
-                        <div class="row" id="personalExtraRow" style="display: none;">
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Mahali pa Kuzaliwa</label>
+                                    <label>Mahali pa Kuzaliwa <small class="text-muted">(Hiari)</small></label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
@@ -343,15 +343,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center mb-3">
-                    <button type="button" id="toggleExtraFields" class="btn btn-outline-primary btn-block btn-lg">
-                        <i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)
-                    </button>
-                </div>
             </div>
 
             {{-- Right Column: Photo & Contact --}}
-            <div class="col-lg-4 d-none" id="rightColumnExtra">
+            <div class="col-lg-4">
                 {{-- Profile Photo Card --}}
                 <div class="card card-warning card-outline">
                     <div class="card-body box-profile">
@@ -362,7 +357,7 @@
                                  id="profilePreview"
                                  style="width: 120px; height: 120px; object-fit: cover;">
                         </div>
-                        <h3 class="profile-username text-center text-muted">Pakia Picha</h3>
+                        <h3 class="profile-username text-center text-muted">Pakia Picha <small>(Hiari)</small></h3>
                         
                         <div class="form-group mt-3">
                             <div class="custom-file">
@@ -381,18 +376,18 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label><i class="fas fa-envelope mr-1 text-muted"></i> Barua Pepe</label>
+                            <label><i class="fas fa-envelope mr-1 text-muted"></i> Barua Pepe <small class="text-muted">(Hiari)</small></label>
                             <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Barua Pepe">
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-phone mr-1 text-muted"></i> Simu</label>
+                            <label><i class="fas fa-phone mr-1 text-muted"></i> Simu <small class="text-muted">(Hiari)</small></label>
                             <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="Namba ya Simu">
                         </div>
 
                         {{-- Cascading Location Picker --}}
                         <div class="card bg-light border-0">
                             <div class="card-body p-3">
-                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Maelezo ya Mahali</h6>
+                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Maelezo ya Mahali <small class="text-muted">(Hiari)</small></h6>
                                 
                                 {{-- 1. Country --}}
                                 <div class="form-group">
@@ -456,15 +451,15 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Kazi / Shughuli</label>
+                            <label>Kazi / Shughuli <small class="text-muted">(Hiari)</small></label>
                             <input type="text" name="occupation" class="form-control" value="{{ old('occupation') }}" placeholder="Kazi/Kikazi">
                         </div>
                         <div class="form-group">
-                            <label>Wasifu</label>
+                            <label>Wasifu <small class="text-muted">(Hiari)</small></label>
                             <textarea name="biography" class="form-control" rows="3" placeholder="Wasifu mfupi...">{{ old('biography') }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label>Maelezo Binafsi ya Ndani</label>
+                            <label>Maelezo Binafsi ya Ndani <small class="text-muted">(Hiari)</small></label>
                             <textarea name="notes" class="form-control" rows="2" placeholder="Maelezo ya ndani ya siri...">{{ old('notes') }}</textarea>
                         </div>
                     </div>
@@ -947,42 +942,7 @@
             $('#statusSelect').change(toggleDeceased);
             toggleDeceased(); 
 
-            // --- 5. Toggle Extra Fields ---
-            $('#toggleExtraFields').click(function() {
-                const $extraRow = $('#personalExtraRow');
-                const $rightCol = $('#rightColumnExtra');
-                const $leftCol = $('#leftColumnMain');
 
-                if ($rightCol.hasClass('d-none')) {
-                    $extraRow.slideDown();
-                    $rightCol.removeClass('d-none');
-                    $leftCol.removeClass('col-lg-12').addClass('col-lg-8');
-                    $(this).html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
-                } else {
-                    $extraRow.slideUp();
-                    $rightCol.addClass('d-none');
-                    $leftCol.removeClass('col-lg-8').addClass('col-lg-12');
-                    $(this).html('<i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)');
-                }
-            });
-
-            // Auto-expand if there are validation errors or existing old input values
-            const hasErrorsOrData = @json($errors->any()) || 
-                                    $('#profilePhoto').val() ||
-                                    $('input[name="place_of_birth"]').val() ||
-                                    $('input[name="maiden_name"]').val() ||
-                                    $('input[name="email"]').val() ||
-                                    $('input[name="phone"]').val() ||
-                                    $('textarea[name="biography"]').val() ||
-                                    $('textarea[name="notes"]').val() ||
-                                    $('input[name="address"]').val();
-
-            if (hasErrorsOrData) {
-                $('#personalExtraRow').show();
-                $('#rightColumnExtra').removeClass('d-none');
-                $('#leftColumnMain').removeClass('col-lg-12').addClass('col-lg-8');
-                $('#toggleExtraFields').html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
-            }
         });
     </script>
 @stop

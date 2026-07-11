@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Middle Name</label>
+                            <label>Middle Name <small class="text-muted">(Optional)</small></label>
                             <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
                                    value="{{ old('middle_name', $member->middle_name) }}">
                             @error('middle_name')
@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Date of Birth</label>
+                            <label>Date of Birth <small class="text-muted">(Optional)</small></label>
                             <input type="hidden" name="date_of_birth" id="dob_hidden" value="{{ old('date_of_birth', $member->date_of_birth?->format('Y-m-d')) }}">
                             <div class="row">
                                 <div class="col-4 pr-1">
@@ -245,18 +245,10 @@
                     </div>
                 </div>
 
-                <div class="text-center mb-4">
-                    <button type="button" id="toggleExtraFields" class="btn btn-outline-primary btn-block btn-lg">
-                        <i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)
-                    </button>
-                </div>
-
-                <div id="extraFields" style="display: none;">
-                    {{-- Hidden optional personal fields --}}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Maiden Name</label>
+                                <label>Maiden Name <small class="text-muted">(Optional)</small></label>
                                 <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
                                        value="{{ old('maiden_name', $member->maiden_name) }}">
                                 @error('maiden_name')
@@ -266,7 +258,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Place of Birth</label>
+                                <label>Place of Birth <small class="text-muted">(Optional)</small></label>
                                 <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
                                        value="{{ old('place_of_birth', $member->place_of_birth) }}" placeholder="City, Country">
                                 @error('place_of_birth')
@@ -282,7 +274,7 @@
                     <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>Email <small class="text-muted">(Optional)</small></label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
                                    value="{{ old('email', $member->email) }}">
                             @error('email')
@@ -292,7 +284,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Phone</label>
+                            <label>Phone <small class="text-muted">(Optional)</small></label>
                             <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" 
                                    value="{{ old('phone', $member->phone) }}">
                             @error('phone')
@@ -302,7 +294,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Profile Photo</label>
+                            <label>Profile Photo <small class="text-muted">(Optional)</small></label>
                             <div class="custom-file">
                                 <input type="file" name="profile_photo" class="custom-file-input @error('profile_photo') is-invalid @enderror" id="profile_photo" accept="image/*">
                                 <label class="custom-file-label" for="profile_photo">Choose file</label>
@@ -325,7 +317,7 @@
                     <div class="col-md-12">
                         <div class="card bg-light border-0">
                             <div class="card-body p-3">
-                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Location Details</h6>
+                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Location Details <small class="text-muted">(Optional)</small></h6>
                                 
                                 {{-- 1. Country --}}
                                 <div class="form-group">
@@ -385,7 +377,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Biography</label>
+                            <label>Biography <small class="text-muted">(Optional)</small></label>
                             <textarea name="biography" class="form-control @error('biography') is-invalid @enderror" 
                                       rows="3">{{ old('biography', $member->biography) }}</textarea>
                             @error('biography')
@@ -398,7 +390,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Notes</label>
+                            <label>Notes <small class="text-muted">(Optional)</small></label>
                             <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" 
                                       rows="2">{{ old('notes', $member->notes) }}</textarea>
                             @error('notes')
@@ -406,7 +398,6 @@
                             @enderror
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
 
@@ -900,42 +891,7 @@
                 $('#address, #street, #city, #district, #region, #country, #current_lat, #current_lng').val('');
             });
 
-            // --- 5. Toggle Extra Fields ---
-            $('#toggleExtraFields').click(function() {
-                const $extraDiv = $('#extraFields');
 
-                if ($extraDiv.is(':hidden')) {
-                    $extraDiv.slideDown();
-                    $(this).html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
-                } else {
-                    $extraDiv.slideUp();
-                    $(this).html('<i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)');
-                }
-            });
-
-            // Auto-expand if there are validation errors or existing data/values
-            const hasErrorsOrData = @json($errors->any()) || 
-                                    $('input[name="place_of_birth"]').val() ||
-                                    $('input[name="maiden_name"]').val() ||
-                                    $('input[name="email"]').val() ||
-                                    $('input[name="phone"]').val() ||
-                                    $('textarea[name="biography"]').val() ||
-                                    $('textarea[name="notes"]').val() ||
-                                    $('input[name="address"]').val() ||
-                                    $('#profile_photo').val() ||
-                                    "{{ $member->profile_photo }}" ||
-                                    "{{ $member->place_of_birth }}" ||
-                                    "{{ $member->maiden_name }}" ||
-                                    "{{ $member->email }}" ||
-                                    "{{ $member->phone }}" ||
-                                    "{{ $member->biography }}" ||
-                                    "{{ $member->notes }}" ||
-                                    "{{ $member->address }}";
-
-            if (hasErrorsOrData) {
-                $('#extraFields').show();
-                $('#toggleExtraFields').html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
-            }
         });
     </script>
 @stop
