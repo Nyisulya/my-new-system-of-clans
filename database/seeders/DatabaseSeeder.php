@@ -414,5 +414,7 @@ class DatabaseSeeder extends Seeder
         echo "  Generation 4: Michael & Susan\n";
         echo "  Generation 5: David, Sarah, Jennifer\n";
         echo "  Generation 6: Emily, James (Current Youth)\n\n";
+
+        $this->call(SimuliziSeeder::class);
     }
 }
