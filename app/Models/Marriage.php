@@ -26,6 +26,34 @@ class Marriage extends Model
     ];
 
     /**
+     * Boot method for Marriage model events
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($marriage) {
+            if ($marriage->status === 'active') {
+                $husband = $marriage->husband;
+                $wife = $marriage->wife;
+
+                if ($husband && $wife) {
+                    // Husband marries into the family (no parents) -> inherits wife's generation
+                    if (!$husband->father_id && !$husband->mother_id && $husband->generation_number !== $wife->generation_number) {
+                        $husband->generation_number = $wife->generation_number;
+                        $husband->saveQuietly();
+                    }
+                    // Wife marries into the family (no parents) -> inherits husband's generation
+                    elseif (!$wife->father_id && !$wife->mother_id && $wife->generation_number !== $husband->generation_number) {
+                        $wife->generation_number = $husband->generation_number;
+                        $wife->saveQuietly();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * Get the husband in this marriage.
      */
     public function husband(): BelongsTo

@@ -84,8 +84,8 @@
                         @endphp
                         
                         <a href="{{ route('members.create', [
-                            'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
-                            'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
+                            'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse?->id ?? null),
+                            'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse?->id ?? null),
                             'clan_id' => $member->clan_id,
                             'family_id' => $member->family_id
                         ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Ongeza Mtoto</a>
@@ -365,8 +365,8 @@
                             @can('update', $member)
                                 @php $firstSpouse = $member->spouses()->first(); @endphp
                                 <a href="{{ route('members.create', [
-                                    'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse->id ?? null),
-                                    'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse->id ?? null),
+                                    'father_id' => $member->gender == 'male' ? $member->id : ($firstSpouse?->id ?? null),
+                                    'mother_id' => $member->gender == 'female' ? $member->id : ($firstSpouse?->id ?? null),
                                     'clan_id' => $member->clan_id,
                                     'family_id' => $member->family_id
                                 ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ongeza Mtoto wa Kwanza</a>

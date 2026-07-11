@@ -43,9 +43,11 @@ class StoreMemberRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isSpouse = $this->filled('spouse_id');
+
         return [
-            'clan_id' => ['nullable', 'required_without:clan_name', 'exists:clans,id'],
-            'clan_name' => ['nullable', 'required_without:clan_id', 'string', 'max:255'],
+            'clan_id' => [$isSpouse ? 'nullable' : 'required_without:clan_name', 'nullable', 'exists:clans,id'],
+            'clan_name' => [$isSpouse ? 'nullable' : 'required_without:clan_id', 'nullable', 'string', 'max:255'],
             'family_id' => ['nullable', 'exists:families,id'],
             'family_name' => ['nullable', 'string', 'max:255'],
 

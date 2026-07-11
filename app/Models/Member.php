@@ -378,6 +378,12 @@ class Member extends Model
             return max($fatherGeneration, $motherGeneration) + 1;
         }
 
+        // If no parents, check if there is a spouse (marrying into the family)
+        $spouse = $this->spouses()->first();
+        if ($spouse) {
+            return $spouse->generation_number;
+        }
+
         // Root member (no parents)
         return 1;
     }

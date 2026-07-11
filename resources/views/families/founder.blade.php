@@ -76,8 +76,8 @@
                                 @endphp
                                 
                                 <a href="{{ route('members.create', [
-                                    'father_id' => $founder->gender == 'male' ? $founder->id : ($firstSpouse->id ?? null),
-                                    'mother_id' => $founder->gender == 'female' ? $founder->id : ($firstSpouse->id ?? null),
+                                    'father_id' => $founder->gender == 'male' ? $founder->id : ($firstSpouse?->id ?? null),
+                                    'mother_id' => $founder->gender == 'female' ? $founder->id : ($firstSpouse?->id ?? null),
                                     'clan_id' => $founder->clan_id,
                                     'family_id' => $founder->family_id
                                 ]) }}" class="btn btn-success btn-block"><i class="fas fa-child"></i> Add Child</a>
@@ -227,8 +227,8 @@
                                     @else
                                         <div class="alert alert-info"><i class="fas fa-info-circle"></i> No children recorded for this founder.</div>
                                         <a href="{{ route('members.create', [
-                                            'father_id' => $founder->gender == 'male' ? $founder->id : ($firstSpouse->id ?? null),
-                                            'mother_id' => $founder->gender == 'female' ? $founder->id : ($firstSpouse->id ?? null),
+                                            'father_id' => $founder->gender == 'male' ? $founder->id : ($firstSpouse?->id ?? null),
+                                            'mother_id' => $founder->gender == 'female' ? $founder->id : ($firstSpouse?->id ?? null),
                                             'clan_id' => $founder->clan_id,
                                             'family_id' => $founder->family_id
                                         ]) }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add First Child</a>

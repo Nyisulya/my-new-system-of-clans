@@ -269,5 +269,84 @@ class MemberCreationTest extends TestCase
             'last_name' => null,
         ]);
     }
+
+    public function test_can_create_spouse_without_clan(): void
+    {
+        $member = Member::create([
+            'clan_id' => $this->clan->id,
+            'family_id' => $this->family->id,
+            'first_name' => 'Existing',
+            'last_name' => 'Member',
+            'gender' => 'male',
+            'status' => 'alive',
+        ]);
+        $user = User::factory()->create(['role' => 'admin', 'member_id' => null]);
+        
+        $response = $this->actingAs($user)
+            ->post(route('members.store'), [
+                'first_name' => 'SpouseNoClan',
+                'last_name' => 'Wife',
+                'gender' => 'female',
+                'spouse_id' => $member->id,
+                'status' => 'alive',
+            ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('members', [
+            'first_name' => 'SpouseNoClan',
+            'clan_id' => null,
+        ]);
+    }
+
+    public function test_spouse_generation_is_synchronized_with_husband(): void
+    {
+        $ancestor1 = Member::create([
+            'clan_id' => $this->clan->id,
+            'family_id' => $this->family->id,
+            'first_name' => 'Ancestor1',
+            'last_name' => 'Name',
+            'gender' => 'male',
+            'status' => 'alive',
+            'generation_number' => 1,
+        ]);
+        $ancestor2 = Member::create([
+            'clan_id' => $this->clan->id,
+            'family_id' => $this->family->id,
+            'first_name' => 'Ancestor2',
+            'last_name' => 'Name',
+            'gender' => 'male',
+            'father_id' => $ancestor1->id,
+            'status' => 'alive',
+            'generation_number' => 2,
+        ]);
+        $husband = Member::create([
+            'clan_id' => $this->clan->id,
+            'family_id' => $this->family->id,
+            'first_name' => 'HusbandGen3',
+            'last_name' => 'Name',
+            'gender' => 'male',
+            'father_id' => $ancestor2->id,
+            'status' => 'alive',
+            'generation_number' => 3,
+        ]);
+
+        $user = User::factory()->create(['role' => 'admin', 'member_id' => null]);
+        
+        $response = $this->actingAs($user)
+            ->post(route('members.store'), [
+                'first_name' => 'WifeGen3',
+                'last_name' => 'Name',
+                'gender' => 'female',
+                'spouse_id' => $husband->id,
+                'status' => 'alive',
+            ]);
+
+        $response->assertRedirect();
+        
+        $this->assertDatabaseHas('members', [
+            'first_name' => 'WifeGen3',
+            'generation_number' => 3,
+        ]);
+    }
 }
 

@@ -171,8 +171,8 @@ class MemberController extends Controller
         }
 
         $clans = Clan::core()->with('families')->get();
-        $potentialFathers = Member::where('gender', 'male')->orderBy('first_name')->get();
-        $potentialMothers = Member::where('gender', 'female')->orderBy('first_name')->get();
+        $potentialFathers = Member::where('gender', 'male')->with(['marriagesAsHusband.wife'])->orderBy('first_name')->get();
+        $potentialMothers = Member::where('gender', 'female')->with(['marriagesAsWife.husband'])->orderBy('first_name')->get();
         $potentialSpouses = Member::orderBy('first_name')->get();
 
         $selectedFatherId = $request->input('father_id');

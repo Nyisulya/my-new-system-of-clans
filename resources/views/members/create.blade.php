@@ -251,12 +251,13 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label>Ukoo <span class="text-danger">*</span></label>
+                                    <label>Ukoo @if(!isset($selectedSpouse))<span class="text-danger">*</span>@else<small class="text-muted">(Hiari)</small>@endif</label>
                                     @if(isset($selectedSpouse))
-                                        <input type="text" name="clan_name" class="form-control" value="{{ old('clan_name') }}" placeholder="Ukoo wa Mwenzi" required>
-                                        <small class="text-muted">Ingiza jina la ukoo wa mwenzi</small>
+                                        <input type="text" name="clan_name" class="form-control @error('clan_name') is-invalid @enderror" value="{{ old('clan_name') }}" placeholder="Ukoo wa Mwenzi (Hiari)">
+                                        <small class="text-muted">Ingiza jina la ukoo wa mwenzi (Hiari)</small>
+                                        @error('clan_name') <span class="text-danger small">{{ $message }}</span> @enderror
                                     @else
-                                        <select name="clan_id" class="form-control select2" required>
+                                        <select name="clan_id" class="form-control select2 @error('clan_id') is-invalid @enderror" required>
                                             <option value="">Chagua Ukoo...</option>
                                             @foreach($clans as $clan)
                                                 <option value="{{ $clan->id }}" {{ old('clan_id', $selectedClanId ?? '') == $clan->id ? 'selected' : '' }}>
@@ -264,9 +265,29 @@
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @error('clan_id') <span class="text-danger small">{{ $message }}</span> @enderror
                                     @endif
                                 </div>
                             </div>
+
+                            @if(!isset($selectedSpouse))
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Familia <small class="text-muted">(Hiari)</small></label>
+                                    <select name="family_id" class="form-control select2 @error('family_id') is-invalid @enderror">
+                                        <option value="">Chagua Familia...</option>
+                                        @foreach($clans as $clan)
+                                            @foreach($clan->families as $family)
+                                                <option value="{{ $family->id }}" {{ old('family_id', $selectedFamilyId ?? '') == $family->id ? 'selected' : '' }}>
+                                                    {{ $family->name }} ({{ $clan->name }})
+                                                </option>
+                                            @endforeach
+                                        @endforeach
+                                    </select>
+                                    @error('family_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            @endif
 
 
                         </div>
@@ -286,6 +307,7 @@
                                                 <option value="{{ $father->id }}" 
                                                         data-clan="{{ $father->clan_id }}" 
                                                         data-family="{{ $father->family_id }}"
+                                                        data-spouse-id="{{ $father->marriagesAsHusband->where('status', 'active')->first()?->wife_id }}"
                                                         {{ old('father_id', $selectedFatherId ?? '') == $father->id ? 'selected' : '' }}>
                                                     {{ $father->full_name }}
                                                 </option>
@@ -303,7 +325,11 @@
                                         <select name="mother_id" class="form-control select2">
                                             <option value="">Haijulikani / Hakuna</option>
                                             @foreach($potentialMothers as $mother)
-                                                <option value="{{ $mother->id }}" {{ old('mother_id', $selectedMotherId ?? '') == $mother->id ? 'selected' : '' }}>
+                                                <option value="{{ $mother->id }}"
+                                                        data-clan="{{ $mother->clan_id }}"
+                                                        data-family="{{ $mother->family_id }}"
+                                                        data-spouse-id="{{ $mother->marriagesAsWife->where('status', 'active')->first()?->husband_id }}"
+                                                        {{ old('mother_id', $selectedMotherId ?? '') == $mother->id ? 'selected' : '' }}>
                                                     {{ $mother->full_name }}
                                                 </option>
                                             @endforeach
@@ -862,21 +888,66 @@
                 }
             });
 
-            // Auto-populate clan and family when father is selected
-            $('select[name="father_id"]').change(function() {
-                const selectedOption = $(this).find('option:selected');
+            let isAutoSelecting = false;
+
+            function handleParentSelection(type) {
+                if (isAutoSelecting) return;
+
+                const select = $('select[name="' + type + '_id"]');
+                const selectedOption = select.find('option:selected');
+                if (!selectedOption.val()) return;
+
                 const clanId = selectedOption.data('clan');
                 const familyId = selectedOption.data('family');
+                const spouseId = selectedOption.data('spouse-id');
 
-                if (clanId) {
-                    $('select[name="clan_id"]').val(clanId).trigger('change');
+                if (spouseId) {
+                    const otherType = type === 'father' ? 'mother' : 'father';
+                    const otherSelect = $('select[name="' + otherType + '_id"]');
+                    if (!otherSelect.val()) {
+                        isAutoSelecting = true;
+                        otherSelect.val(spouseId).trigger('change');
+                        isAutoSelecting = false;
+                    }
                 }
-                if (familyId) {
-                    setTimeout(function() {
-                        $('select[name="family_id"]').val(familyId).trigger('change');
-                    }, 50);
+
+                // Clan and Family auto-population
+                let setClanFamily = false;
+                if (type === 'father') {
+                    setClanFamily = true;
+                } else {
+                    // type is mother, set only if father is not selected
+                    if (!$('select[name="father_id"]').val()) {
+                        setClanFamily = true;
+                    }
                 }
+
+                if (setClanFamily) {
+                    if (clanId) {
+                        $('select[name="clan_id"]').val(clanId).trigger('change');
+                    }
+                    if (familyId) {
+                        setTimeout(function() {
+                            $('select[name="family_id"]').val(familyId).trigger('change');
+                        }, 50);
+                    }
+                }
+            }
+
+            $('select[name="father_id"]').change(function() {
+                handleParentSelection('father');
             });
+
+            $('select[name="mother_id"]').change(function() {
+                handleParentSelection('mother');
+            });
+
+            // Run on initial load
+            if ($('select[name="father_id"]').val()) {
+                handleParentSelection('father');
+            } else if ($('select[name="mother_id"]').val()) {
+                handleParentSelection('mother');
+            }
 
             // Date of Birth compilation from Day/Month/Year selects
             function compileDOB() {
