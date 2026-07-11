@@ -84,15 +84,13 @@
     {{-- Navigation --}}
     <nav class="sidebar-nav">
 
-        {{-- Main --}}
-        <div class="sidebar-section-title">{{ __('common.main') }}</div>
-
+        {{-- Ukurasa wa Nyumbani --}}
         <a href="{{ route('dashboard') }}" class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i class="fas fa-tachometer-alt"></i>
-            {{ __('common.dashboard') }}
+            <i class="fas fa-home"></i>
+            Ukurasa wa Nyumbani
         </a>
 
-        {{-- Members --}}
+        {{-- Wanachama --}}
         <div class="sidebar-section-title">{{ __('common.people') }}</div>
 
         <a href="{{ route('members.index') }}" class="sidebar-item {{ request()->routeIs('members.*') && !request()->routeIs('members.create') ? 'active' : '' }}">
@@ -105,10 +103,6 @@
                 <i class="fas fa-user-plus"></i>
                 {{ __('common.add_member') }}
             </a>
-            <a href="{{ route('admin.users') }}" class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
-                <i class="fas fa-users-cog"></i>
-                {{ __('common.system_users') }}
-            </a>
         @elseif(auth()->user()->member_id === null)
             <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
                 <i class="fas fa-user-plus text-warning"></i>
@@ -116,25 +110,18 @@
             </a>
         @endif
 
-        @if(auth()->user()->isAdmin())
-        <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
-            <i class="fas fa-user-friends"></i>
-            {{ __('common.parents') }}
+        {{-- Simulizi na Picha --}}
+        <a href="{{ route('posts.index') }}" class="sidebar-item {{ request()->routeIs('posts.*') ? 'active' : '' }}">
+            <i class="fas fa-rss"></i>
+            Simulizi / Habari
         </a>
-        @endif
 
-        @if(auth()->user()->isAdmin())
-        {{-- Clans & Families --}}
-        <div class="sidebar-section-title">{{ __('common.structure') }}</div>
-
-        <a href="{{ route('clans.index') }}" class="sidebar-item {{ request()->routeIs('clans.*') ? 'active' : '' }}">
-            <i class="fas fa-shield-alt"></i>
-            {{ __('common.clans') }}
+        <a href="{{ route('galleries.index') }}" class="sidebar-item {{ request()->routeIs('galleries.*') ? 'active' : '' }}">
+            <i class="fas fa-images"></i>
+            Picha za Ukoo
         </a>
-        @endif
 
-
-        {{-- Community --}}
+        {{-- Jamii --}}
         <div class="sidebar-section-title">{{ __('common.community') }}</div>
 
         <a href="{{ route('announcements.feed') }}" class="sidebar-item {{ request()->routeIs('announcements.*') ? 'active' : '' }}">
@@ -147,30 +134,39 @@
             {{ __('common.campaigns') }}
         </a>
 
+        {{-- Admin-Only Items --}}
         @if(auth()->user()->isAdmin())
-        <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
-            <i class="fas fa-calendar-alt"></i>
-            {{ __('common.calendar') }}
-        </a>
-        @endif
 
-        {{-- Media & Records --}}
+        <div class="sidebar-section-title">{{ __('common.structure') }}</div>
+
+        <a href="{{ route('clans.index') }}" class="sidebar-item {{ request()->routeIs('clans.*') ? 'active' : '' }}">
+            <i class="fas fa-shield-alt"></i>
+            {{ __('common.clans') }}
+        </a>
+
+        <a href="{{ route('parents.index') }}" class="sidebar-item {{ request()->routeIs('parents.*') ? 'active' : '' }}">
+            <i class="fas fa-user-friends"></i>
+            {{ __('common.parents') }}
+        </a>
+
         <div class="sidebar-section-title">{{ __('common.records') }}</div>
-
-        <a href="{{ route('galleries.index') }}" class="sidebar-item {{ request()->routeIs('galleries.*') ? 'active' : '' }}">
-            <i class="fas fa-images"></i>
-            {{ __('common.galleries') }}
-        </a>
 
         <a href="{{ route('timeline.index') }}" class="sidebar-item {{ request()->routeIs('timeline.*') ? 'active' : '' }}">
             <i class="fas fa-stream"></i>
             {{ __('common.timeline') }}
         </a>
 
-        <a href="{{ route('posts.index') }}" class="sidebar-item {{ request()->routeIs('posts.*') ? 'active' : '' }}">
-            <i class="fas fa-rss"></i>
-            Simulizi / Feed
+        <a href="{{ route('calendar.index') }}" class="sidebar-item {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
+            <i class="fas fa-calendar-alt"></i>
+            {{ __('common.calendar') }}
         </a>
+
+        <a href="{{ route('admin.users') }}" class="sidebar-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+            <i class="fas fa-users-cog"></i>
+            {{ __('common.system_users') }}
+        </a>
+
+        @endif
 
         <div class="sidebar-divider"></div>
 

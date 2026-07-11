@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title', __('common.clan_title'))
-@section('page_title', __('common.dashboard'))
+@section('page_title', 'Ukurasa wa Nyumbani')
 
 @section('content_header')
     <h1>
-        <i class="fas fa-tachometer-alt"></i> {{ __('common.dashboard') }}
+        <i class="fas fa-home"></i> Ukurasa wa Nyumbani
         <small>{{ __('common.clans') }}</small>
     </h1>
 @stop
