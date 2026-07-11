@@ -211,7 +211,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Jina la Msichana <small class="text-muted">(Hiari)</small></label>
+                                    <label>Jina la Maarufu <small class="text-muted">(Hiari)</small></label>
                                     <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
                                            value="{{ old('maiden_name') }}" placeholder="Jina la Msichana">
                                 </div>
