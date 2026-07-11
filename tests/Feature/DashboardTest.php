@@ -113,6 +113,9 @@ class DashboardTest extends TestCase
         $html = $response->json('html');
         $this->assertStringContainsString('ChildDescendant', $html);
         $this->assertStringNotContainsString('SpouseMember', $html);
+        $this->assertStringContainsString('Wote (2)', $html);
+        $this->assertStringContainsString('Watoto wa Ukoo (1)', $html);
+        $this->assertStringContainsString('Wenza pekee (1)', $html);
 
         $response = $this->actingAs($this->user)
             ->getJson(route('dashboard.members', [
@@ -124,5 +127,8 @@ class DashboardTest extends TestCase
         $html = $response->json('html');
         $this->assertStringNotContainsString('ChildDescendant', $html);
         $this->assertStringContainsString('SpouseMember', $html);
+        $this->assertStringContainsString('Wote (2)', $html);
+        $this->assertStringContainsString('Watoto wa Ukoo (1)', $html);
+        $this->assertStringContainsString('Wenza pekee (1)', $html);
     }
 }

@@ -120,16 +120,41 @@ class DashboardController extends Controller
 
         $prefixHtml = '';
         if ($category && str_starts_with($category, 'generation_')) {
+            $genNum = (int) str_replace('generation_', '', $category);
+
+            $totalCount = Member::where('generation_number', $genNum)->count();
+            
+            $descendantsCount = Member::where('generation_number', $genNum)
+                ->where(function($q) {
+                    $q->whereNotNull('father_id')
+                      ->orWhereNotNull('mother_id')
+                      ->orWhere(function($sq) {
+                          $sq->where('generation_number', 1)
+                             ->where('gender', 'male');
+                      });
+                })->count();
+                
+            $spousesCount = Member::where('generation_number', $genNum)
+                ->whereNull('father_id')
+                ->whereNull('mother_id')
+                ->where(function($q) {
+                    $q->where('generation_number', '>', 1)
+                      ->orWhere(function($sq) {
+                          $sq->where('generation_number', 1)
+                             ->where('gender', 'female');
+                      });
+                })->count();
+
             $prefixHtml .= '
             <div class="btn-group d-flex mb-3" role="group" aria-label="Generation Filters">
                 <button type="button" class="btn ' . ($type === 'all' ? 'btn-success' : 'btn-outline-success') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'all\')">
-                    <i class="fas fa-users mr-1"></i> Wote
+                    <i class="fas fa-users mr-1"></i> Wote (' . $totalCount . ')
                 </button>
                 <button type="button" class="btn ' . ($type === 'descendants' ? 'btn-primary' : 'btn-outline-primary') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'descendants\')">
-                    <i class="fas fa-child mr-1"></i> Watoto wa Ukoo
+                    <i class="fas fa-child mr-1"></i> Watoto wa Ukoo (' . $descendantsCount . ')
                 </button>
                 <button type="button" class="btn ' . ($type === 'spouses' ? 'btn-warning text-dark' : 'btn-outline-warning') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'spouses\')">
-                    <i class="fas fa-ring mr-1"></i> Wenza pekee
+                    <i class="fas fa-ring mr-1"></i> Wenza pekee (' . $spousesCount . ')
                 </button>
             </div>';
         }
