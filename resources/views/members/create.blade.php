@@ -270,24 +270,7 @@
                                 </div>
                             </div>
 
-                            @if(!isset($selectedSpouse))
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Familia <small class="text-muted">(Hiari)</small></label>
-                                    <select name="family_id" class="form-control select2 @error('family_id') is-invalid @enderror">
-                                        <option value="">Chagua Familia...</option>
-                                        @foreach($clans as $clan)
-                                            @foreach($clan->families as $family)
-                                                <option value="{{ $family->id }}" {{ old('family_id', $selectedFamilyId ?? '') == $family->id ? 'selected' : '' }}>
-                                                    {{ $family->name }} ({{ $clan->name }})
-                                                </option>
-                                            @endforeach
-                                        @endforeach
-                                    </select>
-                                    @error('family_id') <span class="text-danger small">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                            @endif
+
 
 
                         </div>
@@ -898,7 +881,6 @@
                 if (!selectedOption.val()) return;
 
                 const clanId = selectedOption.data('clan');
-                const familyId = selectedOption.data('family');
                 const spouseId = selectedOption.data('spouse-id');
 
                 if (spouseId) {
@@ -911,26 +893,9 @@
                     }
                 }
 
-                // Clan and Family auto-population
-                let setClanFamily = false;
-                if (type === 'father') {
-                    setClanFamily = true;
-                } else {
-                    // type is mother, set only if father is not selected
-                    if (!$('select[name="father_id"]').val()) {
-                        setClanFamily = true;
-                    }
-                }
-
-                if (setClanFamily) {
-                    if (clanId) {
-                        $('select[name="clan_id"]').val(clanId).trigger('change');
-                    }
-                    if (familyId) {
-                        setTimeout(function() {
-                            $('select[name="family_id"]').val(familyId).trigger('change');
-                        }, 50);
-                    }
+                // Clan auto-population: set directly from the selected parent
+                if (clanId) {
+                    $('select[name="clan_id"]').val(clanId).trigger('change');
                 }
             }
 

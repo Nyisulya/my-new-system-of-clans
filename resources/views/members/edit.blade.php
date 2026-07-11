@@ -197,24 +197,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Family <small class="text-muted">(Optional)</small></label>
-                            <select name="family_id" class="form-control @error('family_id') is-invalid @enderror">
-                                <option value="">Select Family...</option>
-                                @foreach($clans as $clan)
-                                    @foreach($clan->families as $family)
-                                        <option value="{{ $family->id }}" {{ old('family_id', $member->family_id) == $family->id ? 'selected' : '' }}>
-                                            {{ $family->name }} ({{ $clan->name }})
-                                        </option>
-                                    @endforeach
-                                @endforeach
-                            </select>
-                            @error('family_id')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
+
 
                 </div>
 
@@ -247,7 +230,9 @@
                             <select name="mother_id" class="form-control @error('mother_id') is-invalid @enderror">
                                 <option value="">None</option>
                                 @foreach($potentialMothers as $mother)
-                                    <option value="{{ $mother->id }}" {{ old('mother_id', $member->mother_id) == $mother->id ? 'selected' : '' }}>
+                                    <option value="{{ $mother->id }}" 
+                                            data-clan="{{ $mother->clan_id }}" 
+                                            {{ old('mother_id', $member->mother_id) == $mother->id ? 'selected' : '' }}>
                                         {{ $mother->full_name }} (Gen {{ $mother->generation_number }})
                                     </option>
                                 @endforeach
@@ -502,20 +487,24 @@
             // --- 1. Initialize Select2 ---
             $('.select2').select2({ theme: 'bootstrap' });
 
-            // Auto-populate clan and family when father is selected
-            $('select[name="father_id"]').change(function() {
-                const selectedOption = $(this).find('option:selected');
-                const clanId = selectedOption.data('clan');
-                const familyId = selectedOption.data('family');
+            // Auto-populate clan when father or mother is selected
+            function handleParentSelection(type) {
+                const select = $('select[name="' + type + '_id"]');
+                const selectedOption = select.find('option:selected');
+                if (!selectedOption.val()) return;
 
+                const clanId = selectedOption.data('clan');
                 if (clanId) {
                     $('select[name="clan_id"]').val(clanId).trigger('change');
                 }
-                if (familyId) {
-                    setTimeout(function() {
-                        $('select[name="family_id"]').val(familyId).trigger('change');
-                    }, 50);
-                }
+            }
+
+            $('select[name="father_id"]').change(function() {
+                handleParentSelection('father');
+            });
+
+            $('select[name="mother_id"]').change(function() {
+                handleParentSelection('mother');
             });
 
             // --- 2. Country List (Comprehensive) ---
