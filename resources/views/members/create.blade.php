@@ -87,7 +87,7 @@
 
         <div class="row">
             {{-- Left Column: Main Information --}}
-            <div class="col-lg-8">
+            <div class="col-lg-12" id="leftColumnMain">
                 {{-- Personal Details Card --}}
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -196,7 +196,7 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="personalExtraRow" style="display: none;">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Mahali pa Kuzaliwa</label>
@@ -343,10 +343,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="text-center mb-3">
+                    <button type="button" id="toggleExtraFields" class="btn btn-outline-primary btn-block btn-lg">
+                        <i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)
+                    </button>
+                </div>
             </div>
 
             {{-- Right Column: Photo & Contact --}}
-            <div class="col-lg-4">
+            <div class="col-lg-4 d-none" id="rightColumnExtra">
                 {{-- Profile Photo Card --}}
                 <div class="card card-warning card-outline">
                     <div class="card-body box-profile">
@@ -941,6 +946,43 @@
 
             $('#statusSelect').change(toggleDeceased);
             toggleDeceased(); 
+
+            // --- 5. Toggle Extra Fields ---
+            $('#toggleExtraFields').click(function() {
+                const $extraRow = $('#personalExtraRow');
+                const $rightCol = $('#rightColumnExtra');
+                const $leftCol = $('#leftColumnMain');
+
+                if ($rightCol.hasClass('d-none')) {
+                    $extraRow.slideDown();
+                    $rightCol.removeClass('d-none');
+                    $leftCol.removeClass('col-lg-12').addClass('col-lg-8');
+                    $(this).html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
+                } else {
+                    $extraRow.slideUp();
+                    $rightCol.addClass('d-none');
+                    $leftCol.removeClass('col-lg-8').addClass('col-lg-12');
+                    $(this).html('<i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)');
+                }
+            });
+
+            // Auto-expand if there are validation errors or existing old input values
+            const hasErrorsOrData = @json($errors->any()) || 
+                                    $('#profilePhoto').val() ||
+                                    $('input[name="place_of_birth"]').val() ||
+                                    $('input[name="maiden_name"]').val() ||
+                                    $('input[name="email"]').val() ||
+                                    $('input[name="phone"]').val() ||
+                                    $('textarea[name="biography"]').val() ||
+                                    $('textarea[name="notes"]').val() ||
+                                    $('input[name="address"]').val();
+
+            if (hasErrorsOrData) {
+                $('#personalExtraRow').show();
+                $('#rightColumnExtra').removeClass('d-none');
+                $('#leftColumnMain').removeClass('col-lg-12').addClass('col-lg-8');
+                $('#toggleExtraFields').html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
+            }
         });
     </script>
 @stop

@@ -31,7 +31,7 @@
                 <h5 class="text-primary"><i class="fas fa-user"></i> Personal Information</h5>
                 <hr>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>First Name <span class="text-danger">*</span></label>
                             <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" 
@@ -41,7 +41,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Middle Name</label>
                             <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
@@ -51,7 +51,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Last Name <small class="text-muted">(Optional)</small></label>
                             <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
@@ -61,20 +61,10 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Maiden Name</label>
-                            <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
-                                   value="{{ old('maiden_name', $member->maiden_name) }}">
-                            @error('maiden_name')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Gender <span class="text-danger">*</span></label>
                             <select name="gender" class="form-control @error('gender') is-invalid @enderror" required>
@@ -130,20 +120,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>Place of Birth</label>
-                            <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
-                                   value="{{ old('place_of_birth', $member->place_of_birth) }}" placeholder="City, Country">
-                            @error('place_of_birth')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Status <span class="text-danger">*</span></label>
                             <select name="status" class="form-control @error('status') is-invalid @enderror" required>
@@ -155,7 +132,10 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-3">
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Date of Death</label>
                             <input type="date" name="date_of_death" class="form-control @error('date_of_death') is-invalid @enderror" 
@@ -265,10 +245,41 @@
                     </div>
                 </div>
 
-                {{-- Contact Information --}}
-                <h5 class="text-primary mt-4"><i class="fas fa-address-card"></i> Contact Information</h5>
-                <hr>
-                <div class="row">
+                <div class="text-center mb-4">
+                    <button type="button" id="toggleExtraFields" class="btn btn-outline-primary btn-block btn-lg">
+                        <i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)
+                    </button>
+                </div>
+
+                <div id="extraFields" style="display: none;">
+                    {{-- Hidden optional personal fields --}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Maiden Name</label>
+                                <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
+                                       value="{{ old('maiden_name', $member->maiden_name) }}">
+                                @error('maiden_name')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Place of Birth</label>
+                                <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
+                                       value="{{ old('place_of_birth', $member->place_of_birth) }}" placeholder="City, Country">
+                                @error('place_of_birth')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Contact Information --}}
+                    <h5 class="text-primary mt-4"><i class="fas fa-address-card"></i> Contact Information</h5>
+                    <hr>
+                    <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Email</label>
@@ -395,6 +406,7 @@
                             @enderror
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -887,6 +899,43 @@
                 $('#locationDetails').addClass('d-none');
                 $('#address, #street, #city, #district, #region, #country, #current_lat, #current_lng').val('');
             });
+
+            // --- 5. Toggle Extra Fields ---
+            $('#toggleExtraFields').click(function() {
+                const $extraDiv = $('#extraFields');
+
+                if ($extraDiv.is(':hidden')) {
+                    $extraDiv.slideDown();
+                    $(this).html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
+                } else {
+                    $extraDiv.slideUp();
+                    $(this).html('<i class="fas fa-cog"></i> Onyesha Taarifa za Ziada (Picha, Simu, Anuani, Wasifu)');
+                }
+            });
+
+            // Auto-expand if there are validation errors or existing data/values
+            const hasErrorsOrData = @json($errors->any()) || 
+                                    $('input[name="place_of_birth"]').val() ||
+                                    $('input[name="maiden_name"]').val() ||
+                                    $('input[name="email"]').val() ||
+                                    $('input[name="phone"]').val() ||
+                                    $('textarea[name="biography"]').val() ||
+                                    $('textarea[name="notes"]').val() ||
+                                    $('input[name="address"]').val() ||
+                                    $('#profile_photo').val() ||
+                                    "{{ $member->profile_photo }}" ||
+                                    "{{ $member->place_of_birth }}" ||
+                                    "{{ $member->maiden_name }}" ||
+                                    "{{ $member->email }}" ||
+                                    "{{ $member->phone }}" ||
+                                    "{{ $member->biography }}" ||
+                                    "{{ $member->notes }}" ||
+                                    "{{ $member->address }}";
+
+            if (hasErrorsOrData) {
+                $('#extraFields').show();
+                $('#toggleExtraFields').html('<i class="fas fa-minus-circle"></i> Ficha Taarifa za Ziada');
+            }
         });
     </script>
 @stop
