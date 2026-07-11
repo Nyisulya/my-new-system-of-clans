@@ -76,4 +76,53 @@ class DashboardTest extends TestCase
         $response->assertJsonStructure(['html']);
         $this->assertStringContainsString('Jane Doe', $response->json('html'));
     }
+
+    public function test_authenticated_user_can_filter_generation_members_by_descendants_and_spouses(): void
+    {
+        $father = Member::create([
+            'clan_id' => $this->clan->id,
+            'first_name' => 'Father',
+            'gender' => 'male',
+            'status' => 'alive',
+            'generation_number' => 1,
+        ]);
+        $descendant = Member::create([
+            'clan_id' => $this->clan->id,
+            'first_name' => 'ChildDescendant',
+            'gender' => 'male',
+            'father_id' => $father->id,
+            'status' => 'alive',
+            'generation_number' => 2,
+        ]);
+
+        $spouse = Member::create([
+            'clan_id' => $this->clan->id,
+            'first_name' => 'SpouseMember',
+            'gender' => 'female',
+            'status' => 'alive',
+            'generation_number' => 2,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->getJson(route('dashboard.members', [
+                'category' => 'generation_2',
+                'type' => 'descendants'
+            ]))
+            ->assertStatus(200);
+
+        $html = $response->json('html');
+        $this->assertStringContainsString('ChildDescendant', $html);
+        $this->assertStringNotContainsString('SpouseMember', $html);
+
+        $response = $this->actingAs($this->user)
+            ->getJson(route('dashboard.members', [
+                'category' => 'generation_2',
+                'type' => 'spouses'
+            ]))
+            ->assertStatus(200);
+
+        $html = $response->json('html');
+        $this->assertStringNotContainsString('ChildDescendant', $html);
+        $this->assertStringContainsString('SpouseMember', $html);
+    }
 }

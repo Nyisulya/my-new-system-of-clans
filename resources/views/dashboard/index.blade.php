@@ -376,6 +376,21 @@
             });
         }
 
+        window.filterGenerationMembers = function(category, type) {
+            $('#categoryMembersModalBody .list-group').css('opacity', 0.5);
+            $.ajax({
+                url: '{{ route("dashboard.members") }}',
+                type: 'GET',
+                data: { category: category, type: type },
+                success: function(response) {
+                    $('#categoryMembersModalBody').html(response.html);
+                },
+                error: function() {
+                    $('#categoryMembersModalBody').html('<div class="alert alert-danger">Itilafu imetokea wakati wa kupakia wanachama. Tafadhali jaribu tena.</div>');
+                }
+            });
+        };
+
         // Category Members Modal
         $(document).ready(function() {
             $('.view-category').click(function(e) {

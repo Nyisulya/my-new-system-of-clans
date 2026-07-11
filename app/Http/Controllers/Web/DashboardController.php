@@ -21,12 +21,34 @@ class DashboardController extends Controller
     public function getCategoryMembers(Request $request)
     {
         $category = $request->query('category');
+        $type = $request->query('type', 'all'); // 'all', 'descendants', 'spouses'
         
         $query = Member::query();
 
         if ($category && str_starts_with($category, 'generation_')) {
             $genNum = (int) str_replace('generation_', '', $category);
             $query->where('generation_number', $genNum);
+
+            if ($type === 'descendants') {
+                $query->where(function($q) {
+                    $q->whereNotNull('father_id')
+                      ->orWhereNotNull('mother_id')
+                      ->orWhere(function($sq) {
+                          $sq->where('generation_number', 1)
+                             ->where('gender', 'male');
+                      });
+                });
+            } elseif ($type === 'spouses') {
+                $query->whereNull('father_id')
+                      ->whereNull('mother_id')
+                      ->where(function($q) {
+                          $q->where('generation_number', '>', 1)
+                            ->orWhere(function($sq) {
+                                $sq->where('generation_number', 1)
+                                   ->where('gender', 'female');
+                            });
+                      });
+            }
         } else {
             switch ($category) {
                 case 'all_members':
@@ -96,7 +118,23 @@ class DashboardController extends Controller
             ->limit(100) // Limit to 100 to prevent crashing
             ->get();
 
-        $html = '<div class="list-group">';
+        $prefixHtml = '';
+        if ($category && str_starts_with($category, 'generation_')) {
+            $prefixHtml .= '
+            <div class="btn-group d-flex mb-3" role="group" aria-label="Generation Filters">
+                <button type="button" class="btn ' . ($type === 'all' ? 'btn-success' : 'btn-outline-success') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'all\')">
+                    <i class="fas fa-users mr-1"></i> Wote
+                </button>
+                <button type="button" class="btn ' . ($type === 'descendants' ? 'btn-primary' : 'btn-outline-primary') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'descendants\')">
+                    <i class="fas fa-child mr-1"></i> Watoto wa Ukoo
+                </button>
+                <button type="button" class="btn ' . ($type === 'spouses' ? 'btn-warning text-dark' : 'btn-outline-warning') . ' w-100 font-weight-bold" onclick="window.filterGenerationMembers(\'' . $category . '\', \'spouses\')">
+                    <i class="fas fa-ring mr-1"></i> Wenza pekee
+                </button>
+            </div>';
+        }
+
+        $html = $prefixHtml . '<div class="list-group">';
         if ($members->isEmpty()) {
             $html .= '<div class="list-group-item">No members found in this category.</div>';
         } else {
