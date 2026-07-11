@@ -98,12 +98,12 @@
             {{ __('common.all_members') }}
         </a>
 
-        @if(auth()->user()->isAdmin())
+        @if(auth()->user()->isAdmin() || auth()->user()->member_id !== null)
             <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
                 <i class="fas fa-user-plus"></i>
-                {{ __('common.add_member') }}
+                Ongeza Mwanachama
             </a>
-        @elseif(auth()->user()->member_id === null)
+        @else
             <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
                 <i class="fas fa-user-plus text-warning"></i>
                 <span class="text-warning font-weight-bold">{{ __('common.join_family_tree') }}</span>
