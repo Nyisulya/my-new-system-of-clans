@@ -28,7 +28,7 @@
                         <div class="flex-grow-1">
                             <textarea name="content" id="postContent" class="form-control border-0 px-0" rows="3" 
                                       placeholder="Shiriki simulizi, kumbukumbu, au habari ya ukoo na wengine..." 
-                                      style="resize: none; font-size: 1.05rem; outline: none; box-shadow: none;" required></textarea>
+                                      style="resize: none; font-size: 1.05rem; outline: none; box-shadow: none;"></textarea>
                         </div>
                     </div>
 
@@ -344,6 +344,12 @@ $(document).ready(function() {
         let btnSubmit = $('#btnSubmitPost');
         
         btnSubmit.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Inatuma...');
+        
+        if (!content.trim() && !file) {
+            alert('Tafadhali andika maelezo au chagua picha kabla ya kuchapisha.');
+            btnSubmit.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> Chapisha');
+            return;
+        }
         
         if (!file) {
             // Submit normally via AJAX if no file

@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Member')
+@section('title', 'Hariri Mwanachama')
 
 @section('content_header')
-    <h1><i class="fas fa-user-edit"></i> Edit Member: {{ $member->full_name }}</h1>
+    <h1><i class="fas fa-user-edit"></i> Hariri Mwanachama: {{ $member->full_name }}</h1>
 @stop
 
 @section('content')
     @if(session('warning'))
         <div class="alert alert-warning alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Warning!</strong> {{ session('warning') }}
+            <strong>Onyo!</strong> {{ session('warning') }}
         </div>
     @endif
 
     @if(session('error'))
         <div class="alert alert-danger alert-dismissible">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Error!</strong> {{ session('error') }}
+            <strong>Itilafu!</strong> {{ session('error') }}
         </div>
     @endif
 
@@ -28,12 +28,12 @@
             
             <div class="card-body">
                 {{-- Personal Information --}}
-                <h5 class="text-primary"><i class="fas fa-user"></i> Personal Information</h5>
+                <h5 class="text-primary"><i class="fas fa-user"></i> Maelezo Binafsi</h5>
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>First Name <span class="text-danger">*</span></label>
+                            <label>Jina la Kwanza <span class="text-danger">*</span></label>
                             <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" 
                                    value="{{ old('first_name', $member->first_name) }}" required>
                             @error('first_name')
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Middle Name <small class="text-muted">(Optional)</small></label>
+                            <label>Jina la Kati <small class="text-muted">(Si lazima)</small></label>
                             <input type="text" name="middle_name" class="form-control @error('middle_name') is-invalid @enderror" 
                                    value="{{ old('middle_name', $member->middle_name) }}">
                             @error('middle_name')
@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Last Name <small class="text-muted">(Optional)</small></label>
+                            <label>Jina la Mwisho <small class="text-muted">(Si lazima)</small></label>
                             <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" 
                                    value="{{ old('last_name', $member->last_name) }}">
                             @error('last_name')
@@ -66,12 +66,12 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Gender <span class="text-danger">*</span></label>
+                            <label>Jinsia <span class="text-danger">*</span></label>
                             <select name="gender" class="form-control @error('gender') is-invalid @enderror" required>
-                                <option value="">Select Gender...</option>
-                                <option value="male" {{ old('gender', $member->gender) == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ old('gender', $member->gender) == 'female' ? 'selected' : '' }}>Female</option>
-                                <option value="other" {{ old('gender', $member->gender) == 'other' ? 'selected' : '' }}>Other</option>
+                                <option value="">Chagua Jinsia...</option>
+                                <option value="male" {{ old('gender', $member->gender) == 'male' ? 'selected' : '' }}>Mwanaume</option>
+                                <option value="female" {{ old('gender', $member->gender) == 'female' ? 'selected' : '' }}>Mwanamke</option>
+                                <option value="other" {{ old('gender', $member->gender) == 'other' ? 'selected' : '' }}>Nyingine</option>
                             </select>
                             @error('gender')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -80,12 +80,12 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Date of Birth <small class="text-muted">(Optional)</small></label>
+                            <label>Tarehe ya Kuzaliwa <small class="text-muted">(Si lazima)</small></label>
                             <input type="hidden" name="date_of_birth" id="dob_hidden" value="{{ old('date_of_birth', $member->date_of_birth?->format('Y-m-d')) }}">
                             <div class="row">
                                 <div class="col-4 pr-1">
                                     <select id="dob_day" class="form-control @error('date_of_birth') is-invalid @enderror">
-                                        <option value="">Day</option>
+                                        <option value="">Siku</option>
                                         @for ($d = 1; $d <= 31; $d++)
                                             <option value="{{ sprintf('%02d', $d) }}">{{ sprintf('%02d', $d) }}</option>
                                         @endfor
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-4 px-1">
                                     <select id="dob_month" class="form-control @error('date_of_birth') is-invalid @enderror">
-                                        <option value="">Month</option>
+                                        <option value="">Mwezi</option>
                                         @php
                                             $monthsSw = [
                                                 '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="col-4 pl-1">
                                     <select id="dob_year" class="form-control @error('date_of_birth') is-invalid @enderror">
-                                        <option value="">Year</option>
+                                        <option value="">Mwaka</option>
                                         @for ($y = date('Y'); $y >= 1900; $y--)
                                             <option value="{{ $y }}">{{ $y }}</option>
                                         @endfor
@@ -122,10 +122,10 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Status <span class="text-danger">*</span></label>
+                            <label>Hali ya Uzima <span class="text-danger">*</span></label>
                             <select name="status" class="form-control @error('status') is-invalid @enderror" required>
-                                <option value="alive" {{ old('status', $member->status) == 'alive' ? 'selected' : '' }}>Alive</option>
-                                <option value="deceased" {{ old('status', $member->status) == 'deceased' ? 'selected' : '' }}>Deceased</option>
+                                <option value="alive" {{ old('status', $member->status) == 'alive' ? 'selected' : '' }}>Hai</option>
+                                <option value="deceased" {{ old('status', $member->status) == 'deceased' ? 'selected' : '' }}>Marehemu</option>
                             </select>
                             @error('status')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -137,7 +137,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Date of Death</label>
+                            <label>Tarehe ya Kufariki</label>
                             <input type="date" name="date_of_death" class="form-control @error('date_of_death') is-invalid @enderror" 
                                    value="{{ old('date_of_death', $member->date_of_death?->format('Y-m-d')) }}">
                             @error('date_of_death')
@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Place of Death</label>
+                            <label>Sehemu ya Kufariki</label>
                             <input type="text" name="place_of_death" class="form-control @error('place_of_death') is-invalid @enderror" 
                                    value="{{ old('place_of_death', $member->place_of_death) }}">
                             @error('place_of_death')
@@ -158,14 +158,14 @@
                 </div>
 
                 {{-- Family Organization --}}
-                <h5 class="text-primary mt-4"><i class="fas fa-sitemap"></i> Family Organization</h5>
+                <h5 class="text-primary mt-4"><i class="fas fa-sitemap"></i> Muundo wa Ukoo</h5>
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Clan <span class="text-danger">*</span></label>
+                            <label>Ukoo <span class="text-danger">*</span></label>
                             <select name="clan_id" class="form-control @error('clan_id') is-invalid @enderror" required>
-                                <option value="">Select Clan...</option>
+                                <option value="">Chagua Ukoo...</option>
                                 @foreach($clans as $clan)
                                     <option value="{{ $clan->id }}" {{ old('clan_id', $member->clan_id) == $clan->id ? 'selected' : '' }}>
                                         {{ $clan->name }}
@@ -182,14 +182,14 @@
                 </div>
 
                 {{-- Family Relationships --}}
-                <h5 class="text-primary mt-4"><i class="fas fa-users"></i> Family Relationships</h5>
+                <h5 class="text-primary mt-4"><i class="fas fa-users"></i> Uhusiano wa Kifamilia</h5>
                 <hr>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Father</label>
+                            <label>Baba</label>
                             <select name="father_id" class="form-control @error('father_id') is-invalid @enderror">
-                                <option value="">None</option>
+                                <option value="">Hakuna</option>
                                 @foreach($potentialFathers as $father)
                                     <option value="{{ $father->id }}" 
                                             data-clan="{{ $father->clan_id }}" 
@@ -206,9 +206,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Mother</label>
+                            <label>Mama</label>
                             <select name="mother_id" class="form-control @error('mother_id') is-invalid @enderror">
-                                <option value="">None</option>
+                                <option value="">Hakuna</option>
                                 @foreach($potentialMothers as $mother)
                                     <option value="{{ $mother->id }}" 
                                             data-clan="{{ $mother->clan_id }}" 
@@ -224,7 +224,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Current Spouses</label>
+                            <label>Wenza wa Sasa</label>
                             <div class="border rounded p-2" style="min-height: 38px;">
                                 @php
                                     $currentSpouses = $member->spouses();
@@ -235,11 +235,11 @@
                                         <span class="badge badge-info mr-1">{{ $spouse->full_name }}</span>
                                     @endforeach
                                 @else
-                                    <span class="text-muted">No spouse</span>
+                                    <span class="text-muted">Hakuna Mwenzi</span>
                                 @endif
                             </div>
                             <small class="form-text text-muted">
-                                Manage marriages from the member's detail page
+                                Simamia ndoa kutoka kwenye ukurasa wa maelezo ya mwanachama
                             </small>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Maiden Name <small class="text-muted">(Optional)</small></label>
+                                <label>Jina la Ukoo la Ukubwani / la Kuolewa (Maiden Name) <small class="text-muted">(Si lazima)</small></label>
                                 <input type="text" name="maiden_name" class="form-control @error('maiden_name') is-invalid @enderror" 
                                        value="{{ old('maiden_name', $member->maiden_name) }}">
                                 @error('maiden_name')
@@ -258,9 +258,9 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Place of Birth <small class="text-muted">(Optional)</small></label>
+                                <label>Sehemu ya Kuzaliwa <small class="text-muted">(Si lazima)</small></label>
                                 <input type="text" name="place_of_birth" class="form-control @error('place_of_birth') is-invalid @enderror" 
-                                       value="{{ old('place_of_birth', $member->place_of_birth) }}" placeholder="City, Country">
+                                       value="{{ old('place_of_birth', $member->place_of_birth) }}" placeholder="Mji, Nchi">
                                 @error('place_of_birth')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -269,12 +269,12 @@
                     </div>
 
                     {{-- Contact Information --}}
-                    <h5 class="text-primary mt-4"><i class="fas fa-address-card"></i> Contact Information</h5>
+                    <h5 class="text-primary mt-4"><i class="fas fa-address-card"></i> Maelezo ya Mawasiliano</h5>
                     <hr>
                     <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Email <small class="text-muted">(Optional)</small></label>
+                            <label>Barua Pepe (Email) <small class="text-muted">(Si lazima)</small></label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" 
                                    value="{{ old('email', $member->email) }}">
                             @error('email')
@@ -284,7 +284,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Phone <small class="text-muted">(Optional)</small></label>
+                            <label>Namba ya Simu <small class="text-muted">(Si lazima)</small></label>
                             <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" 
                                    value="{{ old('phone', $member->phone) }}">
                             @error('phone')
@@ -294,15 +294,15 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Profile Photo <small class="text-muted">(Optional)</small></label>
+                            <label>Picha ya Wasifu <small class="text-muted">(Si lazima)</small></label>
                             <div class="custom-file">
                                 <input type="file" name="profile_photo" class="custom-file-input @error('profile_photo') is-invalid @enderror" id="profile_photo" accept="image/*">
-                                <label class="custom-file-label" for="profile_photo">Choose file</label>
+                                <label class="custom-file-label" for="profile_photo">Chagua faili</label>
                             </div>
-                            <small class="form-text text-muted">Leave empty to keep current photo. Max 2MB.</small>
+                            <small class="form-text text-muted">Acha wazi ili kubaki na picha ya sasa. Isizidi 2MB.</small>
                             @if($member->profile_photo)
                                 <div class="mt-2">
-                                    <img src="{{ $member->profile_photo_url }}" alt="Current Photo" class="img-thumbnail" style="height: 100px">
+                                    <img src="{{ $member->profile_photo_url }}" alt="Picha ya Sasa" class="img-thumbnail" style="height: 100px">
                                 </div>
                             @endif
                             @error('profile_photo')
@@ -317,50 +317,50 @@
                     <div class="col-md-12">
                         <div class="card bg-light border-0">
                             <div class="card-body p-3">
-                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Location Details <small class="text-muted">(Optional)</small></h6>
+                                <h6 class="text-primary mb-3"><i class="fas fa-map-marked-alt mr-1"></i> Maelezo ya Mahali Anapoishi Sasa <small class="text-muted">(Si lazima)</small></h6>
                                 
                                 {{-- 1. Country --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">1. Country</label>
+                                    <label class="small text-muted mb-0">1. Nchi</label>
                                     <select id="countrySelect" class="form-control select2" style="width: 100%;">
-                                        <option value="">Select Country...</option>
+                                        <option value="">Chagua Nchi...</option>
                                         {{-- Populated via JS --}}
                                     </select>
                                 </div>
 
                                 {{-- 2. Region --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">2. Region / State</label>
+                                    <label class="small text-muted mb-0">2. Mkoa / Jimbo</label>
                                     <select id="regionSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select Country First...</option>
+                                        <option value="">Chagua Nchi Kwanza...</option>
                                     </select>
                                 </div>
 
                                 {{-- 3. District --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">3. District / County</label>
+                                    <label class="small text-muted mb-0">3. Wilaya</label>
                                     <select id="districtSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select Region First...</option>
+                                        <option value="">Chagua Mkoa Kwanza...</option>
                                     </select>
                                 </div>
 
                                 {{-- 4. Street --}}
                                 <div class="form-group">
-                                    <label class="small text-muted mb-0">4. Street / Village / Area</label>
+                                    <label class="small text-muted mb-0">4. Mtaa / Kijiji / Eneo</label>
                                     <select id="streetSelect" class="form-control select2" style="width: 100%;" disabled>
-                                        <option value="">Select District First...</option>
+                                        <option value="">Chagua Wilaya Kwanza...</option>
                                     </select>
                                 </div>
 
                                 <button type="button" id="resetLocation" class="btn btn-sm btn-outline-danger mt-2">
-                                    <i class="fas fa-undo"></i> Reset Location
+                                    <i class="fas fa-undo"></i> Anza Upya Mahali
                                 </button>
                             </div>
                         </div>
 
                         {{-- Hidden Fields for Location Data --}}
                         <div id="locationDetails" class="{{ $member->current_location ? '' : 'd-none' }} bg-white border p-3 rounded mt-2">
-                            <h6 class="text-success"><i class="fas fa-check-circle"></i> Location Locked</h6>
+                            <h6 class="text-success"><i class="fas fa-check-circle"></i> Mahali Pamethibitishwa</h6>
                             <p class="mb-1 small text-muted" id="displayAddress">{{ $member->current_location }}</p>
                             <input type="hidden" name="address" id="address" value="{{ old('address', $member->address) }}">
                             <input type="hidden" name="street" id="street" value="{{ old('street', $member->street) }}">
@@ -377,7 +377,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Biography <small class="text-muted">(Optional)</small></label>
+                            <label>Wasifu Mfupi (Biography) <small class="text-muted">(Si lazima)</small></label>
                             <textarea name="biography" class="form-control @error('biography') is-invalid @enderror" 
                                       rows="3">{{ old('biography', $member->biography) }}</textarea>
                             @error('biography')
@@ -390,7 +390,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Notes <small class="text-muted">(Optional)</small></label>
+                            <label>Maelezo ya Ziada (Notes) <small class="text-muted">(Si lazima)</small></label>
                             <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" 
                                       rows="2">{{ old('notes', $member->notes) }}</textarea>
                             @error('notes')
@@ -403,10 +403,10 @@
 
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Update Member
+                    <i class="fas fa-save"></i> Hifadhi Mabadiliko
                 </button>
                 <a href="{{ route('members.index') }}" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancel
+                    <i class="fas fa-times"></i> Ghairi
                 </a>
             </div>
         </form>
