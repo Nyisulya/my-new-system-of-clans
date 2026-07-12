@@ -7,28 +7,65 @@
 @stop
 
 @section('content')
+@php
+    $currentUserAvatar = auth()->user()->member ? auth()->user()->member->profile_photo_url : null;
+    if (!$currentUserAvatar) {
+        $name = urlencode(auth()->user()->name ?? 'U');
+        $currentUserAvatar = "https://ui-avatars.com/api/?name={$name}&background=3B82F6&color=fff&size=100";
+    }
+@endphp
 <div class="row justify-content-center">
     <div class="col-md-8">
         
-        <!-- Create Post -->
-        <div class="card card-outline card-primary mb-4">
-            <div class="card-body">
+        <!-- Create Post Card -->
+        <div class="card border-0 shadow-sm mb-4" style="border-radius: 12px; overflow: hidden; background: #fff;">
+            <div class="card-body p-4">
                 <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" id="postForm">
                     @csrf
-                    <div class="form-group">
-                        <textarea name="content" id="postContent" class="form-control" rows="3" placeholder="Andika historia, tangazo, au jambo lolote hapa..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="image"><i class="fas fa-image"></i> Weka Picha (Si lazima)</label>
-                        <input type="file" name="image" id="image" class="form-control-file" accept="image/*">
-                    </div>
-                    <div id="uploadProgressContainer" style="display: none;" class="mb-3">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="uploadProgressBar" role="progressbar" style="width: 0%"></div>
+                    
+                    <div class="d-flex mb-3">
+                        <img src="{{ $currentUserAvatar }}" class="rounded-circle mr-3 border" width="48" height="48" style="object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <div class="flex-grow-1">
+                            <textarea name="content" id="postContent" class="form-control border-0 px-0" rows="3" 
+                                      placeholder="Shiriki simulizi, kumbukumbu, au habari ya ukoo na wengine..." 
+                                      style="resize: none; font-size: 1.05rem; outline: none; box-shadow: none;" required></textarea>
                         </div>
-                        <small class="text-muted" id="uploadStatusText">Inachakata picha...</small>
                     </div>
-                    <button type="submit" class="btn btn-primary" id="btnSubmitPost"><i class="fas fa-paper-plane"></i> Tuma Post</button>
+
+                    <!-- Image Preview Container -->
+                    <div id="imagePreviewContainer" class="position-relative mb-3 d-none text-center" style="border-radius: 8px; overflow: hidden; background: #f8f9fa; border: 1px solid #e9ecef; max-height: 350px; min-height: 100px;">
+                        <img id="imagePreview" src="#" alt="Hakiki Picha" style="max-height: 350px; max-width: 100%; object-fit: contain;">
+                        <button type="button" id="btnRemoveImage" class="btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px; border-radius: 50%; width: 32px; height: 32px; line-height: 32px; padding: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <hr class="my-3" style="border-top: 1px solid #f1f3f5;">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <!-- Styled File Input Trigger -->
+                            <button type="button" class="btn btn-light text-primary font-weight-bold d-flex align-items-center px-3 py-2" id="btnTriggerUpload" style="border-radius: 20px; font-size: 0.9rem; transition: all 0.2s;">
+                                <i class="fas fa-image text-success mr-2" style="font-size: 1.15rem;"></i>
+                                Picha ya Simulizi
+                            </button>
+                            <input type="file" name="image" id="image" class="d-none" accept="image/*">
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-primary font-weight-bold px-4 py-2" id="btnSubmitPost" style="border-radius: 20px; font-size: 0.9rem; box-shadow: 0 4px 6px rgba(0, 123, 255, 0.15); transition: all 0.2s;">
+                                <i class="fas fa-paper-plane mr-1"></i> Chapisha
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar for image processing -->
+                    <div id="uploadProgressContainer" style="display: none;" class="mt-3">
+                        <div class="progress" style="height: 6px; border-radius: 3px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="uploadProgressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small class="text-muted mt-1 d-block" id="uploadStatusText">Inachakata picha...</small>
+                    </div>
                 </form>
             </div>
         </div>
@@ -247,6 +284,18 @@
     #photoModal {
         background: rgba(0,0,0,0.85);
     }
+    #postContent:focus {
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    #btnTriggerUpload:hover {
+        background-color: #e2e6ea !important;
+        transform: scale(1.02);
+    }
+    #btnSubmitPost:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(0, 123, 255, 0.25) !important;
+    }
 </style>
 @stop
 
@@ -259,6 +308,31 @@ function openPhotoModal(url, title) {
 }
 
 $(document).ready(function() {
+    // Trigger file upload when clicking the custom button
+    $('#btnTriggerUpload').on('click', function() {
+        $('#image').click();
+    });
+
+    // Handle file input change event to show image preview
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                $('#imagePreview').attr('src', event.target.result);
+                $('#imagePreviewContainer').removeClass('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle image removal click
+    $('#btnRemoveImage').on('click', function() {
+        $('#image').val('');
+        $('#imagePreview').attr('src', '#');
+        $('#imagePreviewContainer').addClass('d-none');
+    });
+
     // Client-side image compression for Posts to avoid 413 Request Entity Too Large
     $('#postForm').on('submit', function(e) {
         e.preventDefault();
