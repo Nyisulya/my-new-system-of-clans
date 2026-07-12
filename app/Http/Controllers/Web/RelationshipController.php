@@ -15,7 +15,7 @@ class RelationshipController extends Controller
 
     public function index()
     {
-        $members = Member::orderBy('first_name')->get(['id', 'first_name', 'last_name']);
+        $members = Member::orderBy('first_name')->get(['id', 'first_name', 'middle_name', 'last_name']);
         return view('relationships.calculator', compact('members'));
     }
 
