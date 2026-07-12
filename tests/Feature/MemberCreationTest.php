@@ -64,7 +64,7 @@ class MemberCreationTest extends TestCase
         $this->assertNotNull($user->fresh()->member_id);
     }
 
-    public function test_linked_user_create_route_redirects_to_self_parent(): void
+    public function test_linked_user_create_route_does_not_redirect_to_self_parent(): void
     {
         $member = Member::create([
             'clan_id' => $this->clan->id,
@@ -79,12 +79,8 @@ class MemberCreationTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('members.create'));
 
-        // Should redirect to members.create with father_id=member->id since user is male
-        $response->assertRedirect(route('members.create', [
-            'father_id' => $member->id,
-            'clan_id' => $this->clan->id,
-            'family_id' => $this->family->id,
-        ]));
+        // Should return 200 OK directly, allowing them to add anyone instead of redirecting
+        $response->assertStatus(200);
     }
 
     public function test_linked_user_can_access_create_form_with_self_as_father(): void
@@ -128,7 +124,7 @@ class MemberCreationTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('members.create', ['father_id' => $otherMember->id]));
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
     }
 
     public function test_linked_user_can_create_child_when_father(): void
@@ -161,7 +157,7 @@ class MemberCreationTest extends TestCase
         ]);
     }
 
-    public function test_linked_user_cannot_create_child_for_others(): void
+    public function test_linked_user_can_create_child_for_others(): void
     {
         $member = Member::create([
             'clan_id' => $this->clan->id,
@@ -192,7 +188,11 @@ class MemberCreationTest extends TestCase
                 'father_id' => $otherMember->id,
             ]);
 
-        $response->assertStatus(403);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('members', [
+            'first_name' => 'Child',
+            'father_id' => $otherMember->id,
+        ]);
     }
 
     public function test_admin_can_create_any_member(): void
