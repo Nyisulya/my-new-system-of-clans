@@ -20,10 +20,23 @@ class GalleryController extends Controller
 
     public function index()
     {
+        // Auto-create default "Picha za Jumla" gallery if it does not exist
+        $defaultTitle = 'Picha za Jumla';
+        Gallery::firstOrCreate(
+            ['title' => $defaultTitle],
+            [
+                'description' => 'Picha zilizopakiwa bila albamu maalum.',
+                'created_by' => Auth::id() ?? 1,
+            ]
+        );
+
         $galleries = Gallery::withCount('photos')
             ->orderBy('created_at', 'desc')
             ->paginate(12);
-        return view('galleries.index', compact('galleries'));
+
+        $allGalleries = Gallery::orderBy('title', 'asc')->get();
+
+        return view('galleries.index', compact('galleries', 'allGalleries'));
     }
 
     public function create()
@@ -73,6 +86,43 @@ class GalleryController extends Controller
         }
 
         return back()->with('success', count($request->photos) . ' photo(s) uploaded successfully.');
+    }
+
+    public function uploadPhotosGeneral(Request $request)
+    {
+        $request->validate([
+            'photos' => 'required|array',
+            'photos.*' => 'image|max:5120', // 5MB max
+            'gallery_id' => 'nullable|exists:galleries,id',
+        ]);
+
+        $galleryId = $request->gallery_id;
+
+        if (!$galleryId) {
+            $defaultTitle = 'Picha za Jumla';
+            $gallery = Gallery::firstOrCreate(
+                ['title' => $defaultTitle],
+                [
+                    'description' => 'Picha zilizopakiwa bila albamu maalum.',
+                    'created_by' => Auth::id() ?? 1,
+                ]
+            );
+            $galleryId = $gallery->id;
+        }
+
+        foreach ($request->file('photos') as $index => $photo) {
+            $result = $this->imageService->uploadProfilePhoto($photo, 'galleries');
+            
+            GalleryPhoto::create([
+                'gallery_id' => $galleryId,
+                'photo_path' => $result['path'],
+                'caption' => $request->captions[$index] ?? null,
+                'member_id' => $request->members[$index] ?? null,
+                'uploaded_by' => Auth::id(),
+            ]);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function deletePhoto($id)

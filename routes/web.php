@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notifications/mark-all-read', [\App\Http\Controllers\Web\NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-read');
 
     // Galleries
+    Route::post('galleries/upload-photos', [\App\Http\Controllers\Web\GalleryController::class, 'uploadPhotosGeneral'])->name('galleries.upload-photos-general');
     Route::resource('galleries', \App\Http\Controllers\Web\GalleryController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
     Route::post('galleries/{gallery}/upload-photos', [\App\Http\Controllers\Web\GalleryController::class, 'uploadPhotos'])->name('galleries.upload-photos');
     Route::delete('galleries/photos/{id}', [\App\Http\Controllers\Web\GalleryController::class, 'deletePhoto'])->name('galleries.delete-photo');
