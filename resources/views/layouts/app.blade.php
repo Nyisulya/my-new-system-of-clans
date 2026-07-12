@@ -98,6 +98,11 @@
             {{ __('common.all_members') }}
         </a>
 
+        <a href="{{ route('relationships.index') }}" class="sidebar-item {{ request()->routeIs('relationships.*') ? 'active' : '' }}">
+            <i class="fas fa-calculator text-success"></i>
+            Kikokotoo cha Uhusiano
+        </a>
+
         @if(auth()->user()->isAdmin() || auth()->user()->member_id !== null)
             <a href="{{ route('members.create') }}" class="sidebar-item {{ request()->routeIs('members.create') ? 'active' : '' }}">
                 <i class="fas fa-user-plus"></i>

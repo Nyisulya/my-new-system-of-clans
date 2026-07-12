@@ -64,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
     // Map
     Route::get('map', [\App\Http\Controllers\Web\MapController::class, 'index'])->name('maps.index');
 
+    // Relationship Calculator
+    Route::get('relationships', [\App\Http\Controllers\Web\RelationshipController::class, 'index'])->name('relationships.index');
+    Route::post('relationships/calculate', [\App\Http\Controllers\Web\RelationshipController::class, 'calculate'])->name('relationships.calculate');
+
 
     // Calendar
     Route::get('calendar', [\App\Http\Controllers\Web\CalendarController::class, 'index'])->name('calendar.index');
