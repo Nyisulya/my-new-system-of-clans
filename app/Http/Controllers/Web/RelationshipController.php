@@ -31,11 +31,11 @@ class RelationshipController extends Controller
             $request->member2_id
         );
 
-        // Translate English result to Swahili
-        $swResult = $this->translateRelationship($result);
-
         $member1 = Member::find($request->member1_id);
         $member2 = Member::find($request->member2_id);
+
+        // Translate English result to Swahili, passing member1 for gender context
+        $swResult = $this->translateRelationship($result, $member1);
 
         return response()->json([
             'result' => $swResult,
@@ -45,34 +45,86 @@ class RelationshipController extends Controller
     }
 
     /**
-     * Translates English relationship service outputs to Swahili.
+     * Translates English relationship service outputs to Swahili with gender awareness.
      */
-    private function translateRelationship(string $relation): string
+    private function translateRelationship(string $relation, Member $member): string
     {
+        $gender = $member->gender; // 'male', 'female', or 'other'
+
+        // Gender-specific maps
         $translations = [
-            'Same person' => 'Mtu yule yule',
-            'Member not found' => 'Mwanachama hajapatikana',
-            'Spouse' => 'Mwenzi (Mke/Mume)',
-            'Child' => 'Mtoto',
-            'Grandchild' => 'Mjukuu',
-            'Great-grandchild' => 'Kitukuu',
-            'Parent' => 'Mzazi (Baba/Mama)',
-            'Grandparent' => 'Babu/Bibi',
-            'Great-grandparent' => 'Babu/Bibi Mkuu',
-            'Sibling' => 'Ndugu (Kaka/Dada)',
-            'Aunt/Uncle' => 'Shangazi/Mjomba',
-            'Niece/Nephew' => 'Mpwa',
-            'No direct blood relationship found' => 'Hakuna uhusiano wa damu wa moja kwa moja uliopatikana',
+            'male' => [
+                'Same person' => 'Mtu yule yule',
+                'Member not found' => 'Mwanachama hajapatikana',
+                'Spouse' => 'Mume', // Husband
+                'Child' => 'Mtoto wa Kiume',
+                'Grandchild' => 'Mjukuu',
+                'Great-grandchild' => 'Kitukuu',
+                'Parent' => 'Baba', // Father
+                'Grandparent' => 'Babu', // Grandfather
+                'Great-grandparent' => 'Babu Mkuu', // Great-grandfather
+                'Sibling' => 'Kaka', // Brother
+                'Aunt/Uncle' => 'Mjomba', // Uncle
+                'Niece/Nephew' => 'Mpwa wa Kiume',
+                'No direct blood relationship found' => 'Hakuna uhusiano wa damu wa moja kwa moja uliopatikana',
+            ],
+            'female' => [
+                'Same person' => 'Mtu yule yule',
+                'Member not found' => 'Mwanachama hajapatikana',
+                'Spouse' => 'Mke', // Wife
+                'Child' => 'Mtoto wa Kike',
+                'Grandchild' => 'Mjukuu',
+                'Great-grandchild' => 'Kitukuu',
+                'Parent' => 'Mama', // Mother
+                'Grandparent' => 'Bibi', // Grandmother
+                'Great-grandparent' => 'Bibi Mkuu', // Great-grandmother
+                'Sibling' => 'Dada', // Sister
+                'Aunt/Uncle' => 'Shangazi', // Aunt
+                'Niece/Nephew' => 'Mpwa wa Kike',
+                'No direct blood relationship found' => 'Hakuna uhusiano wa damu wa moja kwa moja uliopatikana',
+            ],
+            'other' => [
+                'Same person' => 'Mtu yule yule',
+                'Member not found' => 'Mwanachama hajapatikana',
+                'Spouse' => 'Mwenzi',
+                'Child' => 'Mtoto',
+                'Grandchild' => 'Mjukuu',
+                'Great-grandchild' => 'Kitukuu',
+                'Parent' => 'Mzazi (Baba/Mama)',
+                'Grandparent' => 'Babu/Bibi',
+                'Great-grandparent' => 'Babu/Bibi Mkuu',
+                'Sibling' => 'Ndugu (Kaka/Dada)',
+                'Aunt/Uncle' => 'Shangazi/Mjomba',
+                'Niece/Nephew' => 'Mpwa',
+                'No direct blood relationship found' => 'Hakuna uhusiano wa damu wa moja kwa moja uliopatikana',
+            ]
         ];
+
+        // Choose map based on gender
+        $map = $translations[$gender] ?? $translations['other'];
 
         // Handle pattern match for "Great-(x)-grandchild"
         if (preg_match('/Great-\((\d+)\)-grandchild/', $relation, $matches)) {
-            return "Kilembwe au Mzao wa Kizazi cha " . ($matches[1] + 3);
+            $genNumber = $matches[1] + 3;
+            if ($gender === 'male') {
+                return "Mzao wa Kiume wa Kizazi cha " . $genNumber;
+            } elseif ($gender === 'female') {
+                return "Mzao wa Kike wa Kizazi cha " . $genNumber;
+            } else {
+                return "Mzao wa Kizazi cha " . $genNumber;
+            }
         }
 
         // Handle pattern match for "Great-(x)-grandparent"
         if (preg_match('/Great-\((\d+)\)-grandparent/', $relation, $matches)) {
-            return "Babu/Bibi Mkuu wa Kizazi cha " . ($matches[1] + 3);
+            $genNumber = $matches[1] + 3;
+            if ($gender === 'male') {
+                return "Babu Mkuu wa Kizazi cha " . $genNumber;
+            } elseif ($gender === 'female') {
+                return "Bibi Mkuu wa Kizazi cha " . $genNumber;
+            } else {
+                return "Babu/Bibi Mkuu wa Kizazi cha " . $genNumber;
+            }
         }
 
         // Handle cousin relationships: e.g., "1st Cousin", "2nd Cousin 1x removed"
@@ -86,6 +138,6 @@ class RelationshipController extends Controller
             return $swCousin;
         }
 
-        return $translations[$relation] ?? $relation;
+        return $map[$relation] ?? ($translations['other'][$relation] ?? $relation);
     }
 }
